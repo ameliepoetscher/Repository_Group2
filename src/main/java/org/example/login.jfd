@@ -1,0 +1,45 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {comp panel1::l:::x}"
+			"$verticalGroup": "par l {comp panel1::l:::x}"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+				"$horizontalGroup": "par l {seq {par l {seq l {space :p:151:p, comp label1:::p:202:p}, seq l {space :p:50:p, par l:::p {seq {comp label3:::p::p, space s:::p, comp passwordField1:::::x}, seq {comp label2:::p::p, space s:::p, comp textField1:::p:107:p}}}, seq l {space :p:213:p, comp button1:::p::p}}, space ::157:x}}"
+				"$verticalGroup": "par l {seq l {space :p:46:p, comp label1:::p:62:p, space :p:60:p, par b {comp label2::b:p::p, comp textField1::b:p::p}, space s:::p, par b {comp label3::b:p::p, comp passwordField1::b:p::p}, space ::75:x, comp button1:::p::p, space :p:68:p}}"
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "text"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/logo.jpeg" )
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "textField1"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label2"
+					"text": "username:"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label3"
+					"text": "password:"
+				} )
+				add( new FormComponent( "javax.swing.JPasswordField" ) {
+					name: "passwordField1"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button1"
+					"text": "Log In"
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 10, 5 )
+			"size": new java.awt.Dimension( 510, 395 )
+		} )
+	}
+}
