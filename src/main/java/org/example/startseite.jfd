@@ -50,38 +50,38 @@ new FormModel {
 									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 										add( new java.util.Vector {
 											add( "1" )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Alpha" )
+											add( "Vienna" )
+											add( "20" )
+											add( "35" )
 										} )
 										add( new java.util.Vector {
 											add( "2" )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Beta" )
+											add( "Graz" )
+											add( "30" )
+											add( "45" )
 										} )
 										add( new java.util.Vector {
 											add( "3" )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Gamma" )
+											add( "Linz" )
+											add( "40" )
+											add( "55" )
 										} )
 										add( new java.util.Vector {
 											add( "4" )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Delta" )
+											add( "Salzburg " )
+											add( "50" )
+											add( "65" )
 										} )
 										add( new java.util.Vector {
 											add( "5" )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Epsilon" )
+											add( "Klagenfurt" )
+											add( "60" )
+											add( "75" )
 										} )
 									}, new java.util.Vector {
 										add( "ID" )
@@ -407,36 +407,36 @@ new FormModel {
 								name: "scrollPane2"
 								add( new FormComponent( "javax.swing.JTable" ) {
 									name: "table2"
-									"model": &SwingTableModel0 new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 										add( new java.util.Vector {
 											add( "1" )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Alpha" )
+											add( "10" )
+											add( "15" )
 										} )
 										add( new java.util.Vector {
 											add( "2" )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Beta" )
+											add( "20" )
+											add( "25" )
 										} )
 										add( new java.util.Vector {
 											add( "3" )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Gamma" )
+											add( "30" )
+											add( "35" )
 										} )
 										add( new java.util.Vector {
 											add( "4" )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Delta" )
+											add( "40" )
+											add( "45" )
 										} )
 										add( new java.util.Vector {
 											add( "5" )
-											add( null )
-											add( null )
-											add( null )
+											add( "Hotel Gamma" )
+											add( "50" )
+											add( "55" )
 										} )
 									}, new java.util.Vector {
 										add( "ID" )
@@ -517,7 +517,100 @@ new FormModel {
 								name: "scrollPane3"
 								add( new FormComponent( "javax.swing.JTable" ) {
 									name: "table3"
-									"model": #SwingTableModel0
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+										add( new java.util.Vector {
+											add( "January" )
+											add( "2023" )
+											add( "10" )
+											add( "15" )
+										} )
+										add( new java.util.Vector {
+											add( "February" )
+											add( "2023" )
+											add( "20" )
+											add( "25" )
+										} )
+										add( new java.util.Vector {
+											add( "March" )
+											add( "2023" )
+											add( "30" )
+											add( "35" )
+										} )
+										add( new java.util.Vector {
+											add( "April" )
+											add( "2023" )
+											add( "40" )
+											add( "45" )
+										} )
+										add( new java.util.Vector {
+											add( "May" )
+											add( "2023" )
+											add( "50" )
+											add( "55" )
+										} )
+										add( new java.util.Vector {
+											add( "June" )
+											add( "2023" )
+											add( "20" )
+											add( "30" )
+										} )
+										add( new java.util.Vector {
+											add( "July" )
+											add( "2023" )
+											add( "35" )
+											add( "44" )
+										} )
+										add( new java.util.Vector {
+											add( "August" )
+											add( "2023" )
+											add( "55" )
+											add( "78" )
+										} )
+										add( new java.util.Vector {
+											add( "September" )
+											add( "2023" )
+											add( "62" )
+											add( "88" )
+										} )
+										add( new java.util.Vector {
+											add( "October" )
+											add( "2023" )
+											add( "44" )
+											add( "65" )
+										} )
+										add( new java.util.Vector {
+											add( "November" )
+											add( "2023" )
+											add( "58" )
+											add( "72" )
+										} )
+										add( new java.util.Vector {
+											add( "December" )
+											add( "2023" )
+											add( "60" )
+											add( "70" )
+										} )
+									}, new java.util.Vector {
+										add( "Month" )
+										add( "Year" )
+										add( "Occup. rooms" )
+										add( "Occup. beds" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									} )
 								} )
 							} )
 							add( new FormComponent( "javax.swing.JLabel" ) {
@@ -685,7 +778,7 @@ new FormModel {
 							} )
 						} )
 					}, new FormLayoutConstraints( null ) {
-						"title": "combined overview"
+						"title": "Over"
 					} )
 				} )
 			} )

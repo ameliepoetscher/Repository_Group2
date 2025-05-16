@@ -14,6 +14,13 @@ import javax.swing.table.*;
 public class startseite extends JPanel {
     public startseite() {
         initComponents();
+
+        // ======= HIER kommt Dein eigener Code =======
+        button25.addActionListener(new save());
+        button15.addActionListener(new save());
+        button18.addActionListener(new save());
+        button21.addActionListener(new save());
+        button24.addActionListener(new save());
     }
 
     private void initComponents() {
@@ -32,10 +39,6 @@ public class startseite extends JPanel {
         label1 = new JLabel();
         button6 = new JButton();
         button25 = new JButton();
-
-        button25.addActionListener(new save());
-
-
         panel3 = new JPanel();
         panel17 = new JPanel();
         panel18 = new JPanel();
@@ -108,11 +111,13 @@ public class startseite extends JPanel {
         comboBox14 = new JComboBox<>();
 
         //======== this ========
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0
-        ,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
-        ,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,12),java.awt.Color.red),
-         getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
-        ){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+        . border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder
+        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .
+        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
+        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+        ) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+        ;
 
         //======== this2 ========
         {
@@ -169,11 +174,11 @@ public class startseite extends JPanel {
                             //---- table1 ----
                             table1.setModel(new DefaultTableModel(
                                 new Object[][] {
-                                    {"1", null, null, null, null},
-                                    {"2", null, null, null, null},
-                                    {"3", null, null, null, null},
-                                    {"4", null, null, null, null},
-                                    {"5", null, null, null, null},
+                                    {"1", "Hotel Alpha", "Vienna", "20", "35"},
+                                    {"2", "Hotel Beta", "Graz", "30", "45"},
+                                    {"3", "Hotel Gamma", "Linz", "40", "55"},
+                                    {"4", "Hotel Delta", "Salzburg ", "50", "65"},
+                                    {"5", "Hotel Epsilon", "Klagenfurt", "60", "75"},
                                 },
                                 new String[] {
                                     "ID", "name", "adresse", "rooms", "beds"
@@ -633,11 +638,11 @@ public class startseite extends JPanel {
                             //---- table2 ----
                             table2.setModel(new DefaultTableModel(
                                 new Object[][] {
-                                    {"1", null, null, null},
-                                    {"2", null, null, null},
-                                    {"3", null, null, null},
-                                    {"4", null, null, null},
-                                    {"5", null, null, null},
+                                    {"1", "Hotel Alpha", "10", "15"},
+                                    {"2", "Hotel Beta", "20", "25"},
+                                    {"3", "Hotel Gamma", "30", "35"},
+                                    {"4", "Hotel Delta", "40", "45"},
+                                    {"5", "Hotel Gamma", "50", "55"},
                                 },
                                 new String[] {
                                     "ID", "Name", "Occup. rooms", "Occup. beds"
@@ -929,20 +934,23 @@ public class startseite extends JPanel {
                             //---- table3 ----
                             table3.setModel(new DefaultTableModel(
                                 new Object[][] {
-                                    {"1", null, null, null},
-                                    {"2", null, null, null},
-                                    {"3", null, null, null},
-                                    {"4", null, null, null},
-                                    {"5", null, null, null},
+                                    {"January", "2023", "10", "15"},
+                                    {"February", "2023", "20", "25"},
+                                    {"March", "2023", "30", "35"},
+                                    {"April", "2023", "40", "45"},
+                                    {"May", "2023", "50", "55"},
+                                    {"June", "2023", "20", "30"},
+                                    {"July", "2023", "35", "44"},
+                                    {"August", "2023", "55", "78"},
+                                    {"September", "2023", "62", "88"},
+                                    {"October", "2023", "44", "65"},
+                                    {"November", "2023", "58", "72"},
+                                    {"December", "2023", "60", "70"},
                                 },
                                 new String[] {
-                                    "ID", "Name", "Occup. rooms", "Occup. beds"
+                                    "Month", "Year", "Occup. rooms", "Occup. beds"
                                 }
                             ));
-                            {
-                                TableColumnModel cm = table3.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(15);
-                            }
                             scrollPane3.setViewportView(table3);
                         }
 
@@ -1578,7 +1586,7 @@ public class startseite extends JPanel {
                             .addComponent(panel23, GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
                     );
                 }
-                tabbedPane1.addTab("Occupancy Summary", panel6);
+                tabbedPane1.addTab("Over", panel6);
             }
 
             GroupLayout this2Layout = new GroupLayout(this2);
@@ -1712,6 +1720,7 @@ public class startseite extends JPanel {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
             // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+            // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 
         public void actionPerformed(ActionEvent e) {
