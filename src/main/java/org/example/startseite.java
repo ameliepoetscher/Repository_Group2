@@ -1,4 +1,6 @@
+package org.example;
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.table.*;
@@ -30,6 +32,10 @@ public class startseite extends JPanel {
         label1 = new JLabel();
         button6 = new JButton();
         button25 = new JButton();
+
+        button25.addActionListener(new save());
+
+
         panel3 = new JPanel();
         panel17 = new JPanel();
         panel18 = new JPanel();
@@ -102,12 +108,11 @@ public class startseite extends JPanel {
         comboBox14 = new JComboBox<>();
 
         //======== this ========
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border
-        .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax
-        . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,
-        12 ) ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans
-        .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e.
-        getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0
+        ,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
+        ,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,12),java.awt.Color.red),
+         getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
+        ){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException();}});
 
         //======== this2 ========
         {
@@ -1702,5 +1707,21 @@ public class startseite extends JPanel {
     private JLabel label20;
     private JComboBox<String> comboBox14;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+
+    private class save extends AbstractAction {
+        private save() {
+            // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
+            // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(
+                    startseite.this,                  // als Parent-Component am besten das Panel selbst
+                    "Changes successfully saved!",    // Deine Meldung
+                    "Save",                           // Fenstertitel
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+    }
 }
 

@@ -685,7 +685,7 @@ new FormModel {
 							} )
 						} )
 					}, new FormLayoutConstraints( null ) {
-						"title": "Occupancy Summary"
+						"title": "combined overview"
 					} )
 				} )
 			} )
