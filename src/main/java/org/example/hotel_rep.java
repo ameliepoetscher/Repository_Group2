@@ -5,6 +5,7 @@
 package org.example;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.table.*;
@@ -15,8 +16,26 @@ import javax.swing.table.*;
 public class hotel_rep extends JPanel {
     public hotel_rep() {
         initComponents();
+
+        ActionListener logout = e -> {
+            JFrame top = (JFrame) SwingUtilities.getWindowAncestor(this);
+            top.setContentPane(new login());
+            top.pack();
+            top.setLocationRelativeTo(null);
+        };
+        button1.addActionListener(logout);
+
     }
 
+
+
+
+
+
+
+
+
+    //ab da nichts verändern ?!
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - Amelie Pötscher

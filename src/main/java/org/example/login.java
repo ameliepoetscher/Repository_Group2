@@ -3,6 +3,9 @@ package org.example;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.GroupLayout;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 /*
  * Created by JFormDesigner on Fri May 16 19:03:35 CEST 2025
  */
@@ -18,32 +21,38 @@ public class login extends JPanel {
     }
 
     private void setupLogin() {
-        // Wenn der "Log In"-Button gedrückt wird...
         button1.addActionListener(e -> {
             String user = textField1.getText().trim();
             String pass = new String(passwordField1.getPassword()).trim();
 
-            // 1) Credentials prüfen
+            // ein einziges Mal das umgebende JFrame holen
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
             if ("senioruser".equals(user) && "senioruser".equals(pass)) {
-                // 2) aktuelles Fenster ermitteln
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-
-                // 3) neues Panel setzen
                 topFrame.setContentPane(new startseite());
-                topFrame.pack();            // auf neue Größe anpassen
-                topFrame.setLocationRelativeTo(null);
-
-            } else {
-                // Falsche Daten → Fehlermeldung
+            }
+            else if ("headofnt".equals(user) && "headofnt".equals(pass)) {
+                topFrame.setContentPane(new startseite()); // ggf. anderes Panel für Head of NT
+            }
+            else if ("hotelrep".equals(user) && "hotelrep".equals(pass)) {
+                topFrame.setContentPane(new hotel_rep());
+            }
+            else {
                 JOptionPane.showMessageDialog(
                         this,
-                        "Benutzername oder Passwort falsch!",
-                        "Login fehlgeschlagen",
+                        "Username or password incorrect!",
+                        "Login failed",
                         JOptionPane.ERROR_MESSAGE
                 );
+                return;  // abbrechen, kein Wechsel des Panels
             }
+
+            // Nach dem Setzen des neuen Content-Panes einmal packen und zentrieren:
+            topFrame.pack();
+            topFrame.setLocationRelativeTo(null);
         });
     }
+
 
 
 
