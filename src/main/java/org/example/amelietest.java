@@ -10,8 +10,8 @@ import javax.swing.*;
 /**
  * @author amaim
  */
-public class amelieudmariabesteeee extends JFrame {
-    public amelieudmariabesteeee() {
+public class amelietest extends JFrame {
+    public amelietest() {
         initComponents();
     }
 
