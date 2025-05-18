@@ -1,0 +1,103 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {comp tabbedPane1:::p:613:p, space :0:122:x}}"
+			"$verticalGroup": "par l {seq l {comp tabbedPane1:::p:343:p, space :0:117:x}}"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				name: "tabbedPane1"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+					"$horizontalGroup": "par l {comp panel7::l:::x}"
+					"$verticalGroup": "par l {comp panel7::l:::x}"
+				} ) {
+					name: "panel1"
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {seq l {comp panel8:::p:89:p, space :::p, comp scrollPane1:::p:440:p, space :::p, comp label1:::p::p, space :::x}}"
+						"$verticalGroup": "par l {seq l {space :::p, par l {comp scrollPane1:::p:50:p, comp label1:::p::p}, space ::254:x}, comp panel8::t:::x}"
+					} ) {
+						name: "panel7"
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+							"$horizontalGroup": "par l {seq t {space :::x, comp button2:::p::p, space :p:17:p}, seq l {space :::p, comp button1:::p::p, space :::x}}"
+							"$verticalGroup": "par l {seq t {space :p:25:p, comp button2:::p::p, space ::218:x, comp button1:::p::p, space :p:23:p}}"
+						} ) {
+							name: "panel8"
+							"background": new java.awt.Color( 51, 102, 255, 255 )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button1"
+								"text": "Log Out"
+								"background": sfield java.awt.Color lightGray
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button2"
+								"text": "Help"
+								"background": sfield java.awt.Color lightGray
+							} )
+						} )
+						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+							name: "scrollPane1"
+							add( new FormComponent( "javax.swing.JTable" ) {
+								name: "table1"
+								"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+									add( new java.util.Vector {
+										add( "1" )
+										add( "   Hotel Alpha" )
+										add( "    Vienna" )
+										add( "  20" )
+										add( "    35" )
+									} )
+								}, new java.util.Vector {
+									add( "ID" )
+									add( "name" )
+									add( "adresse" )
+									add( "rooms" )
+									add( "beds" )
+								}, new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								}, new java.util.Vector {
+									add( false )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								}, new java.util.Vector {
+									add( new com.jformdesigner.model.SwingTableColumn( null, 15, 0, 0, true ) )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+							} )
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label1"
+							"text": "last report: 12.05.2025"
+							"font": new java.awt.Font( ".AppleSystemUIFont", 0, 6 )
+							"background": new java.awt.Color( 51, 0, 51, 255 )
+						} )
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "master data"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+					"$horizontalGroup": "par l {space :0:613:x}"
+					"$verticalGroup": "par l {space :0:310:x}"
+				} ) {
+					name: "panel2"
+				}, new FormLayoutConstraints( null ) {
+					"title": "transactional"
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 735, 460 )
+		} )
+	}
+}

@@ -4,8 +4,6 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
 
-
-
         //logIn:
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Lower Austria Tourist Portal");
@@ -19,6 +17,8 @@ public class Main {
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
+
+
 
 
 
