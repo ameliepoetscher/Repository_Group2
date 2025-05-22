@@ -10,8 +10,8 @@ new FormModel {
 			name: "this"
 			"autoscrolls": true
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq {par l {seq l {space :p:151:p, comp label1:::p:202:p}, seq l {space :p:50:p, par l:::p {seq {comp label3:::p::p, space s:::p, comp passwordField1:::::x}, seq {comp label2:::p::p, space s:::p, comp textField1:::p:107:p}}}, seq l {space :p:213:p, comp button1:::p::p}}, space ::157:x}}"
-				"$verticalGroup": "par l {seq l {space :p:46:p, comp label1:::p:62:p, space :p:60:p, par b {comp label2::b:p::p, comp textField1::b:p::p}, space s:::p, par b {comp label3::b:p::p, comp passwordField1::b:p::p}, space ::75:x, comp button1:::p::p, space :p:68:p}}"
+				"$horizontalGroup": "par l {seq {par l {seq l {space :p:145:p, comp label1:::p:202:p}, seq l {space :p:103:p, par l {comp label3:::p::p, comp label2:::p::p}, space s:::p, par l {comp textField1:::p:165:p, comp passwordField1::l:p:165:p}}, seq l {space :p:222:p, comp button1:::p::p}}, space ::163:x}}"
+				"$verticalGroup": "par l {seq l {space :p:46:p, comp label1:::p:62:p, space :p:60:p, par b {comp textField1::b:p::p, comp label2::b:p::p}, space s:::p, par b {comp label3::b:p::p, comp passwordField1::b:p::p}, space :p:51:p, comp button1:::p::p, space ::74:x}}"
 			} ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -24,11 +24,11 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label2"
-					"text": "username:"
+					"text": "Username:"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3"
-					"text": "password:"
+					"text": "Password:"
 				} )
 				add( new FormComponent( "javax.swing.JPasswordField" ) {
 					name: "passwordField1"
@@ -36,6 +36,9 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button1"
 					"text": "Log In"
+					"background": new java.awt.Color( 51, 153, 255, 255 )
+					"foreground": sfield java.awt.Color white
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
