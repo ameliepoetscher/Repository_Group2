@@ -10,8 +10,8 @@ new FormModel {
 			name: "this"
 			"autoscrolls": true
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq {par l {seq l {space :p:145:p, comp label1:::p:202:p}, seq l {space :p:103:p, par l {comp label3:::p::p, comp label2:::p::p}, space s:::p, par l {comp textField1:::p:165:p, comp passwordField1::l:p:165:p}}, seq l {space :p:222:p, comp button1:::p::p}}, space ::163:x}}"
-				"$verticalGroup": "par l {seq l {space :p:46:p, comp label1:::p:62:p, space :p:60:p, par b {comp textField1::b:p::p, comp label2::b:p::p}, space s:::p, par b {comp label3::b:p::p, comp passwordField1::b:p::p}, space :p:51:p, comp button1:::p::p, space ::74:x}}"
+				"$horizontalGroup": "par l {seq {par l {seq l {space :p:145:p, comp label1:::p:202:p}, seq l {space :p:103:p, par l {comp label3:::p::p, comp label2:::p::p}, space s:::p, par l {comp textField1:::p:165:p, comp passwordField1::l:p:165:p}}}, space ::163:x}, seq t {space :0:224:x, comp button1:::p::p, space :p:222:p}}"
+				"$verticalGroup": "par l {seq l {space :p:46:p, comp label1:::p:62:p, space :p:60:p, par b {comp label2::b:p::p, comp textField1::b:p::p}, space s:::p, par b {comp label3::b:p::p, comp passwordField1::b:p::p}, space :p:51:p, comp button1:::p::p, space ::74:x}}"
 			} ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JLabel" ) {
