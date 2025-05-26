@@ -61,7 +61,7 @@ public class login extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+        // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
         panel1 = new JPanel();
         label1 = new JLabel();
         textField1 = new JTextField();
@@ -72,28 +72,31 @@ public class login extends JPanel {
 
         //======== this ========
         setAutoscrolls(true);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing.
-        border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER
-        ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font
-        . BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener(
-        new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r"
-        .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border
+        .EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax
+        .swing.border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,
+        12),java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans
+        .PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062order".equals(e.
+        getPropertyName()))throw new RuntimeException();}});
 
         //======== panel1 ========
         {
 
             //---- label1 ----
             label1.setText("text");
-            label1.setIcon(new ImageIcon(getClass().getResource("/logo.jpeg")));
+            label1.setIcon(new ImageIcon(getClass().getResource("/logo.jpg")));
 
             //---- label2 ----
-            label2.setText("username:");
+            label2.setText("Username:");
 
             //---- label3 ----
-            label3.setText("password:");
+            label3.setText("Password:");
 
             //---- button1 ----
             button1.setText("Log In");
+            button1.setBackground(new Color(0x3399ff));
+            button1.setForeground(Color.white);
+            button1.setFont(button1.getFont().deriveFont(button1.getFont().getStyle() | Font.BOLD));
 
             GroupLayout panel1Layout = new GroupLayout(panel1);
             panel1.setLayout(panel1Layout);
@@ -102,30 +105,28 @@ public class login extends JPanel {
                     .addGroup(panel1Layout.createSequentialGroup()
                         .addGroup(panel1Layout.createParallelGroup()
                             .addGroup(panel1Layout.createSequentialGroup()
-                                .addGap(151, 151, 151)
-                                .addComponent(label1, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE))
+                                .addGap(103, 103, 103)
+                                .addGroup(panel1Layout.createParallelGroup()
+                                    .addComponent(label3)
+                                    .addComponent(label2))
+                                .addGap(18, 18, 18)
+                                .addGroup(panel1Layout.createParallelGroup()
+                                    .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(passwordField1, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE)))
                             .addGroup(panel1Layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addGroup(panel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(panel1Layout.createSequentialGroup()
-                                        .addComponent(label3)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(passwordField1))
-                                    .addGroup(panel1Layout.createSequentialGroup()
-                                        .addComponent(label2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))))
+                                .addGap(229, 229, 229)
+                                .addComponent(button1))
                             .addGroup(panel1Layout.createSequentialGroup()
-                                .addGap(213, 213, 213)
-                                .addComponent(button1)))
-                        .addContainerGap(157, Short.MAX_VALUE))
+                                .addGap(150, 150, 150)
+                                .addComponent(label1, GroupLayout.PREFERRED_SIZE, 221, GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(199, Short.MAX_VALUE))
             );
             panel1Layout.setVerticalGroup(
                 panel1Layout.createParallelGroup()
                     .addGroup(panel1Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(label1, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60)
+                        .addGap(32, 32, 32)
+                        .addComponent(label1, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                         .addGroup(panel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(label2)
                             .addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -133,9 +134,9 @@ public class login extends JPanel {
                         .addGroup(panel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(label3)
                             .addComponent(passwordField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                        .addGap(45, 45, 45)
                         .addComponent(button1)
-                        .addGap(68, 68, 68))
+                        .addGap(80, 80, 80))
             );
         }
 
@@ -153,7 +154,7 @@ public class login extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+    // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
     private JPanel panel1;
     private JLabel label1;
     private JTextField textField1;
