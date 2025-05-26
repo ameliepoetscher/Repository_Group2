@@ -86,14 +86,8 @@ public class startseite extends JPanel {
         button13 = new JButton();
         button14 = new JButton();
         button15 = new JButton();
-        comboBox2 = new JComboBox<>();
-        label2 = new JLabel();
-        label3 = new JLabel();
-        label4 = new JLabel();
-        label5 = new JLabel();
-        textField1 = new JTextField();
-        textField2 = new JTextField();
-        textField3 = new JTextField();
+        scrollPane5 = new JScrollPane();
+        table5 = new JTable();
         panel4 = new JPanel();
         panel19 = new JPanel();
         panel20 = new JPanel();
@@ -154,13 +148,12 @@ public class startseite extends JPanel {
         comboBox14 = new JComboBox<>();
 
         //======== this ========
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
-        . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder
-        . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .
-        awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) )
-        ;  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-        ) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
-        ;
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border
+        .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e" , javax. swing .border . TitledBorder. CENTER ,javax
+        . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dialo\u0067", java .awt . Font. BOLD ,
+        12 ) ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans
+        .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "borde\u0072" .equals ( e.
+        getPropertyName () ) )throw new RuntimeException( ) ;} } );
 
         //======== this2 ========
         {
@@ -205,7 +198,7 @@ public class startseite extends JPanel {
                                     .addGroup(GroupLayout.Alignment.TRAILING, panel8Layout.createSequentialGroup()
                                         .addGap(25, 25, 25)
                                         .addComponent(button2)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 214, Short.MAX_VALUE)
                                         .addComponent(button1)
                                         .addGap(23, 23, 23))
                             );
@@ -275,10 +268,10 @@ public class startseite extends JPanel {
                                                     .addGap(16, 16, 16)
                                                     .addComponent(comboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                 .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
-                                            .addGap(0, 46, Short.MAX_VALUE))
+                                            .addGap(0, 77, Short.MAX_VALUE))
                                         .addGroup(panel7Layout.createSequentialGroup()
                                             .addComponent(button6)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 413, Short.MAX_VALUE)
                                             .addComponent(button25)
                                             .addGap(22, 22, 22))))
                         );
@@ -290,7 +283,7 @@ public class startseite extends JPanel {
                                     .addGroup(panel7Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(comboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(label1))
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                                     .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
                                     .addGroup(panel7Layout.createParallelGroup()
@@ -353,7 +346,7 @@ public class startseite extends JPanel {
                                     .addGroup(GroupLayout.Alignment.TRAILING, panel18Layout.createSequentialGroup()
                                         .addGap(25, 25, 25)
                                         .addComponent(button14)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 214, Short.MAX_VALUE)
                                         .addComponent(button13)
                                         .addGap(23, 23, 23))
                             );
@@ -362,35 +355,28 @@ public class startseite extends JPanel {
                         //---- button15 ----
                         button15.setText("save");
 
-                        //---- comboBox2 ----
-                        comboBox2.setModel(new DefaultComboBoxModel<>(new String[] {
-                            "\u2605",
-                            "\u2605\u2605",
-                            "\u2605\u2605\u2605",
-                            "\u2605\u2605\u2605\u2605",
-                            "\u2605\u2605\u2605\u2605\u2605"
-                        }));
+                        //======== scrollPane5 ========
+                        {
 
-                        //---- label2 ----
-                        label2.setText("category:");
-
-                        //---- label3 ----
-                        label3.setText("hotels per category:");
-
-                        //---- label4 ----
-                        label4.setText("\u00d8 rooms:");
-
-                        //---- label5 ----
-                        label5.setText("\u00d8 beds:");
-
-                        //---- textField1 ----
-                        textField1.setText("60");
-
-                        //---- textField2 ----
-                        textField2.setText("45");
-
-                        //---- textField3 ----
-                        textField3.setText("20");
+                            //---- table5 ----
+                            table5.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                    {"\u2605", "40", "50", "70"},
+                                    {"\u2605\u2605", "30", "60", "75"},
+                                    {"\u2605\u2605\u2605", "25", "65", "80"},
+                                    {"\u2605\u2605\u2605\u2605", "20", "40", "50"},
+                                    {"\u2605\u2605\u2605\u2605\u2605", "15", "30", "40"},
+                                },
+                                new String[] {
+                                    "category", "hotels per category", "\u00d8 rooms:", "\u00d8 beds:"
+                                }
+                            ));
+                            {
+                                TableColumnModel cm = table5.getColumnModel();
+                                cm.getColumn(0).setResizable(false);
+                            }
+                            scrollPane5.setViewportView(table5);
+                        }
 
                         GroupLayout panel17Layout = new GroupLayout(panel17);
                         panel17.setLayout(panel17Layout);
@@ -399,54 +385,22 @@ public class startseite extends JPanel {
                                 .addGroup(panel17Layout.createSequentialGroup()
                                     .addComponent(panel18, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                     .addGroup(panel17Layout.createParallelGroup()
-                                        .addGroup(GroupLayout.Alignment.TRAILING, panel17Layout.createSequentialGroup()
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 426, Short.MAX_VALUE)
+                                        .addGroup(panel17Layout.createSequentialGroup()
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 457, Short.MAX_VALUE)
                                             .addComponent(button15)
                                             .addContainerGap())
                                         .addGroup(panel17Layout.createSequentialGroup()
-                                            .addGap(285, 285, 285)
-                                            .addComponent(label2)
-                                            .addGap(16, 16, 16)
-                                            .addComponent(comboBox2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addGap(0, 46, Short.MAX_VALUE))
-                                        .addGroup(panel17Layout.createSequentialGroup()
-                                            .addGap(41, 41, 41)
-                                            .addGroup(panel17Layout.createParallelGroup()
-                                                .addGroup(panel17Layout.createSequentialGroup()
-                                                    .addComponent(label3)
-                                                    .addGap(18, 18, 18)
-                                                    .addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(panel17Layout.createSequentialGroup()
-                                                    .addGroup(panel17Layout.createParallelGroup()
-                                                        .addComponent(label4)
-                                                        .addComponent(label5))
-                                                    .addGap(18, 18, 18)
-                                                    .addGroup(panel17Layout.createParallelGroup()
-                                                        .addComponent(textField3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(textField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-                                            .addContainerGap(257, Short.MAX_VALUE))))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(scrollPane5, GroupLayout.PREFERRED_SIZE, 498, GroupLayout.PREFERRED_SIZE)
+                                            .addContainerGap(25, Short.MAX_VALUE))))
                         );
                         panel17Layout.setVerticalGroup(
                             panel17Layout.createParallelGroup()
                                 .addComponent(panel18, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(GroupLayout.Alignment.TRAILING, panel17Layout.createSequentialGroup()
-                                    .addGap(15, 15, 15)
-                                    .addGroup(panel17Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(comboBox2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(label2))
-                                    .addGap(30, 30, 30)
-                                    .addGroup(panel17Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(label3)
-                                        .addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .addGap(27, 27, 27)
-                                    .addGroup(panel17Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(label4)
-                                        .addComponent(textField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .addGap(24, 24, 24)
-                                    .addGroup(panel17Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(label5)
-                                        .addComponent(textField3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                                    .addContainerGap(70, Short.MAX_VALUE)
+                                    .addComponent(scrollPane5, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(45, 45, 45)
                                     .addComponent(button15)
                                     .addGap(20, 20, 20))
                         );
@@ -719,13 +673,13 @@ public class startseite extends JPanel {
                                     .addComponent(panel20, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                     .addGroup(panel19Layout.createParallelGroup()
                                         .addGroup(GroupLayout.Alignment.TRAILING, panel19Layout.createSequentialGroup()
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 426, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 457, Short.MAX_VALUE)
                                             .addComponent(button18)
                                             .addContainerGap())
                                         .addGroup(panel19Layout.createSequentialGroup()
                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addContainerGap(46, Short.MAX_VALUE))
+                                            .addContainerGap(77, Short.MAX_VALUE))
                                         .addGroup(panel19Layout.createSequentialGroup()
                                             .addGap(102, 102, 102)
                                             .addGroup(panel19Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -738,7 +692,7 @@ public class startseite extends JPanel {
                                                 .addGroup(panel19Layout.createSequentialGroup()
                                                     .addGap(16, 16, 16)
                                                     .addComponent(comboBox5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
                                             .addGroup(panel19Layout.createParallelGroup()
                                                 .addGroup(GroupLayout.Alignment.TRAILING, panel19Layout.createSequentialGroup()
                                                     .addComponent(label22)
@@ -1199,15 +1153,15 @@ public class startseite extends JPanel {
                                             .addContainerGap())
                                         .addGroup(panel21Layout.createSequentialGroup()
                                             .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addContainerGap(40, Short.MAX_VALUE))
+                                            .addContainerGap(71, Short.MAX_VALUE))
                                         .addGroup(GroupLayout.Alignment.TRAILING, panel21Layout.createSequentialGroup()
                                             .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                 .addGroup(panel21Layout.createSequentialGroup()
                                                     .addComponent(comboBox11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
                                                     .addComponent(label14))
                                                 .addGroup(panel21Layout.createSequentialGroup()
-                                                    .addGap(0, 180, Short.MAX_VALUE)
+                                                    .addGap(0, 211, Short.MAX_VALUE)
                                                     .addComponent(label12)))
                                             .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                                                 .addGroup(panel21Layout.createSequentialGroup()
@@ -1547,7 +1501,7 @@ public class startseite extends JPanel {
                                             .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                                                 .addComponent(scrollPane4, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                                                 .addComponent(comboBox16, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 163, Short.MAX_VALUE)
                                             .addGroup(panel23Layout.createParallelGroup()
                                                 .addGroup(panel23Layout.createSequentialGroup()
                                                     .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -1577,7 +1531,7 @@ public class startseite extends JPanel {
                                                     .addComponent(label9)
                                                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                     .addComponent(textField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                                             .addComponent(label20)
                                             .addGap(16, 16, 16)
                                             .addComponent(comboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -1586,7 +1540,7 @@ public class startseite extends JPanel {
                                             .addComponent(label19)
                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(textField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 200, Short.MAX_VALUE)
                                             .addComponent(button24)
                                             .addGap(79, 79, 79))))
                         );
@@ -1722,14 +1676,8 @@ public class startseite extends JPanel {
     private JButton button13;
     private JButton button14;
     private JButton button15;
-    private JComboBox<String> comboBox2;
-    private JLabel label2;
-    private JLabel label3;
-    private JLabel label4;
-    private JLabel label5;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
+    private JScrollPane scrollPane5;
+    private JTable table5;
     private JPanel panel4;
     private JPanel panel19;
     private JPanel panel20;
