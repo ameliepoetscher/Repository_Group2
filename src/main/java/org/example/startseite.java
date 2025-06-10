@@ -12,9 +12,9 @@ import javax.swing.table.*;
  * @author ami
  */
 public class startseite extends JPanel {
-
     public startseite() {
         initComponents();
+
 
         // ======= HIER kommt Dein eigener Code =======
         button25.addActionListener(new save());
@@ -22,6 +22,8 @@ public class startseite extends JPanel {
         button18.addActionListener(new save());
         button21.addActionListener(new save());
         button24.addActionListener(new save());
+
+
 
         deleteButton.addActionListener(new DeleteHotelAction());
 
@@ -61,6 +63,10 @@ public class startseite extends JPanel {
         button23.addActionListener(help);
 
 
+    }
+
+    private void Add(ActionEvent e) {
+        // TODO add your code here
     }
 
 
@@ -149,13 +155,11 @@ public class startseite extends JPanel {
         label21 = new JLabel();
 
         //======== this ========
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
-        swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border
-        . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067"
-        ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder
-        ( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
-        .beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException
-        ( ); }} );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
+        0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
+        .BOTTOM,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,12),java.awt.Color.
+        red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
+        beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException();}});
 
         //======== this2 ========
         {
@@ -239,6 +243,7 @@ public class startseite extends JPanel {
 
                         //---- button6 ----
                         button6.setText("+");
+                        button6.addActionListener(e -> Add(e));
 
                         //---- button25 ----
                         button25.setText("Save");
@@ -372,7 +377,7 @@ public class startseite extends JPanel {
                                         .addGroup(panel17Layout.createSequentialGroup()
                                             .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addComponent(scrollPane5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addContainerGap(85, Short.MAX_VALUE))))
+                                            .addContainerGap(81, Short.MAX_VALUE))))
                         );
                         panel17Layout.setVerticalGroup(
                             panel17Layout.createParallelGroup()
@@ -679,7 +684,7 @@ public class startseite extends JPanel {
                                                 .addGroup(panel19Layout.createSequentialGroup()
                                                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                     .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
-                                    .addContainerGap(91, Short.MAX_VALUE))
+                                    .addContainerGap(87, Short.MAX_VALUE))
                         );
                         panel19Layout.setVerticalGroup(
                             panel19Layout.createParallelGroup()
@@ -1141,7 +1146,7 @@ public class startseite extends JPanel {
                                             .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                 .addComponent(button21)
                                                 .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                            .addContainerGap(85, Short.MAX_VALUE))))
+                                            .addContainerGap(81, Short.MAX_VALUE))))
                         );
                         panel21Layout.setVerticalGroup(
                             panel21Layout.createParallelGroup()
@@ -1758,5 +1763,6 @@ public class startseite extends JPanel {
             // Bei Stop (NO_OPTION) passiert nichts
         }
     }
+
 }
 

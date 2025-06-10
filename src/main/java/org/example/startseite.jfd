@@ -113,6 +113,7 @@ new FormModel {
 							add( new FormComponent( "javax.swing.JButton" ) {
 								name: "button6"
 								"text": "+"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "Add", true ) )
 							} )
 							add( new FormComponent( "javax.swing.JButton" ) {
 								name: "button25"
@@ -133,7 +134,7 @@ new FormModel {
 						name: "panel3"
 						"background": #Color0
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq {comp panel18:::p::p, par l {seq {space ::408:x, comp button15:::p::p, space :p:88:p}, seq l {space u:::p, comp scrollPane5:::p::p, space ::85:x}}}}"
+							"$horizontalGroup": "par l {seq {comp panel18:::p::p, par l {seq {space ::408:x, comp button15:::p::p, space :p:88:p}, seq l {space u:::p, comp scrollPane5:::p::p, space ::81:x}}}}"
 							"$verticalGroup": "par l {seq t {space :p:47:p, comp scrollPane5:::p:158:p, space ::88:x, comp button15:::p::p, space :p:42:p}, comp panel18::l:::x}"
 						} ) {
 							name: "panel17"
@@ -227,7 +228,7 @@ new FormModel {
 						name: "panel4"
 						"background": #Color0
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq l {par t {comp button18:::p::p, seq {comp panel20:::p::p, par l {seq {space :p:51:p, par t {comp label10:::p::p, comp label11:::p::p}, space s:::p, par l:::p {seq {comp comboBox5:::p::p, space :::x, comp label22:::p::p}, seq {comp comboBox4:::p::p, space :p:92:p, comp label6:::p::p}}, space u:::p, par l {comp comboBox15:::p::p, comp comboBox3:::p:120:p}}, seq l {space :::p, comp scrollPane2:::p::p}}}}, space ::91:x}}"
+							"$horizontalGroup": "par l {seq l {par t {comp button18:::p::p, seq {comp panel20:::p::p, par l {seq {space :p:51:p, par t {comp label10:::p::p, comp label11:::p::p}, space s:::p, par l:::p {seq {comp comboBox5:::p::p, space :::x, comp label22:::p::p}, seq {comp comboBox4:::p::p, space :p:92:p, comp label6:::p::p}}, space u:::p, par l {comp comboBox15:::p::p, comp comboBox3:::p:120:p}}, seq l {space :::p, comp scrollPane2:::p::p}}}}, space ::87:x}}"
 							"$verticalGroup": "par l {seq t {space :p:15:p, par b {comp label10::b:p::p, comp comboBox4::b:p::p, comp label6::b:p::p, comp comboBox3::b:p::p}, space s:::p, par b {comp label11::b:p::p, comp comboBox5::b:p::p, comp label22::b:p::p, comp comboBox15::b:p::p}, space s:::p, comp scrollPane2:::p:147:p, space :::p, comp button18:::p::p, space ::36:x}, comp panel20::l:::x}"
 						} ) {
 							name: "panel19"
@@ -510,7 +511,7 @@ new FormModel {
 						name: "panel5"
 						"background": #Color0
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq l {comp panel22:::p::p, space u:::p, par l {seq t {par t {seq {comp comboBox11:::p::p, space ::146:x, comp label14:::p::p}, seq {space :0:258:x, comp label12:::p::p}}, par t:::p {seq {space :::p, comp comboBox9:::p::p, space :::x, comp label15:::p::p}, seq {space :p:5:p, comp comboBox7:::p::p, space s:::p, comp label13:::p::p}}, space :::p, par l {comp comboBox8:::p::p, comp comboBox10:::p::p}, space :p:45:p}, seq l {par t {comp button21:::p::p, comp scrollPane3:::p::p}, space ::85:x}}}}"
+							"$horizontalGroup": "par l {seq l {comp panel22:::p::p, space u:::p, par l {seq t {par t {seq {comp comboBox11:::p::p, space ::146:x, comp label14:::p::p}, seq {space :0:258:x, comp label12:::p::p}}, par t:::p {seq {space :::p, comp comboBox9:::p::p, space :::x, comp label15:::p::p}, seq {space :p:5:p, comp comboBox7:::p::p, space s:::p, comp label13:::p::p}}, space :::p, par l {comp comboBox8:::p::p, comp comboBox10:::p::p}, space :p:45:p}, seq l {par t {comp button21:::p::p, comp scrollPane3:::p::p}, space ::81:x}}}}"
 							"$verticalGroup": "par l {seq t {space :p:18:p, par b {comp label12::b:p::p, comp comboBox7::b:p::p, comp label13::b:p::p, comp comboBox8::b:p::p}, space :::p, par l {comp comboBox11::l:p::p, par b:l {comp label14::b:p::p, comp comboBox9::b:p::p, comp label15::b:p::p, comp comboBox10::b:p::p}}, space :::x, comp scrollPane3:::p:147:p, space u:::p, comp button21:::p::p, space :p:26:p}, comp panel22::t:::x}"
 						} ) {
 							name: "panel21"
