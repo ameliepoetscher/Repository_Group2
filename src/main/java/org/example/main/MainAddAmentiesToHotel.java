@@ -1,6 +1,6 @@
 package org.example.main;
 
-import org.example.HotelDAO;
+import org.example.dao.HotelDAO;
 import org.example.entity.Hotel;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class MainAddAmentiesToHotel {
 
         // Szemario 2: Load an existing hotel and add (existing) amenities
         ArrayList<Integer> amenities = new ArrayList<>(List.of(1));
-        HotelDAO.addAmentenytoHotel(2, amenities);
+        HotelDAO.addAmenitiesToHotel(2, amenities);
 
 
         // afterwards   check if the amenities were added, there should be 3 amenities at hotel 2

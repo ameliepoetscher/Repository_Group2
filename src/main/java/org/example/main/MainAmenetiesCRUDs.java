@@ -1,6 +1,6 @@
 package org.example.main;
 
-import org.example.AmenityDAO;
+import org.example.dao.AmenityDAO;
 import org.example.entity.Amenity;
 
 import java.util.ArrayList;

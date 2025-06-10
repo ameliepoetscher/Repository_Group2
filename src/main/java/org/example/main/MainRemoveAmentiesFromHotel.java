@@ -1,8 +1,7 @@
 package org.example.main;
 
-import org.example.HotelDAO;
 import org.example.entity.Hotel;
-
+import org.example.dao.HotelDAO;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -18,7 +17,7 @@ public class MainRemoveAmentiesFromHotel {
         ArrayList<Integer> amenitiesToDelete = new ArrayList<>(Arrays.asList(1, 1));
 
         // remove of existing amenities
-        HotelDAO.removeAmenityFromHotel(2, amenitiesToDelete);
+        HotelDAO.removeAmenitiesFromHotel(2, amenitiesToDelete);
 
         // afterwards   check if the amenities were removed, there should be 1 amenity at hotel 2
         tempHotel = HotelDAO.getHotelById(2);

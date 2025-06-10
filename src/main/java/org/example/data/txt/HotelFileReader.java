@@ -40,16 +40,16 @@ public class HotelFileReader {
                 try {
                     Hotel hotel = new Hotel();
                     hotel.setId(Integer.parseInt(parts[0]));
-                    hotel.setName(parts[1]);
-                    hotel.setAddress(parts[2]);
-                    hotel.setCity(parts[3]);
-                    hotel.setState(parts[4]);
-                    hotel.setCountry(parts[5]);
-                    hotel.setPostalCode(parts[6]);
-                    hotel.setPhone(parts[7]);
-                    hotel.setEmail(parts[8]);
-                    hotel.setRooms(Integer.parseInt(parts[9]));
-                    hotel.setRating(Integer.parseInt(parts[10]));
+                    hotel.setCategory(parts[1]);
+                    hotel.setName(parts[2]);
+                    hotel.setOwner(parts[3]);
+                    hotel.setContact(parts[4]);
+                    hotel.setAddress(parts[5]);
+                    hotel.setCity(parts[6]);
+                    hotel.setCityCode(parts[7]);
+                    hotel.setPhone(parts[8]);
+                    hotel.setNoRooms(Integer.parseInt(parts[9]));
+                    hotel.setNoBeds(Integer.parseInt(parts[10]));
                     hotels.add(hotel);
                 } catch (Exception e) {
                     System.out.println("Error parsing line: " + line);
