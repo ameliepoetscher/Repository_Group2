@@ -134,8 +134,8 @@ new FormModel {
 						name: "panel3"
 						"background": #Color0
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq {comp panel18:::p::p, par l {seq {space ::389:x, comp button15:::p::p, space :p:88:p}, seq l {space u:::p, comp scrollPane5:::p::p, space ::85:x}}}}"
-							"$verticalGroup": "par l {seq t {space :p:47:p, comp scrollPane5:::p:158:p, space ::88:x, comp button15:::p::p, space :p:42:p}, comp panel18::l:::x}"
+							"$horizontalGroup": "par l {seq {comp panel18:::p::p, space u:::p, comp scrollPane5:::p::p, space ::85:x}}"
+							"$verticalGroup": "par l {seq t {space :p:47:p, comp scrollPane5:::p:158:p, space :42:152:x}, comp panel18::l:::x}"
 						} ) {
 							name: "panel17"
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -154,10 +154,6 @@ new FormModel {
 									"text": "Help"
 									"background": sfield java.awt.Color lightGray
 								} )
-							} )
-							add( new FormComponent( "javax.swing.JButton" ) {
-								name: "button15"
-								"text": "save"
 							} )
 							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 								name: "scrollPane5"

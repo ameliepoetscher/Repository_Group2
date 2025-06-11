@@ -23,34 +23,49 @@ public class HotelFileReader {
                     continue;
                 }
 
-                line = line.replace("\"", "").trim();
-                String[] parts = line.split(",", -1);
+                // Verbesserte CSV-Parsing-Logik
+                List<String> fields = new ArrayList<>();
+                StringBuilder currentField = new StringBuilder();
+                boolean inQuotes = false;
+
+                for (char c : line.toCharArray()) {
+                    if (c == '"') {
+                        inQuotes = !inQuotes;
+                    } else if (c == ',' && !inQuotes) {
+                        fields.add(currentField.toString().trim());
+                        currentField.setLength(0);
+                    } else {
+                        currentField.append(c);
+                    }
+                }
+                fields.add(currentField.toString().trim());
+
+                String[] parts = fields.toArray(new String[0]);
 
                 if (parts.length < 11) {
                     System.out.println("Warning: Skipping incomplete line: " + line);
                     continue;
                 }
 
-                for (int i = 0; i < parts.length; i++) {
-                    if (parts[i] == null || parts[i].trim().isEmpty()) {
-                        parts[i] = (i >= 9) ? "0" : "unknown";
-                    }
-                }
-
                 try {
                     Hotel hotel = new Hotel();
-                    hotel.setId(Integer.parseInt(parts[0]));
-                    hotel.setCategory(parts[1]);
-                    hotel.setName(parts[2]);
-                    hotel.setOwner(parts[3]);
-                    hotel.setContact(parts[4]);
-                    hotel.setAddress(parts[5]);
-                    hotel.setCity(parts[6]);
-                    hotel.setCityCode(parts[7]);
-                    hotel.setPhone(parts[8]);
-                    hotel.setNoRooms(Integer.parseInt(parts[9]));
-                    hotel.setNoBeds(Integer.parseInt(parts[10]));
+                    hotel.setId(Integer.parseInt(parts[0].replaceAll("\"", "")));
+                    hotel.setCategory(parts[1].replaceAll("\"", ""));
+                    hotel.setName(parts[2].replaceAll("\"", ""));
+                    hotel.setOwner(parts[3].replaceAll("\"", ""));
+                    hotel.setContact(parts[4].replaceAll("\"", ""));
+                    hotel.setAddress(parts[5].replaceAll("\"", ""));
+                    hotel.setCity(parts[6].replaceAll("\"", ""));
+                    hotel.setCityCode(parts[7].replaceAll("\"", ""));
+                    hotel.setPhone(parts[8].replaceAll("\"", ""));
+                    hotel.setNoRooms(Integer.parseInt(parts[9].replaceAll("\"", "")));
+                    hotel.setNoBeds(Integer.parseInt(parts[10].replaceAll("\"", "")));
                     hotels.add(hotel);
+
+                    // Debug-Ausgabe
+                    System.out.println("Erfolgreich eingelesen - Hotel ID: " + hotel.getId() +
+                            ", Zimmer: " + hotel.getNoRooms() +
+                            ", Betten: " + hotel.getNoBeds());
                 } catch (Exception e) {
                     System.out.println("Error parsing line: " + line);
                     e.printStackTrace();
@@ -62,9 +77,7 @@ public class HotelFileReader {
             e.printStackTrace();
         }
 
-        // 🔽 Hier wird die Liste nach ID sortiert
         hotels.sort(Comparator.comparingInt(Hotel::getId));
-
         return hotels;
     }
 }
