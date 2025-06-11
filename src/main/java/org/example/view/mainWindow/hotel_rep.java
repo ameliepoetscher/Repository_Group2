@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Sun May 18 18:16:41 CEST 2025
  */
 
-package org.example;
+package org.example.view.mainWindow;
 
 import java.awt.*;
 import java.awt.event.ActionListener;

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.view.mainWindow;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
