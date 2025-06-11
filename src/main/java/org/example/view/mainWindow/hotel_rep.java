@@ -38,7 +38,7 @@ public class hotel_rep extends JPanel {
     //ab da nichts verändern ?!
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+        // Generated using JFormDesigner Evaluation license - Amelie Pötscher
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
         panel7 = new JPanel();
@@ -49,15 +49,16 @@ public class hotel_rep extends JPanel {
         table1 = new JTable();
         label1 = new JLabel();
         panel2 = new JPanel();
+        panel3 = new JPanel();
 
         //======== this ========
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax
-        .swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing
-        .border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.
-        Font("D\u0069alog",java.awt.Font.BOLD,12),java.awt.Color.red
-        ), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override
-        public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName(
-        )))throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
+        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing
+        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
+        Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
+        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
+        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName (
+        ) )) throw new RuntimeException( ); }} );
 
         //======== tabbedPane1 ========
         {
@@ -188,6 +189,12 @@ public class hotel_rep extends JPanel {
                 );
             }
             tabbedPane1.addTab("transactional", panel2);
+
+            //======== panel3 ========
+            {
+                panel3.setLayout(new GridLayout(10, 10));
+            }
+            tabbedPane1.addTab("text", panel3);
         }
 
         GroupLayout layout = new GroupLayout(this);
@@ -208,7 +215,7 @@ public class hotel_rep extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+    // Generated using JFormDesigner Evaluation license - Amelie Pötscher
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private JPanel panel7;
@@ -219,5 +226,6 @@ public class hotel_rep extends JPanel {
     private JTable table1;
     private JLabel label1;
     private JPanel panel2;
+    private JPanel panel3;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

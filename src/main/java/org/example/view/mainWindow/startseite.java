@@ -41,7 +41,6 @@ public class startseite extends JPanel {
 
         // ======= HIER kommt Dein eigener Code =======
         button25.addActionListener(new save());
-        button15.addActionListener(new save());
         button18.addActionListener(new save());
         button21.addActionListener(new save());
         button24.addActionListener(new save());
@@ -94,9 +93,9 @@ public class startseite extends JPanel {
         String filePath = "src/main/java/org/example/data/txt/hotels.txt";
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
 
-        DefaultTableModel model = new DefaultTableModel(
-                new String[] {"ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds"}, 0
-        );
+        DefaultTableModel model = new DefaultTableModel(new String[]{
+                "ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds", "Last Reported Data"
+        }, 0);
 
 
         for (Hotel hotel : hotels) {
@@ -108,7 +107,8 @@ public class startseite extends JPanel {
                     hotel.getCity(),
                     hotel.getCityCode(),
                     hotel.getNoRooms(),
-                    hotel.getNoBeds()
+                    hotel.getNoBeds(),
+                    "" // Hier ist der Platzhalter für später „Last Reported Data“
             };
             model.addRow(rowData);
         }
