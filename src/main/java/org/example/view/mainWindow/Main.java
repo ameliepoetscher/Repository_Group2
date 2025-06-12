@@ -1,4 +1,4 @@
-package org.example;
+package org.example.view.mainWindow;
 import javax.swing.*;
 
 public class Main {
@@ -18,6 +18,7 @@ public class Main {
             frame.setVisible(true);
 
         });
+
 
 
 
