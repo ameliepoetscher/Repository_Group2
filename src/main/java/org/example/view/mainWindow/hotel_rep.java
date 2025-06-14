@@ -86,8 +86,37 @@ public class hotel_rep extends JPanel {
     //Panel 1 Ende
 
     private void button5(ActionEvent e) {
-        // TODO add your code here
+        int row = table1.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a Hotel");
+            return;
+        }
+
+        // Hole das aktuelle Hotel-Objekt aus der Zeile
+        int id = Integer.parseInt(table1.getValueAt(row, 0).toString());
+        String name = table1.getValueAt(row, 2).toString();
+        String address = table1.getValueAt(row, 3).toString();
+        int noRooms = Integer.parseInt(table1.getValueAt(row, 6).toString());
+        int noBeds = Integer.parseInt(table1.getValueAt(row, 7).toString());
+
+        Hotel hotel = new Hotel();
+        hotel.setId(id);
+        hotel.setName(name);
+        hotel.setAddress(address);
+        hotel.setNoRooms(noRooms);
+        hotel.setNoBeds(noBeds);
+
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        EditHotelDialog dialog = new EditHotelDialog(topFrame, hotel);
+        dialog.setVisible(true);
+
+        // Nach dem Schließen ggf. Änderungen zurückschreiben in die Tabelle:
+        table1.setValueAt(hotel.getName(), row, 2);
+        table1.setValueAt(hotel.getAddress(), row, 3);
+        table1.setValueAt(hotel.getNoRooms(), row, 6);
+        table1.setValueAt(hotel.getNoBeds(), row, 7);
     }
+
 
 
 
@@ -135,13 +164,13 @@ public class hotel_rep extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax
-        .swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",javax.swing
-        .border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.
-        Font("Dialo\u0067",java.awt.Font.BOLD,12),java.awt.Color.red
-        ), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override
-        public void propertyChange(java.beans.PropertyChangeEvent e){if("borde\u0072".equals(e.getPropertyName(
-        )))throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+        . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder
+        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .
+        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
+        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+        ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+        ;
 
         //======== tabbedPane1 ========
         {
