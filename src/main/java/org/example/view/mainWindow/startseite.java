@@ -9,16 +9,6 @@ import javax.swing.table.*;
 import org.example.data.txt.HotelFileReader;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.example.entity.Occupancy;
-import org.example.data.txt.OccupancyFileReader;
-import java.util.Comparator;
-
-
 
 
 
@@ -35,12 +25,11 @@ public class startseite extends JPanel {
     public startseite() {
         initComponents();
         ladeHotelsInTabelle();
-        ladeHotelsSummary();
-        ladeOccupancySummary();
 
 
         // ======= HIER kommt Dein eigener Code =======
         button25.addActionListener(new save());
+        button15.addActionListener(new save());
         button18.addActionListener(new save());
         button21.addActionListener(new save());
         button24.addActionListener(new save());
@@ -86,14 +75,14 @@ public class startseite extends JPanel {
 
 
     }
-    //Panel 1
+
     private void ladeHotelsInTabelle() {
         String filePath = "src/main/java/org/example/data/txt/hotels.txt";
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
 
-        DefaultTableModel model = new DefaultTableModel(new String[]{
-                "ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds", "Last Reported Data"
-        }, 0);
+        DefaultTableModel model = new DefaultTableModel(
+                new String[] {"ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds"}, 0
+        );
 
 
         for (Hotel hotel : hotels) {
@@ -105,116 +94,13 @@ public class startseite extends JPanel {
                     hotel.getCity(),
                     hotel.getCityCode(),
                     hotel.getNoRooms(),
-                    hotel.getNoBeds(),
-                    "" // Hier ist der Platzhalter für später „Last Reported Data“
+                    hotel.getNoBeds()
             };
             model.addRow(rowData);
         }
 
         table1.setModel(model);
     }
-    //Panel 1 Ende
-
-    //Panel 2
-    private void ladeHotelsSummary() {
-        String filePath = "src/main/java/org/example/data/txt/hotels.txt";
-        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
-
-        // Kategorie -> Hotels
-        Map<String, List<Hotel>> kategorienMap = new HashMap<>();
-        for (Hotel hotel : hotels) {
-            kategorienMap.computeIfAbsent(hotel.getCategory(), k -> new ArrayList<>()).add(hotel);
-        }
-
-        // Kategorien in gewünschter Reihenfolge
-        List<String> kategorienReihenfolge = List.of("*", "**", "***", "****", "*****");
-
-        // Table Model vorbereiten
-        DefaultTableModel model = (DefaultTableModel) table5.getModel();
-        model.setRowCount(0);
-
-        for (String kategorie : kategorienReihenfolge) {
-            List<Hotel> kategorieHotels = kategorienMap.getOrDefault(kategorie, new ArrayList<>());
-
-            int anzahlHotels = kategorieHotels.size();
-            int sumRooms = 0;
-            int sumBeds = 0;
-
-            for (Hotel hotel : kategorieHotels) {
-                sumRooms += hotel.getNoRooms();
-                sumBeds += hotel.getNoBeds();
-            }
-
-            int avgRooms = anzahlHotels == 0 ? 0 : sumRooms / anzahlHotels;
-            int avgBeds = anzahlHotels == 0 ? 0 : sumBeds / anzahlHotels;
-
-            Object[] rowData = { kategorie, anzahlHotels, avgRooms, avgBeds };
-            model.addRow(rowData);
-        }
-
-        // Tabelle aktualisieren
-        table5.setModel(model);
-    }
-    // Panel 2 Ende
-
-    //Panel 3
-    private void ladeOccupancySummary() {
-        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
-        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
-
-        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
-        List<Occupancy> occs = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
-
-
-        // Auswahl aus ComboBoxen holen
-        String selYear     = (String) comboBox4.getSelectedItem();       // z. B. "2025"
-        String selMonth    = (String) comboBox5.getSelectedItem();       // z. B. "January"
-        String selCategory = (String) comboBox3.getSelectedItem();       // z. B. "★"
-
-        int year = Integer.parseInt(selYear);
-        int month = comboBox5.getSelectedIndex() + 1; // January -> 1, etc.
-
-        // Hotel-ID nach Kategorie suchen (für Filter)
-        Set<Integer> allowedHotelIds = hotels.stream()
-                .filter(h -> h.getCategory().equals(selCategory))
-                .map(Hotel::getId)
-                .collect(Collectors.toSet());
-
-        // Summen berechnen
-        int sumRooms = 0, sumBeds = 0, countEntries = 0;
-        for (Occupancy o : occs) {
-            if (o.getYear() == year &&
-                    o.getMonth() == month &&
-                    allowedHotelIds.contains(o.getHotel().getId())) {
-
-                sumRooms += o.getUsedRooms();
-                sumBeds += o.getUsedBeds();
-                countEntries++;
-            }
-        }
-
-
-        // Durchschnitt pro Hotel (wenn mehrere Hotels in Kategorie existieren)
-        int numHotelsInCat = allowedHotelIds.size();
-        int avgRooms = countEntries == 0 || numHotelsInCat == 0 ? 0
-                : sumRooms / numHotelsInCat;
-        int avgBeds  = countEntries == 0 || numHotelsInCat == 0 ? 0
-                : sumBeds  / numHotelsInCat;
-
-        // Tabelle aktualisieren
-        DefaultTableModel model = (DefaultTableModel) table2.getModel();
-        model.setRowCount(0);
-        Object[] row = {
-                selYear, selMonth, selCategory,
-                sumRooms, sumBeds,
-                numHotelsInCat, avgRooms, avgBeds
-        };
-        model.addRow(row);
-        table2.setModel(model);
-    }
-
-
-
 
     private void Add(ActionEvent e) {
         // TODO add your code here
@@ -307,12 +193,12 @@ public class startseite extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-        ( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-        . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-        propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
-        ; }} );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing.
+        border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e" , javax. swing .border . TitledBorder. CENTER
+        ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dialo\u0067", java .awt . Font
+        . BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener(
+        new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "borde\u0072"
+        .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
 
         //======== this2 ========
         {
