@@ -18,19 +18,9 @@ import org.example.entity.Occupancy;
 import org.example.data.txt.OccupancyFileReader;
 import java.util.Comparator;
 
-
-
-
-
-/*
- * Created by JFormDesigner on Fri May 16 15:12:45 CEST 2025
- */
-
 /**
  * @author ami
  */
-
-
 public class startseite extends JPanel {
     public startseite() {
         initComponents();
@@ -38,14 +28,11 @@ public class startseite extends JPanel {
         ladeHotelsSummary();
         ladeOccupancySummary();
 
-
         // ======= HIER kommt Dein eigener Code =======
         button25.addActionListener(new save());
         button18.addActionListener(new save());
         button21.addActionListener(new save());
         button24.addActionListener(new save());
-
-
 
         deleteButton.addActionListener(new DeleteHotelAction());
 
@@ -77,15 +64,15 @@ public class startseite extends JPanel {
             );
         };
 
-        button2 .addActionListener(help);
+        button2.addActionListener(help);
         button17.addActionListener(help);
         button20.addActionListener(help);
         button23.addActionListener(help);
 
-        
-
-
+        // Korrektes Hinzufügen des Edit-Buttons!
+        button3.addActionListener(this::button3);
     }
+
     //Panel 1
     private void ladeHotelsInTabelle() {
         String filePath = "src/main/java/org/example/data/txt/hotels.txt";
@@ -94,7 +81,6 @@ public class startseite extends JPanel {
         DefaultTableModel model = new DefaultTableModel(new String[]{
                 "ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds", "Last Reported Data"
         }, 0);
-
 
         for (Hotel hotel : hotels) {
             Object[] rowData = {
@@ -165,7 +151,6 @@ public class startseite extends JPanel {
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
         List<Occupancy> occs = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
 
-
         // Auswahl aus ComboBoxen holen
         String selYear     = (String) comboBox4.getSelectedItem();       // z. B. "2025"
         String selMonth    = (String) comboBox5.getSelectedItem();       // z. B. "January"
@@ -193,7 +178,6 @@ public class startseite extends JPanel {
             }
         }
 
-
         // Durchschnitt pro Hotel (wenn mehrere Hotels in Kategorie existieren)
         int numHotelsInCat = allowedHotelIds.size();
         int avgRooms = countEntries == 0 || numHotelsInCat == 0 ? 0
@@ -213,12 +197,142 @@ public class startseite extends JPanel {
         table2.setModel(model);
     }
 
-
-
+    // Handler für Edit-Button
+    private void button3(ActionEvent e) {
+        editHotel();
+    }
 
     private void Add(ActionEvent e) {
         // TODO add your code here
     }
+
+    // *** NEU: EditHotelDialog + Logic ***
+    private void editHotel() {
+        int selectedRow = table1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a hotel to edit!", "No selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) table1.getModel();
+        Object[] rowData = new Object[8];
+        for (int i = 0; i < 8; i++) {
+            rowData[i] = model.getValueAt(selectedRow, i);
+        }
+
+        EditHotelDialog dialog = new EditHotelDialog((JFrame) SwingUtilities.getWindowAncestor(this), rowData);
+        dialog.setVisible(true);
+
+        if (dialog.isSaved()) {
+            Object[] edited = dialog.getEditedValues();
+            for (int i = 1; i < 8; i++) { // ID bleibt, Rest aktualisieren
+                model.setValueAt(edited[i], selectedRow, i);
+            }
+            JOptionPane.showMessageDialog(this, "Hotel updated!", "Edit", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    // **** EditHotelDialog: Dialog zum Bearbeiten der Hoteldaten (alle Felder außer ID) ****
+    private static class EditHotelDialog extends JDialog {
+        private boolean saved = false;
+        private JTextField categoryField;
+        private JTextField nameField;
+        private JTextField addressField;
+        private JTextField cityField;
+        private JTextField plzField;
+        private JTextField roomsField;
+        private JTextField bedsField;
+
+        public EditHotelDialog(JFrame parent, Object[] rowData) {
+            super(parent, "Edit Hotel", true);
+            setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.anchor = GridBagConstraints.WEST;
+
+            gbc.gridx = 0; gbc.gridy = 0;
+            add(new JLabel("ID:"), gbc);
+            gbc.gridx = 1;
+            JTextField idField = new JTextField(rowData[0].toString(), 10);
+            idField.setEditable(false);
+            add(idField, gbc);
+
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Category:"), gbc);
+            gbc.gridx = 1;
+            categoryField = new JTextField(rowData[1].toString(), 10);
+            add(categoryField, gbc);
+
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Name:"), gbc);
+            gbc.gridx = 1;
+            nameField = new JTextField(rowData[2].toString(), 15);
+            add(nameField, gbc);
+
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Adresse:"), gbc);
+            gbc.gridx = 1;
+            addressField = new JTextField(rowData[3].toString(), 15);
+            add(addressField, gbc);
+
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("City:"), gbc);
+            gbc.gridx = 1;
+            cityField = new JTextField(rowData[4].toString(), 10);
+            add(cityField, gbc);
+
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("PLZ:"), gbc);
+            gbc.gridx = 1;
+            plzField = new JTextField(rowData[5].toString(), 10);
+            add(plzField, gbc);
+
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Rooms:"), gbc);
+            gbc.gridx = 1;
+            roomsField = new JTextField(rowData[6].toString(), 5);
+            add(roomsField, gbc);
+
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Beds:"), gbc);
+            gbc.gridx = 1;
+            bedsField = new JTextField(rowData[7].toString(), 5);
+            add(bedsField, gbc);
+
+            gbc.gridx = 0; gbc.gridy++;
+            JButton saveBtn = new JButton("Save");
+            JButton cancelBtn = new JButton("Cancel");
+            add(saveBtn, gbc);
+            gbc.gridx = 1;
+            add(cancelBtn, gbc);
+
+            saveBtn.addActionListener(e -> {
+                saved = true;
+                setVisible(false);
+            });
+            cancelBtn.addActionListener(e -> setVisible(false));
+
+            pack();
+            setLocationRelativeTo(parent);
+        }
+
+        public boolean isSaved() { return saved; }
+
+        // Gibt die neuen Werte als Object[] in der richtigen Reihenfolge zurück
+        public Object[] getEditedValues() {
+            return new Object[]{
+                    null, // ID nicht editierbar
+                    categoryField.getText(),
+                    nameField.getText(),
+                    addressField.getText(),
+                    cityField.getText(),
+                    plzField.getText(),
+                    roomsField.getText(),
+                    bedsField.getText()
+            };
+        }
+    }
+
 
 
 
@@ -238,6 +352,7 @@ public class startseite extends JPanel {
         button6 = new JButton();
         button25 = new JButton();
         deleteButton = new JButton();
+        button3 = new JButton();
         panel3 = new JPanel();
         panel17 = new JPanel();
         button15 = new JButton();
@@ -307,13 +422,13 @@ public class startseite extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
-        swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border
-        .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog"
-        ,java.awt.Font.BOLD,12),java.awt.Color.red), getBorder
-        ())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
-        .beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException
-        ();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+        . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder
+        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .
+        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
+        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+        ) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+        ;
 
         //======== this2 ========
         {
@@ -421,6 +536,10 @@ public class startseite extends JPanel {
                     //---- deleteButton ----
                     deleteButton.setText("Delete");
 
+                    //---- button3 ----
+                    button3.setText("Edit");
+
+
                     GroupLayout panel7Layout = new GroupLayout(panel7);
                     panel7.setLayout(panel7Layout);
                     panel7Layout.setHorizontalGroup(
@@ -431,7 +550,9 @@ public class startseite extends JPanel {
                                 .addGroup(panel7Layout.createParallelGroup()
                                     .addGroup(panel7Layout.createSequentialGroup()
                                         .addComponent(button6)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 387, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 334, Short.MAX_VALUE)
+                                        .addComponent(button3)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(deleteButton)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(button25)
@@ -449,7 +570,8 @@ public class startseite extends JPanel {
                                 .addGroup(panel7Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                     .addComponent(button6)
                                     .addComponent(deleteButton)
-                                    .addComponent(button25))
+                                    .addComponent(button25)
+                                    .addComponent(button3))
                                 .addGap(28, 28, 28))
                             .addComponent(panel8, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     );
@@ -1803,6 +1925,7 @@ public class startseite extends JPanel {
     private JButton button6;
     private JButton button25;
     private JButton deleteButton;
+    private JButton button3;
     private JPanel panel3;
     private JPanel panel17;
     private JButton button15;
