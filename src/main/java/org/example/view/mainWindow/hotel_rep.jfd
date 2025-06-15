@@ -48,6 +48,7 @@ new FormModel {
 								"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 									add( new java.util.Vector {
 										add( "" )
+										add( null )
 										add( "" )
 										add( " " )
 										add( null )
@@ -58,6 +59,7 @@ new FormModel {
 									} )
 								}, new java.util.Vector {
 									add( "ID" )
+									add( "Category" )
 									add( "Hotel Name" )
 									add( "Adress" )
 									add( "City" )
@@ -66,6 +68,7 @@ new FormModel {
 									add( "Beds" )
 									add( "Last Transaction" )
 								}, new java.util.Vector {
+									add( null )
 									add( null )
 									add( null )
 									add( null )
@@ -83,8 +86,10 @@ new FormModel {
 									add( null )
 									add( null )
 									add( null )
+									add( null )
 								}, new java.util.Vector {
 									add( new com.jformdesigner.model.SwingTableColumn( null, 15, 0, 0, true ) )
+									add( null )
 									add( null )
 									add( null )
 									add( null )
@@ -442,4 +447,3 @@ new FormModel {
 		} )
 	}
 }
-
