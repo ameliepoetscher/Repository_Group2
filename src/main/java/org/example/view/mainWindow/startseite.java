@@ -226,7 +226,7 @@ public class startseite extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+        // Generated using JFormDesigner Evaluation license - Tamara Sibinovic
         this2 = new JPanel();
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
@@ -307,12 +307,13 @@ public class startseite extends JPanel {
         label21 = new JLabel();
 
         //======== this ========
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-        ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-        .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-        propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-        ;} } );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
+        javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax
+        . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
+        . awt .Font ( "D\u0069al\u006fg", java .awt . Font. BOLD ,12 ) ,java . awt
+        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .
+        PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062or\u0064er" .
+        equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
 
         //======== this2 ========
         {
@@ -1767,7 +1768,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+    // Generated using JFormDesigner Evaluation license - Tamara Sibinovic
     private JPanel this2;
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
@@ -1851,7 +1852,7 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+            // Generated using JFormDesigner Evaluation license - Tamara Sibinovic
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 
