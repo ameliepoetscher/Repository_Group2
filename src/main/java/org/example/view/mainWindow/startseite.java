@@ -1,4 +1,5 @@
 package org.example.view.mainWindow;
+import jakarta.persistence.criteria.CollectionJoin;
 import org.example.entity.Hotel;
 
 import java.awt.*;
@@ -22,6 +23,8 @@ import java.util.Comparator;
  * @author ami
  */
 public class startseite extends JPanel {
+    private CollectionJoin<Object, Object> hotelTable;
+
     public startseite() {
         initComponents();
         ladeHotelsInTabelle();
@@ -202,6 +205,13 @@ public class startseite extends JPanel {
         editHotel();
     }
 
+
+    private void AddHotel(ActionEvent e) {
+        DefaultTableModel model = (DefaultTableModel) hotelTable.getModel();
+        AddMasterData dialog = new AddMasterData(model);
+        dialog.setVisible(true);
+    }
+
     private void Add(ActionEvent e) {
         // TODO add your code here
     }
@@ -336,9 +346,10 @@ public class startseite extends JPanel {
 
 
 
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+        // Generated using JFormDesigner Evaluation license - Maria Malik
         this2 = new JPanel();
         label21 = new JLabel();
         tabbedPane1 = new JTabbedPane();
@@ -422,13 +433,14 @@ public class startseite extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-        . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder
-        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .
-        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
-        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-        ) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
-        ;
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder (
+        new javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn"
+        , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM
+        , new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 )
+        ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener(
+        new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
+        ) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
+        ;} } );
 
         //======== this2 ========
         {
@@ -538,7 +550,7 @@ public class startseite extends JPanel {
 
                     //---- button3 ----
                     button3.setText("Edit");
-
+                    button3.addActionListener(e -> button3(e));
 
                     GroupLayout panel7Layout = new GroupLayout(panel7);
                     panel7.setLayout(panel7Layout);
@@ -1911,7 +1923,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+    // Generated using JFormDesigner Evaluation license - Maria Malik
     private JPanel this2;
     private JLabel label21;
     private JTabbedPane tabbedPane1;
@@ -1997,7 +2009,7 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+            // Generated using JFormDesigner Evaluation license - Maria Malik
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 
