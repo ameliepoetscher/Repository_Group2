@@ -1,4 +1,5 @@
 package org.example.view.mainWindow;
+import jakarta.persistence.criteria.CollectionJoin;
 import org.example.entity.Hotel;
 
 import java.awt.*;
@@ -32,6 +33,8 @@ import java.util.Comparator;
 
 
 public class startseite extends JPanel {
+    private CollectionJoin<Object, Object> hotelTable;
+
     public startseite() {
         initComponents();
         ladeHotelsInTabelle();
@@ -218,15 +221,23 @@ public class startseite extends JPanel {
 
 
 
+
+    private void AddHotel(ActionEvent e) {
+        DefaultTableModel model = (DefaultTableModel) hotelTable.getModel();
+        AddMasterData dialog = new AddMasterData(model);
+        dialog.setVisible(true);
+    }
+
     private void Add(ActionEvent e) {
         // TODO add your code here
     }
 
 
 
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+        // Generated using JFormDesigner Evaluation license - Maria Malik
         this2 = new JPanel();
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
@@ -307,12 +318,13 @@ public class startseite extends JPanel {
         label21 = new JLabel();
 
         //======== this ========
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-        ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-        .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-        propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-        ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
+        swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border
+        .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog"
+        ,java.awt.Font.BOLD,12),java.awt.Color.red), getBorder
+        ())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
+        .beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException
+        ();}});
 
         //======== this2 ========
         {
@@ -396,7 +408,11 @@ public class startseite extends JPanel {
 
                         //---- button6 ----
                         button6.setText("+");
-                        button6.addActionListener(e -> Add(e));
+                        button6.addActionListener(e -> {
+			Add(e);
+			Add(e);
+			AddHotel(e);
+		});
 
                         //---- button25 ----
                         button25.setText("Save");
@@ -826,7 +842,7 @@ public class startseite extends JPanel {
                                                 .addGroup(panel19Layout.createSequentialGroup()
                                                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                     .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
-                                    .addContainerGap(81, Short.MAX_VALUE))
+                                    .addContainerGap(91, Short.MAX_VALUE))
                         );
                         panel19Layout.setVerticalGroup(
                             panel19Layout.createParallelGroup()
@@ -1263,10 +1279,10 @@ public class startseite extends JPanel {
                                             .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                 .addGroup(panel21Layout.createSequentialGroup()
                                                     .addComponent(comboBox11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
                                                     .addComponent(label14))
                                                 .addGroup(panel21Layout.createSequentialGroup()
-                                                    .addGap(0, 225, Short.MAX_VALUE)
+                                                    .addGap(0, 241, Short.MAX_VALUE)
                                                     .addComponent(label12)))
                                             .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                                                 .addGroup(panel21Layout.createSequentialGroup()
@@ -1611,7 +1627,7 @@ public class startseite extends JPanel {
                                             .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                                                 .addComponent(scrollPane4, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                                                 .addComponent(comboBox16, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
                                             .addGroup(panel23Layout.createParallelGroup()
                                                 .addGroup(panel23Layout.createSequentialGroup()
                                                     .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -1641,7 +1657,7 @@ public class startseite extends JPanel {
                                                     .addComponent(label9)
                                                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                     .addComponent(textField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
                                             .addComponent(label20)
                                             .addGap(16, 16, 16)
                                             .addComponent(comboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -1650,7 +1666,7 @@ public class startseite extends JPanel {
                                             .addComponent(label19)
                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(textField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 214, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
                                             .addComponent(button24)
                                             .addGap(79, 79, 79))))
                         );
@@ -1767,7 +1783,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+    // Generated using JFormDesigner Evaluation license - Maria Malik
     private JPanel this2;
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
@@ -1851,7 +1867,7 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+            // Generated using JFormDesigner Evaluation license - Maria Malik
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 
