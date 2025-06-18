@@ -29,7 +29,7 @@ new FormModel {
 					name: "panel1"
 					"background": &Color0 new java.awt.Color( 255, 255, 255, 255 )
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {seq l {comp panel8:::p::p, space :::p, par l {seq {comp button6:::p::p, space ::334:x, comp button3:::p::p, space :::p, comp deleteButton:::p::p, space :::p, comp button25:::p::p, space :p:94:p}, seq {comp scrollPane1::::0:x, space :::p}}}}"
+						"$horizontalGroup": "par l {seq l {comp panel8:::p::p, space :::p, par l {seq {comp button6:::p::p, space :::x, comp button3:::p::p, space :::p, comp deleteButton:::p::p, space :::p, comp button25:::p::p, space :p:94:p}, seq {comp scrollPane1::::634:x, space :::p}}}}"
 						"$verticalGroup": "par l {seq l {space :::x, comp scrollPane1:::p:302:p, space :::p, par b {comp button6::b:p::p, comp deleteButton::b:p::p, comp button25::b:p::p, comp button3::b:p::p}, space :p:28:p}, comp panel8::l:::x}"
 					} ) {
 						name: "panel7"
@@ -121,6 +121,8 @@ new FormModel {
 							name: "button6"
 							"text": "+"
 							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "Add", true ) )
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button6", true ) )
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "AddButton", true ) )
 						} )
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button25"
@@ -133,11 +135,11 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button3"
 							"text": "Edit"
-							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button3", true ) )
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "EditButton", true ) )
 						} )
 					} )
 				}, new FormLayoutConstraints( null ) {
-					"title": "Hotels"
+					"title": "Hotel List"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 					"$horizontalGroup": "par l {comp panel17::l:::x}"
@@ -231,7 +233,89 @@ new FormModel {
 						} )
 					} )
 				}, new FormLayoutConstraints( null ) {
-					"title": "Hotels Summary"
+					"title": "Hotel Summary"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+					"$horizontalGroup": "par l {seq {comp panel26:::p::p, par l {seq {space ::371:x, comp button5:::p::p, space s:::p, comp button4:::p::p, space :p:112:p}, seq l {space :p:18:p, comp scrollPane6:::p:571:p, space ::57:x}}}}"
+					"$verticalGroup": "par l {seq t {par t {comp panel26:::::x, seq {space ::7:x, comp scrollPane6:::p:323:p, space :::p, par b {comp button4::b:p::p, comp button5::b:p::p}}}, space :::p}}"
+				} ) {
+					name: "panel2"
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane6"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "table6"
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+								add( new java.util.Vector {
+									add( "" )
+									add( "" )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+							}, new java.util.Vector {
+								add( "ID" )
+								add( "Hotel Name" )
+								add( "Room Occupany" )
+								add( "Bed Occupancy" )
+								add( "Month" )
+								add( "Year" )
+								add( "Attributes" )
+							}, new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							}, new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							}, new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button4"
+						"text": "Edit"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {seq {space :::p, par l {comp button28::l:::x, seq l {comp button29:::p:83:p, space :0:0:x}}, space :::p}}"
+						"$verticalGroup": "par l {seq t {space :p:25:p, comp button29:::p::p, space ::260:x, comp button28:::p::p, space :p:23:p}}"
+					} ) {
+						name: "panel26"
+						"background": #Color1
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "button28"
+							"text": "Log Out"
+							"background": sfield java.awt.Color lightGray
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "button29"
+							"text": "Help"
+							"background": sfield java.awt.Color lightGray
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button5"
+						"text": "Add Attribute"
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "Transactional Data"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 					"$horizontalGroup": "par l {comp panel19::l:::x}"
@@ -240,8 +324,8 @@ new FormModel {
 					name: "panel4"
 					"background": #Color0
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {seq {par l {comp panel20::l:p::p, comp button18::l:p::p}, par l {seq {space :p:51:p, par t {comp label10:::p::p, comp label11:::p::p}, space s:::p, par l:::p {seq {comp comboBox5:::p::p, space :::x, comp label22:::p::p}, seq {comp comboBox4:::p::p, space :p:92:p, comp label6:::p::p}}, space u:::p, par l {comp comboBox15:::p::p, comp comboBox3:::p:120:p}}, seq l {space :::p, comp scrollPane2:::p:569:p}}, space ::71:x}}"
-						"$verticalGroup": "par l {seq t {space :p:15:p, par b {comp label10::b:p::p, comp comboBox4::b:p::p, comp label6::b:p::p, comp comboBox3::b:p::p}, space s:::p, par b {comp label11::b:p::p, comp comboBox5::b:p::p, comp label22::b:p::p, comp comboBox15::b:p::p}, par l {seq {space :p:215:p, comp button18:::p::p, space ::42:x}, seq {space s:::p, comp scrollPane2::::261:x, space :::p}}}, comp panel20::l:::x}"
+						"$horizontalGroup": "par l {seq {par l {comp panel20::l:p::p, comp button18::l:p::p}, par l {seq {space :p:51:p, par t {comp label10:::p::p, comp label11:::p::p}, space s:::p, par l:::p {seq {comp comboBox5:::p::p, space :::x, comp label22:::p::p}, seq {comp comboBox4:::p::p, space :p:92:p, comp label6:::p::p}}, space u:::p, par l {comp comboBox15:::p::p, comp comboBox3:::p:120:p}}, seq l {space :::p, comp scrollPane2:::p:569:p}}, space ::71:x}};par l {seq {space :0:0:x, comp label24:::p::p, space :0:0:x}}"
+						"$verticalGroup": "par l {seq t {space :p:15:p, par b {comp label10::b:p::p, comp comboBox4::b:p::p, comp label6::b:p::p, comp comboBox3::b:p::p}, space s:::p, par b {comp label11::b:p::p, comp comboBox5::b:p::p, comp label22::b:p::p, comp comboBox15::b:p::p}, par l {seq {space :p:215:p, comp button18:::p::p, space ::42:x}, seq {space s:::p, comp scrollPane2::::261:x, space :::p}}}, comp panel20::l:::x};par l {seq {space :0:0:x, comp label24:::p::p, space :0:0:x}}"
 					} ) {
 						name: "panel19"
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -498,7 +582,7 @@ new FormModel {
 						} )
 						add( new FormComponent( "javax.swing.JComboBox" ) {
 							name: "comboBox15"
-							"model": new javax.swing.DefaultComboBoxModel {
+							"model": &DefaultComboBoxModel3 new javax.swing.DefaultComboBoxModel {
 								selectedItem: "---select---"
 								addElement( "---select---" )
 								addElement( "Hotel Alpha" )
@@ -512,6 +596,10 @@ new FormModel {
 							name: "label22"
 							"text": "hotel:"
 						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label24"
+							"text": "hotel:"
+						} )
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "Occupancy Summary"
@@ -523,8 +611,8 @@ new FormModel {
 					name: "panel5"
 					"background": #Color0
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {seq l {comp panel22:::p::p, space u:::p, par l {seq t {par t {seq {comp comboBox11:::p::p, space :::x, comp label14:::p::p}, seq {space :0:0:x, comp label12:::p::p}}, par t:::p {seq {space :::p, comp comboBox9:::p::p, space :::x, comp label15:::p::p}, seq {space :p:5:p, comp comboBox7:::p::p, space s:::p, comp label13:::p::p}}, space :::p, par l {comp comboBox8:::p::p, comp comboBox10:::p::p}, space :p:45:p}, seq {space :p:399:p, comp button21:::p::p, space :::x}, seq l {comp scrollPane3:::p:531:p, space :0:103:x}}}}"
-						"$verticalGroup": "par l {seq t {space :p:18:p, par b {comp label12::b:p::p, comp comboBox7::b:p::p, comp label13::b:p::p, comp comboBox8::b:p::p}, space :::p, par l {comp comboBox11::l:p::p, par b:l {comp label14::b:p::p, comp comboBox9::b:p::p, comp label15::b:p::p, comp comboBox10::b:p::p}}, space :::x, comp scrollPane3:::p:236:p, space :::p, comp button21:::p::p, space :p:26:p}, comp panel22::t:::x}"
+						"$horizontalGroup": "par l {seq l {comp panel22:::p::p, par t {seq t {space u:::p, par l {seq {space :p:399:p, comp button21:::p::p, space :::x}, seq l {comp scrollPane3:::p:531:p, space :0:103:x}}}, seq t {space :p:90:p, par t {comp label23:::p::p, comp label25:::p::p}, space u:::p, par t:::p {seq {comp comboBox18:::p::p, space :::x, comp label12:::p::p}, seq {comp comboBox17:::p:120:p, space :p:40:p, comp label14:::p::p}}, space :p:6:p, par l:::p {seq {comp comboBox9:::p::p, space :::x, comp label15:::p::p}, seq {comp comboBox7:::p::p, space :p:31:p, comp label13:::p::p}}, space :::p, par l {comp comboBox8:::p::p, seq {space :6:6:p, comp comboBox10:::p::p}}, space :p:91:p}}}}"
+						"$verticalGroup": "par l {seq t {par l {seq {space :p:18:p, par b {comp comboBox7::b:p::p, comp label12::b:p::p, comp label13::b:p::p, comp comboBox8::b:p::p}, space :::x, par b {comp comboBox9::b:p::p, comp label14::b:p::p, comp label15::b:p::p, comp comboBox10::b:p::p}}, seq l {space :::x, par b {comp label25::b:p::p, comp comboBox18::b:p::p}, space u:::p, par b {comp label23::b:p::p, comp comboBox17::b:p::p}}}, space s:::p, comp scrollPane3:::p:236:p, space :::p, comp button21:::p::p, space :p:26:p}, comp panel22::t:::x}"
 					} ) {
 						name: "panel21"
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -681,20 +769,24 @@ new FormModel {
 							"model": #DefaultComboBoxModel2
 						} )
 						add( new FormComponent( "javax.swing.JComboBox" ) {
-							name: "comboBox11"
-							"model": &DefaultComboBoxModel3 new javax.swing.DefaultComboBoxModel {
-								selectedItem: "Hotel Alpha"
-								addElement( "Hotel Alpha" )
-								addElement( "Hotel Beta" )
-								addElement( "Hotel Gamma " )
-								addElement( "Hotel Delta" )
-								addElement( "Hotel Epsilon" )
-							}
-							"font": &Font0 new java.awt.Font( ".AppleSystemUIFont", 0, 15 )
+							name: "comboBox17"
+							"model": #DefaultComboBoxModel0
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label23"
+							"text": "category:"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label25"
+							"text": "hotel:"
+						} )
+						add( new FormComponent( "javax.swing.JComboBox" ) {
+							name: "comboBox18"
+							"model": #DefaultComboBoxModel3
 						} )
 					} )
 				}, new FormLayoutConstraints( null ) {
-					"title": "Occupancy List"
+					"title": "Transactional Data List"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 					"$horizontalGroup": "par l {comp panel23::l:::x}"
@@ -746,8 +838,15 @@ new FormModel {
 						} )
 						add( new FormComponent( "javax.swing.JComboBox" ) {
 							name: "comboBox16"
-							"model": #DefaultComboBoxModel3
-							"font": #Font0
+							"model": new javax.swing.DefaultComboBoxModel {
+								selectedItem: "Hotel Alpha"
+								addElement( "Hotel Alpha" )
+								addElement( "Hotel Beta" )
+								addElement( "Hotel Gamma " )
+								addElement( "Hotel Delta" )
+								addElement( "Hotel Epsilon" )
+							}
+							"font": new java.awt.Font( ".AppleSystemUIFont", 0, 15 )
 						} )
 						add( new FormComponent( "javax.swing.JComboBox" ) {
 							name: "comboBox6"

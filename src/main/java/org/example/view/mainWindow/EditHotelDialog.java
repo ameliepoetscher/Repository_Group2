@@ -11,7 +11,7 @@ public class EditHotelDialog extends JDialog {
     private JTextField addressField;
     private JTextField roomsField;
     private JTextField bedsField;
-
+//für hotelrep
     public EditHotelDialog(JFrame parent, Hotel hotel) {
         super(parent, "Edit Master Data", true);
         setLayout(new BorderLayout());
