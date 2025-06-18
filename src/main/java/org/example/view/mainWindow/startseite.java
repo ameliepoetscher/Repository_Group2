@@ -16,9 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.example.entity.Occupancy;
 import org.example.data.txt.OccupancyFileReader;
-import java.util.Comparator;
-
-
+import org.example.view.mainWindow.AddTransactionalDataDialog;
 
 
 /*
@@ -31,11 +29,17 @@ import java.util.Comparator;
 
 
 public class startseite extends JPanel {
+
     public startseite() {
         initComponents();
         ladeHotelsInTabelle();
         ladeHotelsSummary();
         ladeOccupancySummary();
+        comboBox18.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
+        initialisiereLeereTransaktionsTabelle();
+
+
+
 
 
         // ======= HIER kommt Dein eigener Code =======
@@ -82,6 +86,11 @@ public class startseite extends JPanel {
         button23.addActionListener(help);
         button27.addActionListener(help);
         button29.addActionListener(help);
+
+        button5.setText("Add Transactional Data");
+        button5.addActionListener(e -> openAddTransactionalDialogForSenior());
+
+
 
 
 
@@ -163,7 +172,7 @@ public class startseite extends JPanel {
     }
     // Panel 2 Ende
 
-    //Panel 3
+    //Panel 2 auch??
     private void ladeOccupancySummary() {
         String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
         String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
@@ -219,9 +228,145 @@ public class startseite extends JPanel {
         table2.setModel(model);
     }
 
+// Panel 2?? Ende
+
+    //Panel 3 (Transactionla Data)
+
+    private void initialisiereLeereTransaktionsTabelle() {
+        String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
+
+        DefaultTableModel model = new DefaultTableModel(new Object[]{
+                "ID", "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year"
+        }, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Hotel-ID darf NICHT editierbar sein
+                return column != 0;
+            }
+        };
+
+        for (Hotel hotel : hotels) {
+            model.addRow(new Object[]{
+                    hotel.getId(),
+                    hotel.getName(),
+                    "", "", "", ""
+            });
+        }
+
+        table6.setModel(model);
+    }
+//---------
+private void openAddTransactionalDialogForSenior() {
+    int row = table6.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a hotel in the table first!");
+        return;
+    }
+
+    int hotelId = Integer.parseInt(table6.getValueAt(row, 0).toString());
+    String hotelName = table6.getValueAt(row, 1).toString();
+
+    AddTransactionalDataDialog dialog = new AddTransactionalDataDialog(
+            (JFrame) SwingUtilities.getWindowAncestor(this), hotelId, hotelName
+    );
+    dialog.setVisible(true);
+
+
+    if (dialog.isSaved()) {
+        int year = dialog.getSelectedYear();
+        int month = dialog.getSelectedMonth();
+        int roomOcc = dialog.getRoomOccupancy();
+        int bedOcc = dialog.getBedOccupancy();
+
+        // Setze die Daten direkt in die Tabelle
+        table6.setValueAt(roomOcc, row, 2);
+        table6.setValueAt(bedOcc, row, 3);
+        table6.setValueAt(month, row, 4);
+        table6.setValueAt(year, row, 5);
+
+        // ➕ UPDATE Last Transaction in Hotel List
+        for (int i = 0; i < table1.getRowCount(); i++) {
+            int idInTable1 = Integer.parseInt(table1.getValueAt(i, 0).toString());
+            if (idInTable1 == hotelId) {
+                String today = java.time.LocalDate.now().toString(); // z.B. "2025-06-18"
+                table1.setValueAt(today, i, table1.getColumnCount() - 1); // letzte Spalte
+                break;
+            }
+        }
+
+        System.out.println("✅ Daten gespeichert – Hotel-ID: " + hotelId);
+    }
+}
 
 
 
+    //Panel 3 Ende
+
+    // Panel 5 (Transactionla Data List)
+    private String getMonthName(int month) {
+        String[] months = {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+        return (month >= 1 && month <= 12) ? months[month - 1] : "Unknown";
+    }
+
+    private void ladeOccupancyTabelleFürTransaktionen() {
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile = "src/main/java/org/example/data/txt/occupancies.txt";
+
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> occupancies = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+        String selectedHotelName = (String) comboBox18.getSelectedItem();
+        System.out.println("🧪 Ausgewähltes Hotel: " + selectedHotelName);
+        System.out.println("🔢 Anzahl geladener Hotels: " + hotels.size());
+        if (selectedHotelName == null || selectedHotelName.equals("---select---")) return;
+
+        // Zeitraum holen
+        int startYear = Integer.parseInt((String) comboBox7.getSelectedItem());
+        int endYear = Integer.parseInt((String) comboBox9.getSelectedItem());
+        int startMonth = comboBox8.getSelectedIndex() + 1; // Januar = 0
+        int endMonth = comboBox10.getSelectedIndex() + 1;
+
+        // Hotel-Objekt suchen
+        Hotel selectedHotel = hotels.stream()
+                .filter(h -> h.getName().equals(selectedHotelName))
+                .findFirst()
+                .orElse(null);
+
+        if (selectedHotel == null) return;
+
+        // Tabelle leeren
+        DefaultTableModel model = (DefaultTableModel) table3.getModel();
+        model.setRowCount(0);
+
+
+        for (Occupancy occ : occupancies) {
+            if (occ.getHotel().getId() == selectedHotel.getId()) {
+                boolean imJahr = occ.getYear() >= startYear && occ.getYear() <= endYear;
+                boolean imMonat = (occ.getYear() == startYear && occ.getMonth() >= startMonth)
+                        || (occ.getYear() == endYear && occ.getMonth() <= endMonth)
+                        || (occ.getYear() > startYear && occ.getYear() < endYear);
+
+                if (imJahr && imMonat) {
+                    model.addRow(new Object[]{
+                            getMonthName(occ.getMonth()),
+                            occ.getYear(),
+                            occ.getUsedRooms(),
+                            occ.getUsedBeds()
+                    });
+                }
+            }
+        }
+
+
+
+    }
+
+
+// Panel 5 Ende
     private void Add(ActionEvent e) {
         // TODO add your code here
     }
@@ -358,6 +503,15 @@ public class startseite extends JPanel {
         table4 = new JTable();
         label20 = new JLabel();
         comboBox14 = new JComboBox<>();
+        comboBox18.addActionListener(e -> {
+            ladeOccupancyTabelleFürTransaktionen();
+        });
+        button21.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
+        comboBox7.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
+        comboBox8.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
+        comboBox9.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
+        comboBox10.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
+
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
@@ -699,7 +853,7 @@ public class startseite extends JPanel {
                 }
 
                 //---- button5 ----
-                button5.setText("Add Attribute");
+                button5.setText("Add Transactional Data");
 
                 GroupLayout panel2Layout = new GroupLayout(panel2);
                 panel2.setLayout(panel2Layout);
@@ -2085,6 +2239,7 @@ public class startseite extends JPanel {
     private JTable table4;
     private JLabel label20;
     private JComboBox<String> comboBox14;
+
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     private class save extends AbstractAction {
