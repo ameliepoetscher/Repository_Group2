@@ -81,6 +81,8 @@ public class startseite extends JPanel {
         button17.addActionListener(help);
         button20.addActionListener(help);
         button23.addActionListener(help);
+        button27.addActionListener(help);
+        button29.addActionListener(help);
 
 
 
@@ -361,13 +363,11 @@ public class startseite extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
-        swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border
-        .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog"
-        ,java.awt.Font.BOLD,12),java.awt.Color.red), getBorder
-        ())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
-        .beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException
-        ();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+        0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+        . BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+        red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+        beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
         //======== this2 ========
         {
@@ -501,7 +501,7 @@ public class startseite extends JPanel {
                                         .addComponent(button25)
                                         .addGap(94, 94, 94))
                                     .addGroup(panel7Layout.createSequentialGroup()
-                                        .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+                                        .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
                                         .addContainerGap())))
                     );
                     panel7Layout.setVerticalGroup(
@@ -606,13 +606,13 @@ public class startseite extends JPanel {
                                 .addComponent(panel25, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addGroup(panel17Layout.createParallelGroup()
                                     .addGroup(panel17Layout.createSequentialGroup()
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 521, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 602, Short.MAX_VALUE)
                                         .addComponent(button15)
                                         .addGap(72, 72, 72))
                                     .addGroup(panel17Layout.createSequentialGroup()
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(scrollPane5, GroupLayout.PREFERRED_SIZE, 562, GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap(78, Short.MAX_VALUE))))
+                                        .addContainerGap(159, Short.MAX_VALUE))))
                     );
                     panel17Layout.setVerticalGroup(
                         panel17Layout.createParallelGroup()
@@ -709,7 +709,7 @@ public class startseite extends JPanel {
                             .addComponent(panel26, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addGroup(panel2Layout.createParallelGroup()
                                 .addGroup(panel2Layout.createSequentialGroup()
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 371, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 452, Short.MAX_VALUE)
                                     .addComponent(button5)
                                     .addGap(18, 18, 18)
                                     .addComponent(button4)
@@ -717,7 +717,7 @@ public class startseite extends JPanel {
                                 .addGroup(panel2Layout.createSequentialGroup()
                                     .addGap(18, 18, 18)
                                     .addComponent(scrollPane6, GroupLayout.PREFERRED_SIZE, 571, GroupLayout.PREFERRED_SIZE)
-                                    .addContainerGap(57, Short.MAX_VALUE))))
+                                    .addContainerGap(138, Short.MAX_VALUE))))
                 );
                 panel2Layout.setVerticalGroup(
                     panel2Layout.createParallelGroup()
@@ -1021,7 +1021,7 @@ public class startseite extends JPanel {
                                     .addGroup(panel19Layout.createSequentialGroup()
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, 569, GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(71, Short.MAX_VALUE))
+                                .addContainerGap(152, Short.MAX_VALUE))
                     );
                     panel19Layout.setVerticalGroup(
                         panel19Layout.createParallelGroup()
@@ -1486,7 +1486,7 @@ public class startseite extends JPanel {
                                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                             .addGroup(panel21Layout.createSequentialGroup()
                                                 .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 531, GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 103, Short.MAX_VALUE))))
+                                                .addGap(0, 184, Short.MAX_VALUE))))
                                     .addGroup(panel21Layout.createSequentialGroup()
                                         .addGap(90, 90, 90)
                                         .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -1969,27 +1969,24 @@ public class startseite extends JPanel {
             layout.createParallelGroup()
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
-                    .addGroup(layout.createParallelGroup()
-                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(0, 0, Short.MAX_VALUE)
-                            .addComponent(label21, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup()
-                                .addComponent(this2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 741, GroupLayout.PREFERRED_SIZE))
-                            .addGap(0, 22, Short.MAX_VALUE)))
+                    .addComponent(this2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 822, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(label21, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
                     .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup()
                 .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap()
                     .addComponent(label21, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                     .addComponent(this2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addGap(23, 23, 23))
+                    .addGap(412, 412, 412))
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(64, Short.MAX_VALUE))
         );
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
