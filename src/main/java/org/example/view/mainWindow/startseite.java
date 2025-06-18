@@ -1,4 +1,5 @@
 package org.example.view.mainWindow;
+import jakarta.persistence.criteria.CollectionJoin;
 import org.example.entity.Hotel;
 
 import java.awt.*;
@@ -32,7 +33,11 @@ import java.util.Comparator;
 
 
 public class startseite extends JPanel {
+<<<<<<< HEAD
+    private CollectionJoin<Object, Object> hotelTable;
+=======
     private boolean editMode = false;
+>>>>>>> 235e69c71b8ed99b453427041a25320869554d61
 
     public startseite() {
         initComponents();
@@ -229,6 +234,13 @@ public class startseite extends JPanel {
 
 
 
+
+    private void AddHotel(ActionEvent e) {
+        DefaultTableModel model = (DefaultTableModel) hotelTable.getModel();
+        AddMasterData dialog = new AddMasterData(model);
+        dialog.setVisible(true);
+    }
+
     private void Add(ActionEvent e) {
         // TODO add your code here
     }
@@ -247,9 +259,10 @@ public class startseite extends JPanel {
 
 
 
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+        // Generated using JFormDesigner Evaluation license - Maria Malik
         this2 = new JPanel();
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
@@ -331,12 +344,13 @@ public class startseite extends JPanel {
         label21 = new JLabel();
 
         //======== this ========
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-        ( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-        . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-        propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
-        ; }} );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing
+        .border.EmptyBorder(0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder
+        .CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069al\u006fg",java.
+        awt.Font.BOLD,12),java.awt.Color.red), getBorder()))
+        ; addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
+        ){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException();}})
+        ;
 
         //======== this2 ========
         {
@@ -1798,7 +1812,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+    // Generated using JFormDesigner Evaluation license - Maria Malik
     private JPanel this2;
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
@@ -1883,7 +1897,7 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Evaluation license - Amelie Pötscher
+            // Generated using JFormDesigner Evaluation license - Maria Malik
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 
