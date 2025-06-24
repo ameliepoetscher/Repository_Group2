@@ -16,9 +16,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.example.entity.Occupancy;
 import org.example.data.txt.OccupancyFileReader;
-import org.example.view.mainWindow.AddTransactionalDataDialog;
 import java.util.TreeSet;
 import org.example.data.txt.HotelFileWriter;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import org.example.entity.Hotel;
+import org.example.data.txt.HotelFileReader;
+
 
 
 
@@ -51,12 +57,15 @@ public class startseite extends JPanel {
 
 
 
+
         // ======= HIER kommt Dein eigener Code =======
         button25.addActionListener(new save());
         button18.addActionListener(new save());
         button21.addActionListener(new save());
         button24.addActionListener(new save());
         button15.addActionListener(e -> ladeHotelsSummary());
+        button4.addActionListener(new SaveOccupancyAction());
+
 
 
 
@@ -320,6 +329,67 @@ private void openAddTransactionalDialogForSenior() {
         System.out.println("✅ Daten gespeichert – Hotel-ID: " + hotelId);
     }
 }
+    /**
+     * Schreibt alle neuen Transaktions-Einträge (occupancyDataList) in occupancies.txt im Append-Modus
+     */
+    private class SaveOccupancyAction extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // 1) Lade alle Hotels, um rooms und beds zu ermitteln
+            String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+            List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+            Map<Integer, Hotel> hotelMap = new HashMap<>();
+            for (Hotel h : hotels) {
+                hotelMap.put(h.getId(), h);
+            }
+
+            // 2) Öffne occupancies.txt im Append-Modus
+            File out = new File("src/main/java/org/example/data/txt/occupancies.txt");
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(out, true))) {
+                // 3) Für jede neue Transaktion in occupancyDataList…
+                for (Map<String,Object> occ : occupancyDataList) {
+                    int id        = (Integer) occ.get("id");
+                    int usedRooms = (Integer) occ.get("roomOcc");
+                    int usedBeds  = (Integer) occ.get("bedOcc");
+                    int year      = (Integer) occ.get("year");
+                    int month     = (Integer) occ.get("month");
+
+                    // Hole rooms/beds aus Master-Daten
+                    Hotel h = hotelMap.get(id);
+                    int totalRooms = h.getNoRooms();
+                    int totalBeds  = h.getNoBeds();
+
+                    // Baue CSV-Zeile: id,rooms,usedrooms,beds,usedbeds,year,month
+                    String line = String.format(
+                            "%d,%d,%d,%d,%d,%d,%d",
+                            id, totalRooms, usedRooms, totalBeds, usedBeds, year, month
+                    );
+
+                    bw.write(line);
+                    bw.newLine();
+                }
+                bw.flush();
+
+                // 4) Bestätigung und Liste leeren
+                JOptionPane.showMessageDialog(
+                        startseite.this,
+                        "Transactional data saved to file!",
+                        "Save",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                occupancyDataList.clear();
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(
+                        startseite.this,
+                        "Error writing occupancies.txt:\n" + ex.getMessage(),
+                        "Save Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
+
 
 
 
@@ -938,7 +1008,7 @@ private void openAddTransactionalDialogForSenior() {
                 }
 
                 //---- button4 ----
-                button4.setText("Edit");
+                button4.setText("Save");
 
                 //======== panel26 ========
                 {

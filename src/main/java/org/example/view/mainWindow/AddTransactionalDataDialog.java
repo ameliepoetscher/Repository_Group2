@@ -59,7 +59,7 @@ public class AddTransactionalDataDialog extends JDialog {
 
         // Buttons
         gbc.gridx = 0; gbc.gridy++;
-        JButton saveButton = new JButton("Save");
+        JButton saveButton = new JButton("Ok");
         JButton cancelButton = new JButton("Cancel");
         add(saveButton, gbc);
         gbc.gridx = 1;
