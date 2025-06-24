@@ -695,4 +695,3 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attrib
 694,"**","Privatzimmer Hofer","-","-","17 Bärnkopf","Bärnkopf","3665","-",11,37,""
 695,"***","Angerhof","-","-","Forstamt 9","Dorfstetten","4392","-",23,62,""
 696,"*","Heurigenhof Bründlmayer","-","-","Walterstraße 14","Langenlois","3550","-",80,43,""
-697,"*****","HotelTest","-","-","blb","Vienna","1120","-",15,19,""

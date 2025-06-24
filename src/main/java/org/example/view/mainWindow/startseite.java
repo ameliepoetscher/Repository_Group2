@@ -55,6 +55,8 @@ public class startseite extends JPanel {
         button18.addActionListener(new save());
         button21.addActionListener(new save());
         button24.addActionListener(new save());
+        button15.addActionListener(e -> ladeHotelsSummary());
+
 
 
 
@@ -815,7 +817,7 @@ private void openAddTransactionalDialogForSenior() {
                 {
 
                     //---- button15 ----
-                    button15.setText("save");
+                    button15.setText("update");
 
                     //======== scrollPane5 ========
                     {
