@@ -48,7 +48,7 @@ public class EditHotelDialog extends JDialog {
 
         // Panel für Buttons
         JPanel buttonsPanel = new JPanel();
-        JButton saveButton = new JButton("Save");
+        JButton saveButton = new JButton("OK");
         JButton backButton = new JButton("Back to Hotel List");
 
         saveButton.addActionListener(e -> {
