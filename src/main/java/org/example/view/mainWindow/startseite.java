@@ -18,6 +18,10 @@ import org.example.entity.Occupancy;
 import org.example.data.txt.OccupancyFileReader;
 import org.example.view.mainWindow.AddTransactionalDataDialog;
 import java.util.TreeSet;
+import org.example.data.txt.HotelFileWriter;
+
+
+
 
 
 /*
@@ -2366,13 +2370,45 @@ private void openAddTransactionalDialogForSenior() {
         }
 
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(
-                    startseite.this,                  // als Parent-Component am besten das Panel selbst
-                    "Changes successfully saved!",    // Deine Meldung
-                    "Save",                           // Fenstertitel
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            try {
+                DefaultTableModel model = (DefaultTableModel) table1.getModel();
+                List<Hotel> hotelListe = new ArrayList<>();
+
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    int id = Integer.parseInt(model.getValueAt(i, 0).toString());
+                    String category = model.getValueAt(i, 1).toString();
+                    String name = model.getValueAt(i, 2).toString();
+                    String address = model.getValueAt(i, 3).toString();
+                    String city = model.getValueAt(i, 4).toString();
+                    String cityCode = model.getValueAt(i, 5).toString();
+                    int noRooms = Integer.parseInt(model.getValueAt(i, 6).toString());
+                    int noBeds = Integer.parseInt(model.getValueAt(i, 7).toString());
+                    String attribute = ""; // optional, falls du später State aus Tabelle brauchst
+
+                    Hotel hotel = new Hotel(id, category, name, address, city, cityCode, noRooms, noBeds, attribute);
+                    hotelListe.add(hotel);
+                }
+
+                String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+                HotelFileWriter.writeHotelsToFile(hotelListe, filePath);
+
+                JOptionPane.showMessageDialog(
+                        startseite.this,
+                        "Changes successfully saved!",
+                        "Save",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(
+                        startseite.this,
+                        "Error while saving!",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
         }
+
     }
     private class DeleteHotelAction extends AbstractAction {
         @Override

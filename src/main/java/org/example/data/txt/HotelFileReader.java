@@ -20,10 +20,10 @@ public class HotelFileReader {
             while ((line = reader.readLine()) != null) {
                 if (isFirstLine && line.toLowerCase().contains("id")) {
                     isFirstLine = false;
-                    continue;
+                    continue;  // Header überspringen
                 }
 
-                // Verbesserte CSV-Parsing-Logik
+                // CSV-Parsing
                 List<String> fields = new ArrayList<>();
                 StringBuilder currentField = new StringBuilder();
                 boolean inQuotes = false;
@@ -48,21 +48,28 @@ public class HotelFileReader {
                 }
 
                 try {
-                    Hotel hotel = new Hotel();
-                    hotel.setId(Integer.parseInt(parts[0].replaceAll("\"", "")));
-                    hotel.setCategory(parts[1].replaceAll("\"", ""));
-                    hotel.setName(parts[2].replaceAll("\"", ""));
-                    hotel.setOwner(parts[3].replaceAll("\"", ""));
-                    hotel.setContact(parts[4].replaceAll("\"", ""));
-                    hotel.setAddress(parts[5].replaceAll("\"", ""));
-                    hotel.setCity(parts[6].replaceAll("\"", ""));
-                    hotel.setCityCode(parts[7].replaceAll("\"", ""));
-                    hotel.setPhone(parts[8].replaceAll("\"", ""));
-                    hotel.setNoRooms(Integer.parseInt(parts[9].replaceAll("\"", "")));
-                    hotel.setNoBeds(Integer.parseInt(parts[10].replaceAll("\"", "")));
+                    int id = Integer.parseInt(parts[0].replaceAll("\"", ""));
+                    String category = parts[1].replaceAll("\"", "");
+                    String name = parts[2].replaceAll("\"", "");
+                    String owner = parts[3].replaceAll("\"", "");
+                    String contact = parts[4].replaceAll("\"", "");
+                    String address = parts[5].replaceAll("\"", "");
+                    String city = parts[6].replaceAll("\"", "");
+                    String cityCode = parts[7].replaceAll("\"", "");
+                    String phone = parts[8].replaceAll("\"", "");
+                    int noRooms = Integer.parseInt(parts[9].replaceAll("\"", ""));
+                    int noBeds = Integer.parseInt(parts[10].replaceAll("\"", ""));
+
+                    // Attribut (optional) - falls du später Attribute in Text speicherst
+                    String attribute = parts.length > 11 ? parts[11].replaceAll("\"", "") : "";
+
+                    Hotel hotel = new Hotel(id, category, name, address, city, cityCode, noRooms, noBeds, attribute);
+                    hotel.setOwner(owner);
+                    hotel.setContact(contact);
+                    hotel.setPhone(phone);
+
                     hotels.add(hotel);
 
-                    // Debug-Ausgabe
                     System.out.println("Erfolgreich eingelesen - Hotel ID: " + hotel.getId() +
                             ", Zimmer: " + hotel.getNoRooms() +
                             ", Betten: " + hotel.getNoBeds());
@@ -80,4 +87,5 @@ public class HotelFileReader {
         hotels.sort(Comparator.comparingInt(Hotel::getId));
         return hotels;
     }
+
 }

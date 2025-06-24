@@ -24,14 +24,29 @@ public class Hotel {
     private String phone;
     private Integer noRooms;
     private Integer noBeds;
-    private String state;
+    private String attribute;
 
-    public void setState(String state) {
-        this.state = state;
+    public Hotel(int id, String category, String name, String address, String city,
+                 String cityCode, int noRooms, int noBeds, String attribute) {
+        this.id = id;
+        this.category = category;
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.cityCode = cityCode;
+        this.noRooms = noRooms;
+        this.noBeds = noBeds;
+        this.attribute = attribute;
     }
 
-    public String getState() {
-        return state;
+
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
+
+    public String getAttribute() {
+        return attribute;
     }
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
