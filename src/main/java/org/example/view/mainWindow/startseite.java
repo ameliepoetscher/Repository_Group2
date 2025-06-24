@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.example.entity.Occupancy;
 import org.example.data.txt.OccupancyFileReader;
 import org.example.view.mainWindow.AddTransactionalDataDialog;
+import java.util.TreeSet;
 
 
 /*
@@ -29,6 +30,7 @@ import org.example.view.mainWindow.AddTransactionalDataDialog;
 
 
 public class startseite extends JPanel {
+    private List<Map<String, Object>> occupancyDataList = new ArrayList<>();
 
     public startseite() {
         initComponents();
@@ -37,6 +39,8 @@ public class startseite extends JPanel {
         ladeOccupancySummary();
         comboBox18.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
         initialisiereLeereTransaktionsTabelle();
+        ladeTransaktionsDatenMitAttributen();
+        ladeHotelsMitOccupanciesInComboBox();
 
 
 
@@ -285,6 +289,16 @@ private void openAddTransactionalDialogForSenior() {
         table6.setValueAt(month, row, 4);
         table6.setValueAt(year, row, 5);
 
+        Map<String, Object> occ = new HashMap<>();
+        occ.put("id", hotelId);
+        occ.put("hotelName", hotelName);
+        occ.put("year", year);
+        occ.put("month", month);
+        occ.put("roomOcc", roomOcc);
+        occ.put("bedOcc", bedOcc);
+        occupancyDataList.add(occ);
+
+
         // ➕ UPDATE Last Transaction in Hotel List
         for (int i = 0; i < table1.getRowCount(); i++) {
             int idInTable1 = Integer.parseInt(table1.getValueAt(i, 0).toString());
@@ -361,12 +375,109 @@ private void openAddTransactionalDialogForSenior() {
             }
         }
 
+    }
 
+    private void ladeTransaktionsDatenMitAttributen() {
+
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile = "src/main/java/org/example/data/txt/occupancies.txt";
+
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> occupancies = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+        DefaultTableModel model = new DefaultTableModel(new Object[]{
+                "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year", "Attribute"
+        }, 0);
+
+        for (Occupancy occ : occupancies) {
+            model.addRow(new Object[]{
+                    occ.getHotel().getName(),
+                    occ.getUsedRooms(),
+                    occ.getUsedBeds(),
+                    getMonthName(occ.getMonth()),
+                    occ.getYear(),
+                    "" // leeres Feld für Attribut
+            });
+        }
+
+        table3.setModel(model);
+    }
+    //Drop Down Hotels:
+    private void ladeHotelsMitOccupanciesInComboBox() {
+        comboBox18.removeAllItems();
+        comboBox18.addItem("---select---");
+
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile = "src/main/java/org/example/data/txt/occupancies.txt";
+
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> occupancies = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+        Set<String> hotelNamesWithOccupancy = new TreeSet<>(); // alphabetisch sortiert
+        for (Occupancy occ : occupancies) {
+            hotelNamesWithOccupancy.add(occ.getHotel().getName());
+        }
+
+        for (String name : hotelNamesWithOccupancy) {
+            comboBox18.addItem(name);
+        }
+    }
+    private void filterTable6NachHotel() {
+        String selectedHotel = (String) comboBox18.getSelectedItem();
+        if (selectedHotel == null || selectedHotel.equals("---select---")) return;
+
+        DefaultTableModel originalModel = (DefaultTableModel) table6.getModel();
+        DefaultTableModel filteredModel = new DefaultTableModel(
+                new Object[]{"Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year", "Attribute"}, 0);
+
+        for (int i = 0; i < originalModel.getRowCount(); i++) {
+            String hotelName = (String) originalModel.getValueAt(i, 0);
+            if (hotelName.equals(selectedHotel)) {
+                Object[] row = new Object[originalModel.getColumnCount()];
+                for (int j = 0; j < row.length; j++) {
+                    row[j] = originalModel.getValueAt(i, j);
+                }
+                filteredModel.addRow(row);
+            }
+        }
+
+        table6.setModel(filteredModel);
+    }
+
+
+
+    private void filterTable3NachHotel() {
+        String selectedHotel = (String) comboBox18.getSelectedItem();
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile = "src/main/java/org/example/data/txt/occupancies.txt";
+
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> occupancies = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+        DefaultTableModel model = new DefaultTableModel(new Object[]{
+                "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year", "Attribute"
+        }, 0);
+
+        for (Map<String, Object> occ : occupancyDataList) {
+            String hotelName = (String) occ.get("hotelName");
+            if (hotelName.equals(selectedHotel)) {
+                model.addRow(new Object[]{
+                        hotelName,
+                        occ.get("roomOcc"),
+                        occ.get("bedOcc"),
+                        getMonthName((Integer) occ.get("month")),
+                        occ.get("year"),
+                        "" // Placeholder
+                });
+            }
+        }
+        table3.setModel(model);
 
     }
 
 
-// Panel 5 Ende
+    // Panel 5 Ende
+
     private void Add(ActionEvent e) {
         // TODO add your code here
     }
@@ -511,6 +622,11 @@ private void openAddTransactionalDialogForSenior() {
         comboBox8.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
         comboBox9.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
         comboBox10.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
+        comboBox18.addActionListener(e -> filterTable3NachHotel());
+        comboBox18.addActionListener(e -> filterTable6NachHotel());
+
+
+
 
 
         //======== this ========

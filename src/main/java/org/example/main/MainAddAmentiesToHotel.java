@@ -1,4 +1,4 @@
-package org.example.main;
+/*package org.example.main;
 
 import org.example.dao.HotelDAO;
 import org.example.entity.Hotel;
@@ -30,3 +30,4 @@ public class MainAddAmentiesToHotel {
 
     }
 }
+*/
