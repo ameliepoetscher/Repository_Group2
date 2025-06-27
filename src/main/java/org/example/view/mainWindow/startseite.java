@@ -16,14 +16,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.example.entity.Occupancy;
 import org.example.data.txt.OccupancyFileReader;
-import java.util.TreeSet;
 import org.example.data.txt.HotelFileWriter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import org.example.entity.Hotel;
-import org.example.data.txt.HotelFileReader;
+import java.util.Comparator;
+import java.util.TreeSet;
+
+
+
+
 
 
 
@@ -45,13 +48,46 @@ public class startseite extends JPanel {
 
     public startseite() {
         initComponents();
+        ladeTransaktionsDatenMitAttributen();
+
+
         ladeHotelsInTabelle();
         ladeHotelsSummary();
         ladeOccupancySummary();
-        comboBox18.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
         initialisiereLeereTransaktionsTabelle();
-        ladeTransaktionsDatenMitAttributen();
-        ladeHotelsMitOccupanciesInComboBox();
+
+
+        //Panel 5: Dropdown mit echten Hotel-Namen aus Datei befüllen
+
+        {
+            String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+            String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
+
+            // a) alle Hotels einlesen
+            List<Hotel> hotels    = HotelFileReader.readHotelsFromFile(hotelFile);
+            List<Occupancy> occsAll = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+            // b) eindeutige Hotel-Namen alphabetisch sammeln
+            Set<String> names = new TreeSet<>();
+            for (Occupancy o : occsAll) {
+                names.add(o.getHotel().getName());
+            }
+
+            // c) Dropdown wirklich neu befüllen
+            comboBox18.removeAllItems();
+            comboBox18.addItem("---select---");
+            for (String n : names) {
+                comboBox18.addItem(n);
+            }
+        }
+        // ■■■ Ende Dropdown-Befüllung ■■■
+
+
+
+
+
+
+
 
 
 
@@ -65,7 +101,8 @@ public class startseite extends JPanel {
         button24.addActionListener(new save());
         button15.addActionListener(e -> ladeHotelsSummary());
         button4.addActionListener(new SaveOccupancyAction());
-
+        comboBox18.addActionListener(e -> ladeTransaktionsDatenMitAttributen());
+        button21.addActionListener(e -> ladeTransaktionsDatenMitAttributen());
 
 
 
@@ -253,6 +290,9 @@ public class startseite extends JPanel {
 
     //Panel 3 (Transactionla Data)
 
+
+
+
     private void initialisiereLeereTransaktionsTabelle() {
         String filePath = "src/main/java/org/example/data/txt/hotels.txt";
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
@@ -396,6 +436,7 @@ private void openAddTransactionalDialogForSenior() {
     //Panel 3 Ende
 
     // Panel 5 (Transactionla Data List)
+
     private String getMonthName(int month) {
         String[] months = {
                 "January", "February", "March", "April", "May", "June",
@@ -404,154 +445,59 @@ private void openAddTransactionalDialogForSenior() {
         return (month >= 1 && month <= 12) ? months[month - 1] : "Unknown";
     }
 
-    private void ladeOccupancyTabelleFürTransaktionen() {
-        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
-        String occFile = "src/main/java/org/example/data/txt/occupancies.txt";
-
-        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
-        List<Occupancy> occupancies = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
-
-        String selectedHotelName = (String) comboBox18.getSelectedItem();
-        System.out.println("🧪 Ausgewähltes Hotel: " + selectedHotelName);
-        System.out.println("🔢 Anzahl geladener Hotels: " + hotels.size());
-        if (selectedHotelName == null || selectedHotelName.equals("---select---")) return;
-
-        // Zeitraum holen
-        int startYear = Integer.parseInt((String) comboBox7.getSelectedItem());
-        int endYear = Integer.parseInt((String) comboBox9.getSelectedItem());
-        int startMonth = comboBox8.getSelectedIndex() + 1; // Januar = 0
-        int endMonth = comboBox10.getSelectedIndex() + 1;
-
-        // Hotel-Objekt suchen
-        Hotel selectedHotel = hotels.stream()
-                .filter(h -> h.getName().equals(selectedHotelName))
-                .findFirst()
-                .orElse(null);
-
-        if (selectedHotel == null) return;
-
-        // Tabelle leeren
-        DefaultTableModel model = (DefaultTableModel) table3.getModel();
-        model.setRowCount(0);
-
-
-        for (Occupancy occ : occupancies) {
-            if (occ.getHotel().getId() == selectedHotel.getId()) {
-                boolean imJahr = occ.getYear() >= startYear && occ.getYear() <= endYear;
-                boolean imMonat = (occ.getYear() == startYear && occ.getMonth() >= startMonth)
-                        || (occ.getYear() == endYear && occ.getMonth() <= endMonth)
-                        || (occ.getYear() > startYear && occ.getYear() < endYear);
-
-                if (imJahr && imMonat) {
-                    model.addRow(new Object[]{
-                            getMonthName(occ.getMonth()),
-                            occ.getYear(),
-                            occ.getUsedRooms(),
-                            occ.getUsedBeds()
-                    });
-                }
-            }
-        }
-
-    }
 
     private void ladeTransaktionsDatenMitAttributen() {
-
         String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
-        String occFile = "src/main/java/org/example/data/txt/occupancies.txt";
+        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
 
+        // 1) Hotels und alle Occs laden
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
-        List<Occupancy> occupancies = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+        List<Occupancy> occsAll = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
 
-        DefaultTableModel model = new DefaultTableModel(new Object[]{
-                "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year", "Attribute"
-        }, 0);
-
-        for (Occupancy occ : occupancies) {
-            model.addRow(new Object[]{
-                    occ.getHotel().getName(),
-                    occ.getUsedRooms(),
-                    occ.getUsedBeds(),
-                    getMonthName(occ.getMonth()),
-                    occ.getYear(),
-                    "" // leeres Feld für Attribut
-            });
-        }
-
-        table3.setModel(model);
-    }
-    //Drop Down Hotels:
-    private void ladeHotelsMitOccupanciesInComboBox() {
+        /* 2) Dropdown einmalig befüllen (Alphabet + Einzigartigkeit)
         comboBox18.removeAllItems();
         comboBox18.addItem("---select---");
+        new TreeSet<>(occsAll.stream()
+                .map(o -> o.getHotel().getName())
+                .collect(Collectors.toList()))
+                .forEach(comboBox18::addItem);*/
 
-        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
-        String occFile = "src/main/java/org/example/data/txt/occupancies.txt";
-
-        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
-        List<Occupancy> occupancies = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
-
-        Set<String> hotelNamesWithOccupancy = new TreeSet<>(); // alphabetisch sortiert
-        for (Occupancy occ : occupancies) {
-            hotelNamesWithOccupancy.add(occ.getHotel().getName());
+        // 3) Filter anwenden: selHotel aus dem Dropdown
+        String selHotel = (String) comboBox18.getSelectedItem();
+        List<Occupancy> toDisplay;
+        if (selHotel != null && !selHotel.equals("---select---")) {
+            toDisplay = occsAll.stream()
+                    .filter(o -> o.getHotel().getName().equals(selHotel))
+                    .collect(Collectors.toList());
+        } else {
+            toDisplay = occsAll;
         }
 
-        for (String name : hotelNamesWithOccupancy) {
-            comboBox18.addItem(name);
-        }
-    }
-    private void filterTable6NachHotel() {
-        String selectedHotel = (String) comboBox18.getSelectedItem();
-        if (selectedHotel == null || selectedHotel.equals("---select---")) return;
+        // 4) Sortieren nach Jahr und Monat
+        toDisplay.sort(
+                Comparator.comparingInt(Occupancy::getYear)
+                        .thenComparingInt(Occupancy::getMonth)
+        );
 
-        DefaultTableModel originalModel = (DefaultTableModel) table6.getModel();
-        DefaultTableModel filteredModel = new DefaultTableModel(
-                new Object[]{"Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year", "Attribute"}, 0);
-
-        for (int i = 0; i < originalModel.getRowCount(); i++) {
-            String hotelName = (String) originalModel.getValueAt(i, 0);
-            if (hotelName.equals(selectedHotel)) {
-                Object[] row = new Object[originalModel.getColumnCount()];
-                for (int j = 0; j < row.length; j++) {
-                    row[j] = originalModel.getValueAt(i, j);
-                }
-                filteredModel.addRow(row);
-            }
-        }
-
-        table6.setModel(filteredModel);
-    }
-
-
-
-    private void filterTable3NachHotel() {
-        String selectedHotel = (String) comboBox18.getSelectedItem();
-        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
-        String occFile = "src/main/java/org/example/data/txt/occupancies.txt";
-
-        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
-        List<Occupancy> occupancies = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
-
-        DefaultTableModel model = new DefaultTableModel(new Object[]{
-                "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year", "Attribute"
-        }, 0);
-
-        for (Map<String, Object> occ : occupancyDataList) {
-            String hotelName = (String) occ.get("hotelName");
-            if (hotelName.equals(selectedHotel)) {
-                model.addRow(new Object[]{
-                        hotelName,
-                        occ.get("roomOcc"),
-                        occ.get("bedOcc"),
-                        getMonthName((Integer) occ.get("month")),
-                        occ.get("year"),
-                        "" // Placeholder
-                });
-            }
+        // 5) TableModel neu aufbauen
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{ "Hotel Name","Room Occupancy","Bed Occupancy","Month","Year","Attribute" },
+                0
+        );
+        for (Occupancy o : toDisplay) {
+            model.addRow(new Object[]{
+                    o.getHotel().getName(),
+                    o.getUsedRooms(),
+                    o.getUsedBeds(),
+                    getMonthName(o.getMonth()),
+                    o.getYear(),
+                    ""  // Platz für Attribute
+            });
         }
         table3.setModel(model);
-
     }
+
+
 
 
     // Panel 5 Ende
@@ -692,18 +638,30 @@ private void openAddTransactionalDialogForSenior() {
         table4 = new JTable();
         label20 = new JLabel();
         comboBox14 = new JComboBox<>();
-        comboBox18.addActionListener(e -> {
-            ladeOccupancyTabelleFürTransaktionen();
-        });
-        button21.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
-        comboBox7.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
-        comboBox8.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
-        comboBox9.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
-        comboBox10.addActionListener(e -> ladeOccupancyTabelleFürTransaktionen());
-        comboBox18.addActionListener(e -> filterTable3NachHotel());
-        comboBox18.addActionListener(e -> filterTable6NachHotel());
 
+// Panel 5: Dropdown einmalig mit allen Hotel-Namen aus der Datei befüllen
+        {
+            String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+            String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
 
+            List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+            List<Occupancy> occsAll = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+            // alphabetisch und ohne Duplikate
+            Set<String> hotelNames = new TreeSet<>();
+            for (Occupancy o : occsAll) {
+                hotelNames.add(o.getHotel().getName());
+            }
+
+            comboBox18.removeAllItems();
+            comboBox18.addItem("---select---");
+            for (String name : hotelNames) {
+                comboBox18.addItem(name);
+            }
+        }
+        ladeTransaktionsDatenMitAttributen();
+        // Neu: wenn der Benutzer im Dropdown wechselt, neu laden & ggf. filtern
+        comboBox18.addActionListener(e -> ladeTransaktionsDatenMitAttributen());
 
 
 
