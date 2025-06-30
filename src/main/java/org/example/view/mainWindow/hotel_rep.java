@@ -395,7 +395,7 @@ public class hotel_rep extends JPanel {
     //ab da nichts verändern ?!
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
         panel7 = new JPanel();
@@ -430,13 +430,6 @@ public class hotel_rep extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
-        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing
-        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
-        Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
-        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
-        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName (
-        ) )) throw new RuntimeException( ); }} );
 
         //======== tabbedPane1 ========
         {
@@ -532,14 +525,14 @@ public class hotel_rep extends JPanel {
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(panel7Layout.createParallelGroup()
                                             .addGroup(panel7Layout.createSequentialGroup()
-                                                .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
+                                                .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
                                                 .addContainerGap())
                                             .addGroup(GroupLayout.Alignment.TRAILING, panel7Layout.createSequentialGroup()
                                                 .addGap(0, 520, Short.MAX_VALUE)
                                                 .addComponent(button5)
                                                 .addGap(122, 122, 122))))
                                     .addGroup(panel7Layout.createSequentialGroup()
-                                        .addGap(54, 553, Short.MAX_VALUE)
+                                        .addGap(54, 564, Short.MAX_VALUE)
                                         .addComponent(label6)
                                         .addGap(15, 15, 15))))
                     );
@@ -552,7 +545,7 @@ public class hotel_rep extends JPanel {
                                 .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(button5)
-                                .addContainerGap(31, Short.MAX_VALUE))
+                                .addContainerGap(37, Short.MAX_VALUE))
                             .addComponent(panel8, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     );
                 }
@@ -563,7 +556,7 @@ public class hotel_rep extends JPanel {
                     panel1Layout.createParallelGroup()
                         .addGroup(panel1Layout.createSequentialGroup()
                             .addComponent(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 46, Short.MAX_VALUE))
+                            .addGap(0, 25, Short.MAX_VALUE))
                 );
                 panel1Layout.setVerticalGroup(
                     panel1Layout.createParallelGroup()
@@ -619,14 +612,14 @@ public class hotel_rep extends JPanel {
                                     .addGroup(panel9Layout.createSequentialGroup()
                                         .addGap(9, 9, 9)
                                         .addComponent(button6)))
-                                .addContainerGap(21, Short.MAX_VALUE))
+                                .addContainerGap(11, Short.MAX_VALUE))
                     );
                     panel9Layout.setVerticalGroup(
                         panel9Layout.createParallelGroup()
                             .addGroup(GroupLayout.Alignment.TRAILING, panel9Layout.createSequentialGroup()
                                 .addGap(32, 32, 32)
                                 .addComponent(button6)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 368, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 377, Short.MAX_VALUE)
                                 .addComponent(button3)
                                 .addGap(23, 23, 23))
                     );
@@ -647,7 +640,7 @@ public class hotel_rep extends JPanel {
                                     .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 682, GroupLayout.PREFERRED_SIZE)
                                     .addContainerGap(76, Short.MAX_VALUE))
                                 .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 475, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 454, Short.MAX_VALUE)
                                     .addGroup(panel2Layout.createParallelGroup()
                                         .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
                                             .addComponent(label5)
@@ -661,12 +654,12 @@ public class hotel_rep extends JPanel {
                         .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
                             .addContainerGap()
                             .addComponent(label5)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                             .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 349, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(button4)
                             .addGap(21, 21, 21))
-                        .addComponent(panel9, GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                        .addComponent(panel9, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                 );
             }
             tabbedPane1.addTab("Transactional Data", panel2);
@@ -700,14 +693,14 @@ public class hotel_rep extends JPanel {
                                     .addGroup(panel10Layout.createSequentialGroup()
                                         .addGap(15, 15, 15)
                                         .addComponent(button7)))
-                                .addContainerGap(22, Short.MAX_VALUE))
+                                .addContainerGap(12, Short.MAX_VALUE))
                     );
                     panel10Layout.setVerticalGroup(
                         panel10Layout.createParallelGroup()
                             .addGroup(GroupLayout.Alignment.TRAILING, panel10Layout.createSequentialGroup()
                                 .addGap(27, 27, 27)
                                 .addComponent(button8)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 375, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 384, Short.MAX_VALUE)
                                 .addComponent(button7)
                                 .addGap(21, 21, 21))
                     );
@@ -914,13 +907,13 @@ public class hotel_rep extends JPanel {
                                     .addContainerGap(58, Short.MAX_VALUE))
                                 .addGroup(panel3Layout.createSequentialGroup()
                                     .addComponent(label1)
-                                    .addGap(18, 18, 18)
+                                    .addGap(33, 33, 33)
                                     .addComponent(comboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                    .addGap(21, 21, 21)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(label3)
                                     .addGap(18, 18, 18)
                                     .addComponent(comboBox15, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 208, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
                                     .addComponent(label4)
                                     .addGap(78, 78, 78))))
                 );
@@ -939,10 +932,10 @@ public class hotel_rep extends JPanel {
                             .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(comboBox5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(label2))
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                             .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE)
                             .addGap(34, 34, 34))
-                        .addComponent(panel10, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                        .addComponent(panel10, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                 );
             }
             tabbedPane1.addTab("Transactional Data List", panel3);
@@ -968,7 +961,7 @@ public class hotel_rep extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private JPanel panel7;
