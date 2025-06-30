@@ -38,6 +38,7 @@ public class startseite extends JPanel {
 
         //PANEL 5:
 
+
         // Panel "combined Overview" – Hotel-Dropdown befüllen
         comboBox16.removeAllItems();
         comboBox16.addItem("---select---");
@@ -598,12 +599,12 @@ public class startseite extends JPanel {
         // 3) Stream über alle Occupancy-Records aufbauen
         Stream<Occupancy> stream = occs.stream();
 
-        // 3a) erstmal nach Hotel-Name filtern, falls ausgewählt
+        // 3a) nach Hotel filtern, falls ausgewählt
         if (selHotel != null && !selHotel.equals("---select---")) {
             stream = stream.filter(o -> o.getHotel().getName().equals(selHotel));
         }
-        // 3b) sonst nach Kategorie filtern, falls ausgewählt
-        else if (selCategory != null && !selCategory.equals("*")) {
+// 3b) nach Kategorie filtern, falls ausgewählt (unabhängig vom Hotel)
+        if (selCategory != null && !selCategory.equals("---select---")) {
             stream = stream.filter(o -> o.getHotel().getCategory().equals(selCategory));
         }
 
