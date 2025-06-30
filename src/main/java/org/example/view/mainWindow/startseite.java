@@ -230,6 +230,18 @@ public class startseite extends JPanel {
         if (choice == JOptionPane.YES_OPTION) {
             DefaultTableModel model = (DefaultTableModel) table1.getModel();
             model.removeRow(selectedRow);
+
+            // ---------- NEU: Auch aus der Transactional Data (table6) löschen ----------
+            DefaultTableModel transactionalModel = (DefaultTableModel) table6.getModel();
+            // Achtung: von HINTEN nach VORNE durchgehen, sonst Fehler!
+            for (int row = transactionalModel.getRowCount() - 1; row >= 0; row--) {
+                Object idObj = transactionalModel.getValueAt(row, 0);
+                if (idObj != null && idObj.toString().equals(hotelId)) {
+                    transactionalModel.removeRow(row);
+                }
+            }
+            // ---------------------------------------------------------------------------
+
             JOptionPane.showMessageDialog(
                     this,
                     "Hotel with ID " + hotelId + " has been deleted.",
@@ -238,7 +250,6 @@ public class startseite extends JPanel {
             );
         }
     }
-
 
 
     private void addHotel() {
@@ -724,13 +735,11 @@ public class startseite extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
-        . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder
-        . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .
-        awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) )
-        ;  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-        ) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
-        ;
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0
+        ,0,0,0), "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
+        ,new java.awt.Font("Dialo\u0067",java.awt.Font.BOLD,12),java.awt.Color.red),
+         getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
+        ){if("borde\u0072".equals(e.getPropertyName()))throw new RuntimeException();}});
 
         //======== this2 ========
         {
