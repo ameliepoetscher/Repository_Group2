@@ -32,6 +32,24 @@ public class startseite extends JPanel {
     public startseite() {
         initComponents();
 
+        //PANEL 5:
+
+        // Panel "combined Overview" – Hotel-Dropdown befüllen
+        comboBox16.removeAllItems();
+        comboBox16.addItem("---select---");
+
+// Lies alle Hotels aus der Text-Datei:
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+
+// Sortiere nach Name und füge in comboBox16 ein
+        new TreeSet<>(hotels.stream()
+                .map(Hotel::getName)
+                .collect(Collectors.toList()))
+                .forEach(comboBox16::addItem);
+        //__________________
+
+
 
         // Button-Listener für Hotel-Panel
         button25.addActionListener(e -> saveHotelData());
@@ -65,6 +83,9 @@ public class startseite extends JPanel {
         ladeHotelsInTabelle();
         ladeHotelsSummary();
         initialisiereLeereTransaktionsTabelle();
+
+        //Panel 5:
+        comboBox16.addActionListener(e -> ladeCombinedOverviewData());
     }
 
     // ===== Methoden für das Hotel-List-Panel =====
@@ -453,6 +474,55 @@ public class startseite extends JPanel {
         }
         table3.setModel(model);
     }
+
+    // ===== PANEL 5: =====
+    private void ladeCombinedOverviewData() {
+        // 1) Lese alle Transaktionen ein
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> allOcc = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+        // 2) Welches Hotel ist ausgewählt?
+        String selHotel = (String) comboBox16.getSelectedItem();
+
+        // 3) Filtere (oder zeige alles bei "---select---")
+        List<Occupancy> toDisplay = allOcc.stream()
+                .filter(o -> selHotel.equals("---select---")
+                        || o.getHotel().getName().equals(selHotel))
+                .collect(Collectors.toList());
+
+        // 4) Sortiere nach Jahr/Monat
+        toDisplay.sort(Comparator
+                .comparingInt(Occupancy::getYear)
+                .thenComparingInt(Occupancy::getMonth));
+
+        // 5) Setze die Werte ins Formular (Beispiel für Textfelder):
+        if (toDisplay.isEmpty()) {
+            // leere Felder
+            textField4.setText("");
+            textField5.setText("");
+            textField6.setText("");
+            textField7.setText("");
+            return;
+        }
+
+        // Wir zeigen nur den neuesten Eintrag
+        Occupancy latest = toDisplay.get(toDisplay.size() - 1);
+        textField4.setText(String.valueOf(latest.getHotel().getNoRooms()));
+        textField5.setText(String.valueOf(latest.getUsedRooms()));
+        textField6.setText(String.valueOf(latest.getHotel().getNoBeds()));
+        textField7.setText(String.valueOf(latest.getUsedBeds()));
+        // Und setze noch Jahr/Monat/Attribute-Combos, falls gewünscht:
+        comboBox12.setSelectedItem(String.valueOf(latest.getYear()));
+        comboBox13.setSelectedIndex(latest.getMonth() - 1);
+    }
+
+
+
+
+
+
 
     // ===== Hilfsmethoden =====
 
@@ -1756,85 +1826,84 @@ public class startseite extends JPanel {
                         panel23Layout.createParallelGroup()
                             .addGroup(panel23Layout.createSequentialGroup()
                                 .addComponent(panel24, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(panel23Layout.createParallelGroup()
                                     .addGroup(panel23Layout.createSequentialGroup()
-                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(scrollPane4, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                                            .addComponent(comboBox16, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(panel23Layout.createParallelGroup()
                                             .addGroup(panel23Layout.createSequentialGroup()
-                                                .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(label16)
-                                                    .addComponent(label7))
-                                                .addGap(18, 18, 18)
-                                                .addComponent(comboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(panel23Layout.createSequentialGroup()
-                                                .addGap(17, 17, 17)
-                                                .addComponent(label17)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(comboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(52, 52, 52))
-                                    .addGroup(panel23Layout.createSequentialGroup()
-                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                            .addGroup(panel23Layout.createSequentialGroup()
-                                                .addComponent(label18)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(textField6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(panel23Layout.createSequentialGroup()
-                                                .addComponent(label8)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(textField4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(panel23Layout.createSequentialGroup()
-                                                .addComponent(label9)
+                                                .addComponent(label19)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(textField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 311, Short.MAX_VALUE)
-                                        .addComponent(label20)
-                                        .addGap(16, 16, 16)
-                                        .addComponent(comboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(31, 31, 31))
-                                    .addGroup(panel23Layout.createSequentialGroup()
-                                        .addComponent(label19)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(textField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(textField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(panel23Layout.createSequentialGroup()
+                                                .addGroup(panel23Layout.createParallelGroup()
+                                                    .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(comboBox16, GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                                                        .addComponent(scrollPane4, GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE))
+                                                    .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                        .addGroup(panel23Layout.createSequentialGroup()
+                                                            .addComponent(label18)
+                                                            .addGap(18, 18, 18)
+                                                            .addComponent(textField6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(panel23Layout.createSequentialGroup()
+                                                            .addComponent(label8)
+                                                            .addGap(18, 18, 18)
+                                                            .addComponent(textField4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(panel23Layout.createSequentialGroup()
+                                                            .addComponent(label9)
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                            .addComponent(textField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+                                                .addGap(59, 59, 59)
+                                                .addGroup(panel23Layout.createParallelGroup()
+                                                    .addGroup(panel23Layout.createSequentialGroup()
+                                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                            .addComponent(label16)
+                                                            .addComponent(label7))
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(comboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(panel23Layout.createSequentialGroup()
+                                                        .addGap(17, 17, 17)
+                                                        .addComponent(label17)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(comboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(panel23Layout.createSequentialGroup()
+                                                        .addComponent(label20)
+                                                        .addGap(16, 16, 16)
+                                                        .addComponent(comboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
+                                        .addContainerGap(283, Short.MAX_VALUE))
+                                    .addGroup(GroupLayout.Alignment.TRAILING, panel23Layout.createSequentialGroup()
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 448, Short.MAX_VALUE)
                                         .addComponent(button24)
-                                        .addGap(79, 79, 79))))
+                                        .addGap(207, 207, 207))))
                     );
                     panel23Layout.setVerticalGroup(
                         panel23Layout.createParallelGroup()
                             .addGroup(GroupLayout.Alignment.TRAILING, panel23Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
+                                .addGap(22, 22, 22)
                                 .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                     .addGroup(panel23Layout.createSequentialGroup()
-                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                            .addGroup(panel23Layout.createSequentialGroup()
-                                                .addComponent(comboBox16, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(panel23Layout.createSequentialGroup()
-                                                .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(label16)
-                                                    .addComponent(comboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(label17)
-                                                    .addComponent(comboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                .addGap(15, 15, 15)
-                                                .addComponent(label7)
-                                                .addGap(6, 6, 6)))
+                                        .addComponent(comboBox16, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
                                         .addGap(48, 48, 48)
                                         .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                             .addComponent(textField4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                             .addComponent(label8)))
+                                    .addGroup(panel23Layout.createSequentialGroup()
+                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                            .addComponent(label16)
+                                            .addComponent(comboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                            .addComponent(label17)
+                                            .addComponent(comboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .addGap(15, 15, 15)
+                                        .addComponent(label7)
+                                        .addGap(68, 68, 68))
                                     .addGroup(panel23Layout.createParallelGroup()
                                         .addGroup(panel23Layout.createSequentialGroup()
                                             .addGap(3, 3, 3)
                                             .addComponent(label20))
                                         .addComponent(comboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                     .addComponent(label9)
                                     .addComponent(textField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -1842,17 +1911,13 @@ public class startseite extends JPanel {
                                 .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                     .addComponent(textField6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                     .addComponent(label18))
-                                .addGroup(panel23Layout.createParallelGroup()
-                                    .addGroup(panel23Layout.createSequentialGroup()
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                            .addComponent(label19)
-                                            .addComponent(textField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(GroupLayout.Alignment.TRAILING, panel23Layout.createSequentialGroup()
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                                        .addComponent(button24)
-                                        .addGap(36, 36, 36))))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(label19)
+                                    .addComponent(textField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                                .addComponent(button24)
+                                .addGap(38, 38, 38))
                             .addComponent(panel24, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     );
                 }
