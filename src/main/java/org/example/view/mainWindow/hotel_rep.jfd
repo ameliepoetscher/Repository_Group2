@@ -19,7 +19,7 @@ new FormModel {
 					name: "panel1"
 					"preferredSize": new java.awt.Dimension( 800, 300 )
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {seq l {comp panel8:::p::p, space :::p, par l {seq {comp scrollPane1::::716:x, space :::p}, seq t {space :0:520:x, par l {seq t {comp button5:::p::p, space :p:122:p}, seq t {comp label6:::p::p, space :p:15:p}}}}}}"
+						"$horizontalGroup": "par l {seq l {comp panel8:::p::p, par t {seq t {space :::p, par l {seq {comp scrollPane1::::716:x, space :::p}, seq t {space :0:520:x, comp button5:::p::p, space :p:122:p}}}, seq t {space :54:553:x, comp label6:::p::p, space :p:15:p}}}}"
 						"$verticalGroup": "par l {seq {space :::p, comp label6:::p::p, space :p:27:p, comp scrollPane1:::p:348:p, space :::p, comp button5:::p::p, space ::31:x}, comp panel8:::::x}"
 					} ) {
 						name: "panel7"

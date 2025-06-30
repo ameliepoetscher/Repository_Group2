@@ -22,6 +22,7 @@ public class hotel_rep extends JPanel {
     private Map<Integer, String> lastTransactionMap = new HashMap<>();
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+
     public hotel_rep() {
         String hotelFilePath = "src/main/java/org/example/data/txt/hotels.txt";
         hotels = HotelFileReader.readHotelsFromFile(hotelFilePath);
@@ -427,11 +428,13 @@ public class hotel_rep extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0
-        ,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
-        ,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.red),
-         getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
-        ){if("\u0062ord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
+        javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax
+        . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
+        .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt
+        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans.
+        PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("borde\u0072" .
+        equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
         //======== tabbedPane1 ========
         {
@@ -522,20 +525,21 @@ public class hotel_rep extends JPanel {
                         panel7Layout.createParallelGroup()
                             .addGroup(panel7Layout.createSequentialGroup()
                                 .addComponent(panel8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panel7Layout.createParallelGroup()
+                                .addGroup(panel7Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                     .addGroup(panel7Layout.createSequentialGroup()
-                                        .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
-                                        .addContainerGap())
-                                    .addGroup(GroupLayout.Alignment.TRAILING, panel7Layout.createSequentialGroup()
-                                        .addGap(0, 520, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(panel7Layout.createParallelGroup()
+                                            .addGroup(panel7Layout.createSequentialGroup()
+                                                .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
+                                                .addContainerGap())
                                             .addGroup(GroupLayout.Alignment.TRAILING, panel7Layout.createSequentialGroup()
+                                                .addGap(0, 520, Short.MAX_VALUE)
                                                 .addComponent(button5)
-                                                .addGap(122, 122, 122))
-                                            .addGroup(GroupLayout.Alignment.TRAILING, panel7Layout.createSequentialGroup()
-                                                .addComponent(label6)
-                                                .addGap(15, 15, 15))))))
+                                                .addGap(122, 122, 122))))
+                                    .addGroup(panel7Layout.createSequentialGroup()
+                                        .addGap(54, 553, Short.MAX_VALUE)
+                                        .addComponent(label6)
+                                        .addGap(15, 15, 15))))
                     );
                     panel7Layout.setVerticalGroup(
                         panel7Layout.createParallelGroup()
