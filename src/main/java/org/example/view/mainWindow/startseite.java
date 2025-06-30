@@ -20,6 +20,8 @@ public class startseite extends JPanel {
     private List<Map<String, Object>> occupancyDataList = new ArrayList<>();
     private Map<Integer, String> transactionalDataAlt = new HashMap<>();
 
+
+
     // ===== JFormDesigner GUI-Komponenten =====
     // Die folgenden Felder müssen zu deinen JFormDesigner-Komponenten passen!
     // Beispiel:
@@ -37,6 +39,7 @@ public class startseite extends JPanel {
         // Panel "combined Overview" – Hotel-Dropdown befüllen
         comboBox16.removeAllItems();
         comboBox16.addItem("---select---");
+        updateCombinedHotelDetails();
         comboBox16.addActionListener(e -> {
             ladeCombinedOverviewData();   // falls schon da
             updateCombinedHotelDetails(); // neu
@@ -91,6 +94,7 @@ public class startseite extends JPanel {
 
         //Panel 5:
         comboBox16.addActionListener(e -> ladeCombinedOverviewData());
+        comboBox16.addActionListener(e -> ladeCombinedOverview());
     }
 
     // ===== Methoden für das Hotel-List-Panel =====
@@ -513,22 +517,10 @@ public class startseite extends JPanel {
                 .comparingInt(Occupancy::getYear)
                 .thenComparingInt(Occupancy::getMonth));
 
-        // 5) Setze die Werte ins Formular (Beispiel für Textfelder):
-        if (toDisplay.isEmpty()) {
-            // leere Felder
-            textField4.setText("");
-            textField5.setText("");
-            textField6.setText("");
-            textField7.setText("");
-            return;
-        }
+
 
         // Wir zeigen nur den neuesten Eintrag
         Occupancy latest = toDisplay.get(toDisplay.size() - 1);
-        textField4.setText(String.valueOf(latest.getHotel().getNoRooms()));
-        textField5.setText(String.valueOf(latest.getUsedRooms()));
-        textField6.setText(String.valueOf(latest.getHotel().getNoBeds()));
-        textField7.setText(String.valueOf(latest.getUsedBeds()));
         // Und setze noch Jahr/Monat/Attribute-Combos, falls gewünscht:
         comboBox12.setSelectedItem(String.valueOf(latest.getYear()));
         comboBox13.setSelectedIndex(latest.getMonth() - 1);
@@ -536,41 +528,101 @@ public class startseite extends JPanel {
 
     //part 2:
     private void updateCombinedHotelDetails() {
-        // 1. Alle Hotels laden
-        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
-        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        // 1) Lese alle Hotels
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile("src/main/java/org/example/data/txt/hotels.txt");
 
-        // 2. Gewähltes Hotel ermitteln
-        String selName = (String) comboBox16.getSelectedItem();
-        if (selName == null || selName.equals("---select---")) {
-            // Wenn nichts gewählt, leeres Modell setzen
+        String sel = (String) comboBox16.getSelectedItem();
+        // 2) Wenn gar nichts oder Default ausgewählt, dann leere Kopfzeile
+        if (sel == null || sel.equals("---select---")) {
             table4.setModel(new DefaultTableModel(
                     new Object[0][],
-                    new String[]{"ID","Address","City","PLZ"}
+                    new String[]{"ID", "Address", "City", "PLZ"}
             ));
             return;
         }
+
+        // 3) Sonst genau das eine Hotel finden
         Hotel h = hotels.stream()
-                .filter(x -> x.getName().equals(selName))
+                .filter(x -> x.getName().equals(sel))
                 .findFirst()
                 .orElse(null);
-        if (h == null) return;
+        if (h == null) {
+            // falls Name merkwürdig war
+            table4.setModel(new DefaultTableModel(
+                    new Object[0][],
+                    new String[]{"ID", "Address", "City", "PLZ"}
+            ));
+            return;
+        }
 
-        // 3. Neues TableModel mit genau einer Zeile bauen
+        // 4) Und in einer Zeile anzeigen
         DefaultTableModel m = new DefaultTableModel(
-                new String[]{"ID","Address","City","PLZ"},
-                0
+                new String[]{"ID", "Address", "City", "PLZ"}, 0
         );
-        m.addRow(new Object[]{
-                h.getId(),
-                h.getAddress(),
-                h.getCity(),
-                h.getCityCode()
-        });
-
-        // 4. Auf table4 anwenden
+        m.addRow(new Object[]{ h.getId(), h.getAddress(), h.getCity(), h.getCityCode() });
         table4.setModel(m);
     }
+    private void ladeCombinedOverview() {
+        // 1) Dateien einlesen
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
+
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> occs = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+        // 2) Auswahl aus den Comboboxen holen
+        String selHotel    = (String) comboBox16.getSelectedItem();
+        String selCategory = (String) comboBox1 .getSelectedItem();
+        int    selYear     = Integer.parseInt((String)comboBox12.getSelectedItem());
+        int    selMonth    = comboBox13.getSelectedIndex() + 1;  // Jan→1, …
+
+        // 3) Hotels filtern nach Hotel-Name und Kategorie
+        List<Hotel> filteredHotels = hotels.stream()
+                .filter(h ->
+                        ("---select---".equals(selHotel)   || h.getName().equals(selHotel))   &&
+                                ("*".equals(selCategory)         || h.getCategory().equals(selCategory))
+                )
+                .collect(Collectors.toList());
+
+        // 4) TableModel neu aufbauen
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{ "Hotel Name", "Rooms", "Room Occupancy", "Beds", "Bed Occupancy" },
+                0
+        );
+
+        for (Hotel h : filteredHotels) {
+            // für jedes Hotel die Transaktionsdaten (occupancy) suchen
+            Optional<Occupancy> occOpt = occs.stream()
+                    .filter(o ->
+                            o.getHotel().equals(h) &&
+                                    o.getYear()  == selYear &&
+                                    o.getMonth() == selMonth
+                    )
+                    .findFirst();
+
+            int totalRooms = h.getNoRooms();
+            int totalBeds  = h.getNoBeds();
+            int roomOcc    = occOpt.map(Occupancy::getUsedRooms).orElse(0);
+            int bedOcc     = occOpt.map(Occupancy::getUsedBeds).orElse(0);
+
+            model.addRow(new Object[]{
+                    h.getName(),
+                    totalRooms,
+                    roomOcc,
+                    totalBeds,
+                    bedOcc
+            });
+        }
+
+        table2.setModel(model);
+    }
+
+
+
+
+
+
+
 
 
 
@@ -713,33 +765,27 @@ public class startseite extends JPanel {
         panel24 = new JPanel();
         button22 = new JButton();
         button23 = new JButton();
-        button24 = new JButton();
         comboBox12 = new JComboBox<>();
         label16 = new JLabel();
         label17 = new JLabel();
         comboBox13 = new JComboBox<>();
         comboBox16 = new JComboBox<>();
         label7 = new JLabel();
-        label8 = new JLabel();
-        label9 = new JLabel();
-        label18 = new JLabel();
-        label19 = new JLabel();
-        textField4 = new JTextField();
-        textField5 = new JTextField();
-        textField6 = new JTextField();
-        textField7 = new JTextField();
         scrollPane4 = new JScrollPane();
         table4 = new JTable();
-        label20 = new JLabel();
-        comboBox14 = new JComboBox<>();
+        comboBox1 = new JComboBox<>();
+        scrollPane2 = new JScrollPane();
+        table2 = new JTable();
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0
-        ,0,0,0), "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
-        ,new java.awt.Font("Dialo\u0067",java.awt.Font.BOLD,12),java.awt.Color.red),
-         getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
-        ){if("borde\u0072".equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+        . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder
+        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .
+        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
+        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+        ) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+        ;
 
         //======== this2 ========
         {
@@ -1661,9 +1707,6 @@ public class startseite extends JPanel {
                         );
                     }
 
-                    //---- button24 ----
-                    button24.setText("save");
-
                     //---- comboBox12 ----
                     comboBox12.setModel(new DefaultComboBoxModel<>(new String[] {
                         "2025",
@@ -1825,33 +1868,10 @@ public class startseite extends JPanel {
                         "Hotel Epsilon"
                     }));
                     comboBox16.setFont(new Font(".AppleSystemUIFont", Font.PLAIN, 15));
+                    comboBox16.setPreferredSize(new Dimension(80, 25));
 
                     //---- label7 ----
                     label7.setText("category:");
-
-                    //---- label8 ----
-                    label8.setText("rooms:");
-
-                    //---- label9 ----
-                    label9.setText("occupied rooms:");
-
-                    //---- label18 ----
-                    label18.setText("beds:");
-
-                    //---- label19 ----
-                    label19.setText("ouccupied beds:");
-
-                    //---- textField4 ----
-                    textField4.setText("65");
-
-                    //---- textField5 ----
-                    textField5.setText("40");
-
-                    //---- textField6 ----
-                    textField6.setText("90");
-
-                    //---- textField7 ----
-                    textField7.setText("70");
 
                     //======== scrollPane4 ========
                     {
@@ -1868,16 +1888,30 @@ public class startseite extends JPanel {
                         scrollPane4.setViewportView(table4);
                     }
 
-                    //---- label20 ----
-                    label20.setText("attributes:");
-
-                    //---- comboBox14 ----
-                    comboBox14.setModel(new DefaultComboBoxModel<>(new String[] {
-                        "family friendly",
-                        "dog friendly",
-                        "spa ",
-                        "fitness"
+                    //---- comboBox1 ----
+                    comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
+                        "*",
+                        "**",
+                        "***",
+                        "****",
+                        "*****"
                     }));
+
+                    //======== scrollPane2 ========
+                    {
+
+                        //---- table2 ----
+                        table2.setModel(new DefaultTableModel(
+                            new Object[][] {
+                                {null, null, null, null, null},
+                                {null, null, null, null, null},
+                            },
+                            new String[] {
+                                "hotel name", "rooms", "room occupancy", "beds", "bed occupancy"
+                            }
+                        ));
+                        scrollPane2.setViewportView(table2);
+                    }
 
                     GroupLayout panel23Layout = new GroupLayout(panel23);
                     panel23.setLayout(panel23Layout);
@@ -1885,68 +1919,43 @@ public class startseite extends JPanel {
                         panel23Layout.createParallelGroup()
                             .addGroup(panel23Layout.createSequentialGroup()
                                 .addComponent(panel24, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addGroup(panel23Layout.createParallelGroup()
                                     .addGroup(panel23Layout.createSequentialGroup()
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(panel23Layout.createParallelGroup()
+                                            .addComponent(comboBox16, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 257, GroupLayout.PREFERRED_SIZE))
                                         .addGroup(panel23Layout.createParallelGroup()
                                             .addGroup(panel23Layout.createSequentialGroup()
-                                                .addComponent(label19)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(textField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addGap(88, 88, 88)
+                                                .addComponent(label16)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(comboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                             .addGroup(panel23Layout.createSequentialGroup()
-                                                .addGroup(panel23Layout.createParallelGroup()
-                                                    .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(comboBox16, GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-                                                        .addComponent(scrollPane4, GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE))
-                                                    .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                        .addGroup(panel23Layout.createSequentialGroup()
-                                                            .addComponent(label18)
-                                                            .addGap(18, 18, 18)
-                                                            .addComponent(textField6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(panel23Layout.createSequentialGroup()
-                                                            .addComponent(label8)
-                                                            .addGap(18, 18, 18)
-                                                            .addComponent(textField4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(panel23Layout.createSequentialGroup()
-                                                            .addComponent(label9)
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(textField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-                                                .addGap(59, 59, 59)
+                                                .addGap(64, 64, 64)
+                                                .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(label7)
+                                                    .addComponent(label17))
                                                 .addGroup(panel23Layout.createParallelGroup()
                                                     .addGroup(panel23Layout.createSequentialGroup()
-                                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                            .addComponent(label16)
-                                                            .addComponent(label7))
                                                         .addGap(18, 18, 18)
-                                                        .addComponent(comboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                    .addGroup(panel23Layout.createSequentialGroup()
-                                                        .addGap(17, 17, 17)
-                                                        .addComponent(label17)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                         .addComponent(comboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                     .addGroup(panel23Layout.createSequentialGroup()
-                                                        .addComponent(label20)
-                                                        .addGap(16, 16, 16)
-                                                        .addComponent(comboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
-                                        .addContainerGap(283, Short.MAX_VALUE))
-                                    .addGroup(GroupLayout.Alignment.TRAILING, panel23Layout.createSequentialGroup()
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 448, Short.MAX_VALUE)
-                                        .addComponent(button24)
-                                        .addGap(207, 207, 207))))
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(comboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, 530, GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(179, Short.MAX_VALUE))
                     );
                     panel23Layout.setVerticalGroup(
                         panel23Layout.createParallelGroup()
+                            .addComponent(panel24, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(GroupLayout.Alignment.TRAILING, panel23Layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                .addGap(15, 15, 15)
+                                .addGroup(panel23Layout.createParallelGroup()
                                     .addGroup(panel23Layout.createSequentialGroup()
                                         .addComponent(comboBox16, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(48, 48, 48)
-                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                            .addComponent(textField4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(label8)))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE))
                                     .addGroup(panel23Layout.createSequentialGroup()
                                         .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                             .addComponent(label16)
@@ -1955,29 +1964,13 @@ public class startseite extends JPanel {
                                         .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                             .addComponent(label17)
                                             .addComponent(comboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                        .addGap(15, 15, 15)
-                                        .addComponent(label7)
-                                        .addGap(68, 68, 68))
-                                    .addGroup(panel23Layout.createParallelGroup()
-                                        .addGroup(panel23Layout.createSequentialGroup()
-                                            .addGap(3, 3, 3)
-                                            .addComponent(label20))
-                                        .addComponent(comboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                    .addComponent(label9)
-                                    .addComponent(textField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                    .addComponent(textField6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(label18))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                    .addComponent(label19)
-                                    .addComponent(textField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                                .addComponent(button24)
-                                .addGap(38, 38, 38))
-                            .addComponent(panel24, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                            .addComponent(label7)
+                                            .addComponent(comboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                                .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
+                                .addGap(23, 23, 23))
                     );
                 }
 
@@ -2081,25 +2074,17 @@ public class startseite extends JPanel {
     private JPanel panel24;
     private JButton button22;
     private JButton button23;
-    private JButton button24;
     private JComboBox<String> comboBox12;
     private JLabel label16;
     private JLabel label17;
     private JComboBox<String> comboBox13;
     private JComboBox<String> comboBox16;
     private JLabel label7;
-    private JLabel label8;
-    private JLabel label9;
-    private JLabel label18;
-    private JLabel label19;
-    private JTextField textField4;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
     private JScrollPane scrollPane4;
     private JTable table4;
-    private JLabel label20;
-    private JComboBox<String> comboBox14;
+    private JComboBox<String> comboBox1;
+    private JScrollPane scrollPane2;
+    private JTable table2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     private class save extends AbstractAction {
@@ -2152,6 +2137,8 @@ public class startseite extends JPanel {
         }
 
     }
+
+
     private class DeleteHotelAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
