@@ -37,6 +37,11 @@ public class startseite extends JPanel {
         // Panel "combined Overview" – Hotel-Dropdown befüllen
         comboBox16.removeAllItems();
         comboBox16.addItem("---select---");
+        comboBox16.addActionListener(e -> {
+            ladeCombinedOverviewData();   // falls schon da
+            updateCombinedHotelDetails(); // neu
+        });
+
 
 // Lies alle Hotels aus der Text-Datei:
         String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
@@ -516,6 +521,44 @@ public class startseite extends JPanel {
         // Und setze noch Jahr/Monat/Attribute-Combos, falls gewünscht:
         comboBox12.setSelectedItem(String.valueOf(latest.getYear()));
         comboBox13.setSelectedIndex(latest.getMonth() - 1);
+    }
+
+    //part 2:
+    private void updateCombinedHotelDetails() {
+        // 1. Alle Hotels laden
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+
+        // 2. Gewähltes Hotel ermitteln
+        String selName = (String) comboBox16.getSelectedItem();
+        if (selName == null || selName.equals("---select---")) {
+            // Wenn nichts gewählt, leeres Modell setzen
+            table4.setModel(new DefaultTableModel(
+                    new Object[0][],
+                    new String[]{"ID","Address","City","PLZ"}
+            ));
+            return;
+        }
+        Hotel h = hotels.stream()
+                .filter(x -> x.getName().equals(selName))
+                .findFirst()
+                .orElse(null);
+        if (h == null) return;
+
+        // 3. Neues TableModel mit genau einer Zeile bauen
+        DefaultTableModel m = new DefaultTableModel(
+                new String[]{"ID","Address","City","PLZ"},
+                0
+        );
+        m.addRow(new Object[]{
+                h.getId(),
+                h.getAddress(),
+                h.getCity(),
+                h.getCityCode()
+        });
+
+        // 4. Auf table4 anwenden
+        table4.setModel(m);
     }
 
 
