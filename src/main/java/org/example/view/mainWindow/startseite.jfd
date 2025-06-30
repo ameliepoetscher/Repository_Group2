@@ -771,8 +771,10 @@ new FormModel {
 										add( null )
 										add( null )
 										add( null )
+										add( null )
 									} )
 									add( new java.util.Vector {
+										add( null )
 										add( null )
 										add( null )
 										add( null )
@@ -785,19 +787,23 @@ new FormModel {
 									add( "room occupancy" )
 									add( "beds" )
 									add( "bed occupancy" )
+									add( "category" )
 								}, new java.util.Vector {
 									add( null )
 									add( null )
 									add( null )
 									add( null )
 									add( null )
-								}, new java.util.Vector {
-									add( null )
-									add( null )
-									add( null )
-									add( null )
 									add( null )
 								}, new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								}, new java.util.Vector {
+									add( null )
 									add( null )
 									add( null )
 									add( null )
@@ -817,5 +823,3 @@ new FormModel {
 		} )
 	}
 }
-
-

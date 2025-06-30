@@ -47,11 +47,17 @@ public class startseite extends JPanel {
             ladeCombinedOverviewData();   // falls schon da
             updateCombinedHotelDetails(); // neu
         });
+
+        comboBox1.removeAllItems();
+        comboBox1.addItem("---select---");                // kein Filter
+        for (String cat : List.of("*","**","***","****","*****")) {
+            comboBox1.addItem(cat);
+        }
         // nach initComponents();
 
         comboBox12.insertItemAt("---select---", 0);    // Jahr
         comboBox13.insertItemAt("---select---", 0);    // Monat
-        comboBox1 .insertItemAt("---select---", 0);    // Kategorie
+
 
         comboBox12.setSelectedIndex(0);
         comboBox13.setSelectedIndex(0);
@@ -603,10 +609,14 @@ public class startseite extends JPanel {
         if (selHotel != null && !selHotel.equals("---select---")) {
             stream = stream.filter(o -> o.getHotel().getName().equals(selHotel));
         }
-// 3b) nach Kategorie filtern, falls ausgewählt (unabhängig vom Hotel)
+// 3b) Kategorie-Threshold filtern, nur wenn nicht Default
         if (selCategory != null && !selCategory.equals("---select---")) {
-            stream = stream.filter(o -> o.getHotel().getCategory().equals(selCategory));
+            int minStars = selCategory.length();     // "*"=1, "**"=2, …
+            stream = stream.filter(o ->
+                    o.getHotel().getCategory().length() >= minStars
+            );
         }
+
 
         // 3c) Jahr filtern, falls nicht Default
         if (selYearStr != null && !selYearStr.equals("---select---")) {
@@ -630,7 +640,8 @@ public class startseite extends JPanel {
 
         // 5) TableModel neu aufbauen – eine Zeile pro Occupancy
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{ "Hotel Name","Rooms","Room Occupancy","Beds","Bed Occupancy" }, 0
+                new Object[]{ "Hotel Name", "Rooms", "Room Occupancy", "Beds", "Bed Occupancy", "Category" },
+                0
         );
         for (Occupancy o : toDisplay) {
             Hotel h = o.getHotel();
@@ -639,7 +650,8 @@ public class startseite extends JPanel {
                     h.getNoRooms(),
                     o.getUsedRooms(),
                     h.getNoBeds(),
-                    o.getUsedBeds()
+                    o.getUsedBeds(),
+                    h.getCategory()      // hier die Sterne-Kategorie
             });
         }
 
@@ -739,7 +751,7 @@ public class startseite extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
         this2 = new JPanel();
         label21 = new JLabel();
         tabbedPane1 = new JTabbedPane();
@@ -810,13 +822,6 @@ public class startseite extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-        . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder
-        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .
-        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
-        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-        ) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
-        ;
 
         //======== this2 ========
         {
@@ -1934,11 +1939,11 @@ public class startseite extends JPanel {
                         //---- table2 ----
                         table2.setModel(new DefaultTableModel(
                             new Object[][] {
-                                {null, null, null, null, null},
-                                {null, null, null, null, null},
+                                {null, null, null, null, null, null},
+                                {null, null, null, null, null, null},
                             },
                             new String[] {
-                                "hotel name", "rooms", "room occupancy", "beds", "bed occupancy"
+                                "hotel name", "rooms", "room occupancy", "beds", "bed occupancy", "category"
                             }
                         ));
                         scrollPane2.setViewportView(table2);
@@ -2048,7 +2053,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
     private JPanel this2;
     private JLabel label21;
     private JTabbedPane tabbedPane1;
@@ -2121,7 +2126,7 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+            // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 
