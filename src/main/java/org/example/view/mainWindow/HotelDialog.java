@@ -89,7 +89,7 @@ public class HotelDialog extends JDialog {
         // --- Buttons ---
         gbc.gridy++;
         gbc.gridx = 0;
-        JButton saveBtn = new JButton("Save");
+        JButton saveBtn = new JButton("Ok");
         JButton cancelBtn = new JButton("Cancel");
         add(saveBtn, gbc);
         gbc.gridx = 1;

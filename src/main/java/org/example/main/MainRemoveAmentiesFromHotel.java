@@ -1,4 +1,4 @@
-package org.example.main;
+/*package org.example.main;
 
 import org.example.entity.Hotel;
 import org.example.dao.HotelDAO;
@@ -26,3 +26,4 @@ public class MainRemoveAmentiesFromHotel {
 
     }
 }
+*/

@@ -1,106 +1,72 @@
 package org.example.view.mainWindow;
-import org.example.entity.Hotel;
 
+import org.example.entity.Hotel;
+import org.example.entity.Occupancy;
+import org.example.data.txt.HotelFileReader;
+import org.example.data.txt.HotelFileWriter;
+import org.example.data.txt.OccupancyFileReader;
+import java.time.LocalDate;
+
+import javax.swing.*;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.GroupLayout;
-import javax.swing.table.*;
-import org.example.data.txt.HotelFileReader;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import javax.swing.table.DefaultTableModel;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Set;
 import java.util.stream.Collectors;
-import org.example.entity.Occupancy;
-import org.example.data.txt.OccupancyFileReader;
-import java.util.Comparator;
-
-
-
-
-/*
- * Created by JFormDesigner on Fri May 16 15:12:45 CEST 2025
- */
-
-/**
- * @author ami
- */
-
 
 public class startseite extends JPanel {
+    private List<Map<String, Object>> occupancyDataList = new ArrayList<>();
+    private Map<Integer, String> transactionalDataAlt = new HashMap<>();
+
+    // ===== JFormDesigner GUI-Komponenten =====
+    // Die folgenden Felder müssen zu deinen JFormDesigner-Komponenten passen!
+    // Beispiel:
+    // private JTable table1, table3, table5, table6;
+    // private JButton button25, deleteButton, button6, button3, button15, button5, button4, button1, button2;
+    // private JComboBox<String> comboBox18;
+
+    // Bitte deklariere alle Komponenten entsprechend deiner .form Datei!
+
     public startseite() {
         initComponents();
+
+
+        // Button-Listener für Hotel-Panel
+        button25.addActionListener(e -> saveHotelData());
+        deleteButton.addActionListener(e -> deleteSelectedHotel());
+        button6.addActionListener(e -> addHotel());
+        button3.addActionListener(e -> editHotel());
+
+        // Listener für weitere Panels (Beispiele)
+        button15.addActionListener(e -> ladeHotelsSummary());
+        button5.addActionListener(e -> openAddTransactionalDialog());
+        button4.addActionListener(e -> saveTransactionalData());
+        comboBox18.addActionListener(e -> ladeTransaktionsDatenMitAttributen());
+        button1.addActionListener(e -> logout());
+        button2.addActionListener(e -> showHelp());
+
+        ladeDropdownHotels();
         ladeHotelsInTabelle();
         ladeHotelsSummary();
-        ladeOccupancySummary();
-
-
-        // ======= HIER kommt Dein eigener Code =======
-        button25.addActionListener(new save());
-        button18.addActionListener(new save());
-        button21.addActionListener(new save());
-        button24.addActionListener(new save());
-
-
-
-        deleteButton.addActionListener(new DeleteHotelAction());
-
-        ActionListener logout = e -> {
-            JFrame top = (JFrame) SwingUtilities.getWindowAncestor(this);
-            top.setContentPane(new login());
-            top.pack();
-            top.setLocationRelativeTo(null);
-        };
-
-        button1.addActionListener(logout);
-        button16.addActionListener(logout);
-        button19.addActionListener(logout);
-        button22.addActionListener(logout);
-
-        ActionListener help = e -> {
-            JOptionPane.showMessageDialog(
-                    startseite.this,
-                    "Welcome to the Lower Austria Tourist Portal!\n\n" +
-                            "Here’s how to use this application:\n" +
-                            "1. In the Hotels tab, view and edit master data for all hotels.\n" +
-                            "2. In Hotels Summary, see aggregate statistics per hotel category.\n" +
-                            "3. In Occupancy, select a year, month, and category to view occupancy trends.\n" +
-                            "4. In Occupancy Summary, choose date ranges or hotel to see summarized occupancy data.\n\n" +
-                            "Use the +, save and logout buttons as needed. If you need further assistance,\n" +
-                            "please consult the user guide or contact support@example.com.",
-                    "Help",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        };
-
-        button2 .addActionListener(help);
-        button17.addActionListener(help);
-        button20.addActionListener(help);
-        button23.addActionListener(help);
-        button27.addActionListener(help);
-        button29.addActionListener(help);
-
-
-
+        initialisiereLeereTransaktionsTabelle();
     }
-    //Panel 1
+
+    // ===== Methoden für das Hotel-List-Panel =====
+
     private void ladeHotelsInTabelle() {
         String filePath = "src/main/java/org/example/data/txt/hotels.txt";
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
 
         DefaultTableModel model = new DefaultTableModel(new String[]{
-                "ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds", "Attribute", "Last Transaction"
+                "ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds", "Attribute", "Last Transactional Data"
         }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // ID darf nicht editierbar sein!
                 return column != 0;
             }
         };
-
 
         for (Hotel hotel : hotels) {
             Object[] rowData = {
@@ -112,39 +78,174 @@ public class startseite extends JPanel {
                     hotel.getCityCode(),
                     hotel.getNoRooms(),
                     hotel.getNoBeds(),
-                    "" // Hier ist der Platzhalter für später „Last Reported Data“
+                    hotel.getAttribute() != null ? hotel.getAttribute() : "",
+                    hotel.getLastTransactionalData() != null ? hotel.getLastTransactionalData() : ""
             };
             model.addRow(rowData);
         }
-
         table1.setModel(model);
-    }
-    //Panel 1 Ende
 
-    //Panel 2
+        // HIER transactionalDataAlt befüllen:
+        transactionalDataAlt.clear();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            transactionalDataAlt.put(i, model.getValueAt(i, 8).toString());
+        }
+    }
+
+    private void saveHotelData() {
+        try {
+            DefaultTableModel model = (DefaultTableModel) table1.getModel();
+            List<String> lines = new ArrayList<>();
+            // Neue Header-Zeile mit "attribute" und "lastTransactionalData"
+            lines.add("id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attribute,lastTransactionalData");
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+                StringJoiner joiner = new StringJoiner(",");
+
+                String attribute = model.getValueAt(i, 8).toString();
+                String lastTransactionalData = model.getValueAt(i, 9) != null ? model.getValueAt(i, 9).toString() : "";
+
+                // ALT: alter Wert vom Laden
+                String attributeAlt = transactionalDataAlt.get(i);
+
+                // Prüfen: Hat sich das Attribut geändert?
+                if (!attribute.equals(attributeAlt)) {
+                    lastTransactionalData = java.time.LocalDate.now().toString();
+                    model.setValueAt(lastTransactionalData, i, 9); // GUI aktualisieren
+                } else if (lastTransactionalData == null || lastTransactionalData.isEmpty()) {
+                    lastTransactionalData = "2025-06-22"; // Defaultwert
+                    model.setValueAt(lastTransactionalData, i, 9); // GUI aktualisieren
+                }
+
+                joiner.add(model.getValueAt(i, 0).toString()); // id
+                joiner.add("\"" + model.getValueAt(i, 1).toString() + "\""); // category
+                joiner.add("\"" + model.getValueAt(i, 2).toString() + "\""); // name
+                joiner.add("\"-\""); // owner
+                joiner.add("\"-\""); // contact
+                joiner.add("\"" + model.getValueAt(i, 3).toString() + "\""); // address
+                joiner.add("\"" + model.getValueAt(i, 4).toString() + "\""); // city
+                joiner.add("\"" + model.getValueAt(i, 5).toString() + "\""); // cityCode
+                joiner.add("\"-\""); // phone
+                joiner.add(model.getValueAt(i, 6).toString()); // noRooms
+                joiner.add(model.getValueAt(i, 7).toString()); // noBeds
+                joiner.add("\"" + attribute + "\""); // attribute
+                joiner.add("\"" + lastTransactionalData + "\""); // lastTransactionalData
+
+                lines.add(joiner.toString());
+            }
+
+            String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+                for (String line : lines) {
+                    bw.write(line);
+                    bw.newLine();
+                }
+            }
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Changes successfully saved!",
+                    "Save",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error while saving!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private void deleteSelectedHotel() {
+        int selectedRow = table1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a hotel in the table first!",
+                    "No selection",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        String hotelId = table1.getValueAt(selectedRow, 0).toString();
+        Object[] options = {"Delete", "Stop"};
+        int choice = JOptionPane.showOptionDialog(
+                this,
+                "Transactional data of this Hotel will also be deleted!",
+                "Are you sure?",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
+        );
+
+        if (choice == JOptionPane.YES_OPTION) {
+            DefaultTableModel model = (DefaultTableModel) table1.getModel();
+            model.removeRow(selectedRow);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Hotel with ID " + hotelId + " has been deleted.",
+                    "Deleted",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+    }
+
+
+
+    private void addHotel() {
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        HotelDialog dialog = new HotelDialog(parentFrame, null, false, table1);
+        dialog.setVisible(true);
+        if (dialog.isSaved()) {
+            Object[] newHotel = dialog.getHotelData();
+            ((DefaultTableModel) table1.getModel()).addRow(newHotel);
+        }
+    }
+
+    private void editHotel() {
+        int selectedRow = table1.getSelectedRow();
+        if (selectedRow == -1) return;
+        DefaultTableModel model = (DefaultTableModel) table1.getModel();
+        Object[] rowData = new Object[model.getColumnCount()];
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            rowData[i] = model.getValueAt(selectedRow, i);
+        }
+        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+        HotelDialog dialog = new HotelDialog(parent, rowData, true, table1);
+        dialog.setVisible(true);
+        if (dialog.isSaved()) {
+            Object[] editedHotel = dialog.getHotelData();
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                model.setValueAt(editedHotel[i], selectedRow, i);
+            }
+        }
+    }
+
+    // ===== Methoden für das Hotel-Summary-Panel =====
+
     private void ladeHotelsSummary() {
         String filePath = "src/main/java/org/example/data/txt/hotels.txt";
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
 
-        // Kategorie -> Hotels
         Map<String, List<Hotel>> kategorienMap = new HashMap<>();
         for (Hotel hotel : hotels) {
             kategorienMap.computeIfAbsent(hotel.getCategory(), k -> new ArrayList<>()).add(hotel);
         }
 
-        // Kategorien in gewünschter Reihenfolge
         List<String> kategorienReihenfolge = List.of("*", "**", "***", "****", "*****");
-
-        // Table Model vorbereiten
         DefaultTableModel model = (DefaultTableModel) table5.getModel();
         model.setRowCount(0);
 
         for (String kategorie : kategorienReihenfolge) {
             List<Hotel> kategorieHotels = kategorienMap.getOrDefault(kategorie, new ArrayList<>());
-
             int anzahlHotels = kategorieHotels.size();
-            int sumRooms = 0;
-            int sumBeds = 0;
+            int sumRooms = 0, sumBeds = 0;
 
             for (Hotel hotel : kategorieHotels) {
                 sumRooms += hotel.getNoRooms();
@@ -157,70 +258,221 @@ public class startseite extends JPanel {
             Object[] rowData = { kategorie, anzahlHotels, avgRooms, avgBeds };
             model.addRow(rowData);
         }
-
-        // Tabelle aktualisieren
         table5.setModel(model);
     }
-    // Panel 2 Ende
 
-    //Panel 3
-    private void ladeOccupancySummary() {
+    // ===== Methoden für das Transactional Data Panel =====
+
+    private void initialisiereLeereTransaktionsTabelle() {
+        String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
+
+        DefaultTableModel model = new DefaultTableModel(new Object[]{
+                "ID", "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year"
+        }, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column != 0;
+            }
+        };
+
+        for (Hotel hotel : hotels) {
+            model.addRow(new Object[]{
+                    hotel.getId(),
+                    hotel.getName(),
+                    "", "", "", ""
+            });
+        }
+        table6.setModel(model);
+    }
+
+    private void openAddTransactionalDialog() {
+        int row = table6.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a hotel in the table first!");
+            return;
+        }
+
+        int hotelId = Integer.parseInt(table6.getValueAt(row, 0).toString());
+        String hotelName = table6.getValueAt(row, 1).toString();
+
+        AddTransactionalDataDialog dialog = new AddTransactionalDataDialog(
+                (JFrame) SwingUtilities.getWindowAncestor(this), hotelId, hotelName
+        );
+        dialog.setVisible(true);
+
+        if (dialog.isSaved()) {
+            int year = dialog.getSelectedYear();
+            int month = dialog.getSelectedMonth();
+            int roomOcc = dialog.getRoomOccupancy();
+            int bedOcc = dialog.getBedOccupancy();
+
+            table6.setValueAt(roomOcc, row, 2);
+            table6.setValueAt(bedOcc, row, 3);
+            table6.setValueAt(month, row, 4);
+            table6.setValueAt(year, row, 5);
+
+            Map<String, Object> occ = new HashMap<>();
+            occ.put("id", hotelId);
+            occ.put("hotelName", hotelName);
+            occ.put("year", year);
+            occ.put("month", month);
+            occ.put("roomOcc", roomOcc);
+            occ.put("bedOcc", bedOcc);
+            occupancyDataList.add(occ);
+
+            // Update Last Transaction in Hotel List
+            for (int i = 0; i < table1.getRowCount(); i++) {
+                int idInTable1 = Integer.parseInt(table1.getValueAt(i, 0).toString());
+                if (idInTable1 == hotelId) {
+                    String today = java.time.LocalDate.now().toString();
+                    table1.setValueAt(today, i, table1.getColumnCount() - 1);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void saveTransactionalData() {
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        Map<Integer, Hotel> hotelMap = new HashMap<>();
+        for (Hotel h : hotels) {
+            hotelMap.put(h.getId(), h);
+        }
+
+        File out = new File("src/main/java/org/example/data/txt/occupancies.txt");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(out, true))) {
+            for (Map<String,Object> occ : occupancyDataList) {
+                int id        = (Integer) occ.get("id");
+                int usedRooms = (Integer) occ.get("roomOcc");
+                int usedBeds  = (Integer) occ.get("bedOcc");
+                int year      = (Integer) occ.get("year");
+                int month     = (Integer) occ.get("month");
+
+                Hotel h = hotelMap.get(id);
+                int totalRooms = h.getNoRooms();
+                int totalBeds  = h.getNoBeds();
+
+                String line = String.format(
+                        "%d,%d,%d,%d,%d,%d,%d",
+                        id, totalRooms, usedRooms, totalBeds, usedBeds, year, month
+                );
+
+                bw.write(line);
+                bw.newLine();
+            }
+            bw.flush();
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Transactional data saved to file!",
+                    "Save",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            occupancyDataList.clear();
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error writing occupancies.txt:\n" + ex.getMessage(),
+                    "Save Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    // ===== Methoden für das Transactional Data List Panel =====
+
+    private void ladeTransaktionsDatenMitAttributen() {
         String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
         String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
 
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
-        List<Occupancy> occs = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+        List<Occupancy> occsAll = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
 
-
-        // Auswahl aus ComboBoxen holen
-        String selYear     = (String) comboBox4.getSelectedItem();       // z. B. "2025"
-        String selMonth    = (String) comboBox5.getSelectedItem();       // z. B. "January"
-        String selCategory = (String) comboBox3.getSelectedItem();       // z. B. "★"
-
-        int year = Integer.parseInt(selYear);
-        int month = comboBox5.getSelectedIndex() + 1; // January -> 1, etc.
-
-        // Hotel-ID nach Kategorie suchen (für Filter)
-        Set<Integer> allowedHotelIds = hotels.stream()
-                .filter(h -> h.getCategory().equals(selCategory))
-                .map(Hotel::getId)
-                .collect(Collectors.toSet());
-
-        // Summen berechnen
-        int sumRooms = 0, sumBeds = 0, countEntries = 0;
-        for (Occupancy o : occs) {
-            if (o.getYear() == year &&
-                    o.getMonth() == month &&
-                    allowedHotelIds.contains(o.getHotel().getId())) {
-
-                sumRooms += o.getUsedRooms();
-                sumBeds += o.getUsedBeds();
-                countEntries++;
-            }
+        String selHotel = (String) comboBox18.getSelectedItem();
+        List<Occupancy> toDisplay;
+        if (selHotel != null && !selHotel.equals("---select---")) {
+            toDisplay = occsAll.stream()
+                    .filter(o -> o.getHotel().getName().equals(selHotel))
+                    .collect(Collectors.toList());
+        } else {
+            toDisplay = occsAll;
         }
 
+        toDisplay.sort(
+                Comparator.comparingInt(Occupancy::getYear)
+                        .thenComparingInt(Occupancy::getMonth)
+        );
 
-        // Durchschnitt pro Hotel (wenn mehrere Hotels in Kategorie existieren)
-        int numHotelsInCat = allowedHotelIds.size();
-        int avgRooms = countEntries == 0 || numHotelsInCat == 0 ? 0
-                : sumRooms / numHotelsInCat;
-        int avgBeds  = countEntries == 0 || numHotelsInCat == 0 ? 0
-                : sumBeds  / numHotelsInCat;
-
-        // Tabelle aktualisieren
-        DefaultTableModel model = (DefaultTableModel) table2.getModel();
-        model.setRowCount(0);
-        Object[] row = {
-                selYear, selMonth, selCategory,
-                sumRooms, sumBeds,
-                numHotelsInCat, avgRooms, avgBeds
-        };
-        model.addRow(row);
-        table2.setModel(model);
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{ "Hotel Name","Room Occupancy","Bed Occupancy","Month","Year","Attribute" },
+                0
+        );
+        for (Occupancy o : toDisplay) {
+            model.addRow(new Object[]{
+                    o.getHotel().getName(),
+                    o.getUsedRooms(),
+                    o.getUsedBeds(),
+                    getMonthName(o.getMonth()),
+                    o.getYear(),
+                    ""  // Platz für Attribute
+            });
+        }
+        table3.setModel(model);
     }
 
+    // ===== Hilfsmethoden =====
 
+    private void ladeDropdownHotels() {
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
 
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> occsAll = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+        Set<String> names = new TreeSet<>();
+        for (Occupancy o : occsAll) {
+            names.add(o.getHotel().getName());
+        }
+        comboBox18.removeAllItems();
+        comboBox18.addItem("---select---");
+        for (String n : names) {
+            comboBox18.addItem(n);
+        }
+    }
+
+    private String getMonthName(int month) {
+        String[] months = {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+        return (month >= 1 && month <= 12) ? months[month - 1] : "Unknown";
+    }
+
+    private void logout() {
+        JFrame top = (JFrame) SwingUtilities.getWindowAncestor(this);
+        top.setContentPane(new login());
+        top.pack();
+        top.setLocationRelativeTo(null);
+    }
+
+    private void showHelp() {
+        JOptionPane.showMessageDialog(
+                this,
+                "Welcome to the Lower Austria Tourist Portal!\n\n" +
+                        "Here’s how to use this application:\n" +
+                        "1. In the Hotels tab, view and edit master data for all hotels.\n" +
+                        "2. In Hotels Summary, see aggregate statistics per hotel category.\n" +
+                        "3. In Occupancy, select a year, month, and category to view occupancy trends.\n" +
+                        "4. In Occupancy Summary, choose date ranges or hotel to see summarized occupancy data.\n\n" +
+                        "Use the +, save and logout buttons as needed. If you need further assistance,\n" +
+                        "please consult the user guide or contact support@example.com.",
+                "Help",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
 
     private void Add(ActionEvent e) {
         // TODO add your code here
@@ -231,41 +483,21 @@ public class startseite extends JPanel {
     }
 
     private void AddButton(ActionEvent e) {
-        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        HotelDialog dialog = new HotelDialog(parentFrame, null, false, table1); // Tabelle für automatische ID
-        dialog.setVisible(true);
-        if (dialog.isSaved()) {
-            Object[] newHotel = dialog.getHotelData();
-            ((javax.swing.table.DefaultTableModel) table1.getModel()).addRow(newHotel);
-        }
+        // TODO add your code here
     }
-
 
     private void EditButton(ActionEvent e) {
-        int selectedRow = table1.getSelectedRow();
-        if (selectedRow == -1) return;
-        DefaultTableModel model = (DefaultTableModel) table1.getModel();
-        Object[] rowData = new Object[model.getColumnCount()];
-        for (int i = 0; i < model.getColumnCount(); i++) {
-            rowData[i] = model.getValueAt(selectedRow, i);
-        }
-        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-        HotelDialog dialog = new HotelDialog(parent, rowData, true, table1); // <-- nur hier anpassen!
-        dialog.setVisible(true);
-        if (dialog.isSaved()) {
-            Object[] editedHotel = dialog.getHotelData();
-            for (int i = 0; i < model.getColumnCount(); i++) {
-                model.setValueAt(editedHotel[i], selectedRow, i);
-            }
-        }
+        // TODO add your code here
     }
 
+    // ===== JFormDesigner initComponents und Variablen-Deklaration =====
+    // ... hier bleibt alles wie vom JFormDesigner erzeugt!
 
 
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
         this2 = new JPanel();
         label21 = new JLabel();
         tabbedPane1 = new JTabbedPane();
@@ -296,23 +528,6 @@ public class startseite extends JPanel {
         button28 = new JButton();
         button29 = new JButton();
         button5 = new JButton();
-        panel4 = new JPanel();
-        panel19 = new JPanel();
-        panel20 = new JPanel();
-        button16 = new JButton();
-        button17 = new JButton();
-        button18 = new JButton();
-        comboBox3 = new JComboBox<>();
-        label6 = new JLabel();
-        comboBox4 = new JComboBox<>();
-        label10 = new JLabel();
-        label11 = new JLabel();
-        comboBox5 = new JComboBox<>();
-        scrollPane2 = new JScrollPane();
-        table2 = new JTable();
-        comboBox15 = new JComboBox<>();
-        label22 = new JLabel();
-        label24 = new JLabel();
         panel5 = new JPanel();
         panel21 = new JPanel();
         panel22 = new JPanel();
@@ -344,7 +559,6 @@ public class startseite extends JPanel {
         label17 = new JLabel();
         comboBox13 = new JComboBox<>();
         comboBox16 = new JComboBox<>();
-        comboBox6 = new JComboBox<>();
         label7 = new JLabel();
         label8 = new JLabel();
         label9 = new JLabel();
@@ -361,13 +575,6 @@ public class startseite extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
-                . swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing
-                . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
-                Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
-        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
-        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName (
-        ) )) throw new RuntimeException( ); }} );
 
         //======== this2 ========
         {
@@ -581,10 +788,10 @@ public class startseite extends JPanel {
                                         .addGroup(panel25Layout.createSequentialGroup()
                                                 .addContainerGap()
                                                 .addGroup(panel25Layout.createParallelGroup()
-                                                        .addComponent(button26, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addGroup(panel25Layout.createSequentialGroup()
                                                                 .addComponent(button27, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                                                .addGap(0, 0, Short.MAX_VALUE))
+                                                        .addComponent(button26, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addContainerGap())
                         );
                         panel25Layout.setVerticalGroup(
@@ -592,9 +799,9 @@ public class startseite extends JPanel {
                                         .addGroup(GroupLayout.Alignment.TRAILING, panel25Layout.createSequentialGroup()
                                                 .addGap(25, 25, 25)
                                                 .addComponent(button27)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
                                                 .addComponent(button26)
-                                                .addGap(23, 23, 23))
+                                                .addGap(40, 40, 40))
                         );
                     }
 
@@ -606,22 +813,22 @@ public class startseite extends JPanel {
                                             .addComponent(panel25, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                             .addGroup(panel17Layout.createParallelGroup()
                                                     .addGroup(panel17Layout.createSequentialGroup()
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 602, Short.MAX_VALUE)
-                                                            .addComponent(button15)
-                                                            .addGap(72, 72, 72))
-                                                    .addGroup(panel17Layout.createSequentialGroup()
                                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                             .addComponent(scrollPane5, GroupLayout.PREFERRED_SIZE, 562, GroupLayout.PREFERRED_SIZE)
-                                                            .addContainerGap(159, Short.MAX_VALUE))))
+                                                            .addContainerGap(159, Short.MAX_VALUE))
+                                                    .addGroup(GroupLayout.Alignment.TRAILING, panel17Layout.createSequentialGroup()
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 471, Short.MAX_VALUE)
+                                                            .addComponent(button15)
+                                                            .addGap(184, 184, 184))))
                     );
                     panel17Layout.setVerticalGroup(
                             panel17Layout.createParallelGroup()
                                     .addGroup(panel17Layout.createSequentialGroup()
                                             .addGap(32, 32, 32)
-                                            .addComponent(scrollPane5, GroupLayout.PREFERRED_SIZE, 306, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(scrollPane5, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(button15)
-                                            .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGap(47, 47, 47))
                                     .addGroup(panel17Layout.createSequentialGroup()
                                             .addComponent(panel25, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                             .addGap(0, 0, Short.MAX_VALUE))
@@ -636,7 +843,7 @@ public class startseite extends JPanel {
                 );
                 panel3Layout.setVerticalGroup(
                         panel3Layout.createParallelGroup()
-                                .addComponent(panel17, GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                                .addComponent(panel17, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 );
             }
             tabbedPane1.addTab("Hotel Summary", panel3);
@@ -692,7 +899,7 @@ public class startseite extends JPanel {
                                     .addGroup(GroupLayout.Alignment.TRAILING, panel26Layout.createSequentialGroup()
                                             .addGap(25, 25, 25)
                                             .addComponent(button29)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 269, Short.MAX_VALUE)
                                             .addComponent(button28)
                                             .addGap(23, 23, 23))
                     );
@@ -709,7 +916,7 @@ public class startseite extends JPanel {
                                         .addComponent(panel26, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addGroup(panel2Layout.createParallelGroup()
                                                 .addGroup(panel2Layout.createSequentialGroup()
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 452, Short.MAX_VALUE)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 411, Short.MAX_VALUE)
                                                         .addComponent(button5)
                                                         .addGap(18, 18, 18)
                                                         .addComponent(button4)
@@ -725,349 +932,17 @@ public class startseite extends JPanel {
                                         .addGroup(panel2Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                 .addComponent(panel26, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addGroup(panel2Layout.createSequentialGroup()
-                                                        .addContainerGap(7, Short.MAX_VALUE)
-                                                        .addComponent(scrollPane6, GroupLayout.PREFERRED_SIZE, 323, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addContainerGap(10, Short.MAX_VALUE)
+                                                        .addComponent(scrollPane6, GroupLayout.PREFERRED_SIZE, 298, GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(18, 18, 18)
                                                         .addGroup(panel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                                .addComponent(button4)
-                                                                .addComponent(button5))))
+                                                                .addComponent(button5)
+                                                                .addComponent(button4))
+                                                        .addGap(13, 13, 13)))
                                         .addContainerGap())
                 );
             }
             tabbedPane1.addTab("Transactional Data", panel2);
-
-            //======== panel4 ========
-            {
-                panel4.setBackground(Color.white);
-
-                //======== panel19 ========
-                {
-
-                    //======== panel20 ========
-                    {
-                        panel20.setBackground(new Color(0x3366ff));
-
-                        //---- button16 ----
-                        button16.setText("Log Out");
-                        button16.setBackground(Color.lightGray);
-
-                        //---- button17 ----
-                        button17.setText("Help");
-                        button17.setBackground(Color.lightGray);
-
-                        GroupLayout panel20Layout = new GroupLayout(panel20);
-                        panel20.setLayout(panel20Layout);
-                        panel20Layout.setHorizontalGroup(
-                                panel20Layout.createParallelGroup()
-                                        .addGroup(panel20Layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addGroup(panel20Layout.createParallelGroup()
-                                                        .addComponent(button16, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addGroup(panel20Layout.createSequentialGroup()
-                                                                .addComponent(button17, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                                .addContainerGap())
-                        );
-                        panel20Layout.setVerticalGroup(
-                                panel20Layout.createParallelGroup()
-                                        .addGroup(GroupLayout.Alignment.TRAILING, panel20Layout.createSequentialGroup()
-                                                .addGap(25, 25, 25)
-                                                .addComponent(button17)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(button16)
-                                                .addGap(23, 23, 23))
-                        );
-                    }
-
-                    //---- button18 ----
-                    button18.setText("save");
-
-                    //---- comboBox3 ----
-                    comboBox3.setModel(new DefaultComboBoxModel<>(new String[] {
-                            "\u2605",
-                            "\u2605\u2605",
-                            "\u2605\u2605\u2605",
-                            "\u2605\u2605\u2605\u2605",
-                            "\u2605\u2605\u2605\u2605\u2605"
-                    }));
-
-                    //---- label6 ----
-                    label6.setText("category:");
-
-                    //---- comboBox4 ----
-                    comboBox4.setModel(new DefaultComboBoxModel<>(new String[] {
-                            "2025",
-                            "2024",
-                            "2023",
-                            "2022",
-                            "2021",
-                            "2020",
-                            "2019",
-                            "2018",
-                            "2017",
-                            "2016",
-                            "2015",
-                            "2014",
-                            "2013",
-                            "2012",
-                            "2011",
-                            "2010",
-                            "2009",
-                            "2008",
-                            "2007",
-                            "2006",
-                            "2005",
-                            "2004",
-                            "2003",
-                            "2002",
-                            "2001",
-                            "2000",
-                            "1999",
-                            "1998",
-                            "1997",
-                            "1996",
-                            "1995",
-                            "1994",
-                            "1993",
-                            "1992",
-                            "1991",
-                            "1990",
-                            "1989",
-                            "1988",
-                            "1987",
-                            "1986",
-                            "1985",
-                            "1984",
-                            "1983",
-                            "1982",
-                            "1981",
-                            "1980",
-                            "1979",
-                            "1978",
-                            "1977",
-                            "1976",
-                            "1975",
-                            "1974",
-                            "1973",
-                            "1972",
-                            "1971",
-                            "1970",
-                            "1969",
-                            "1968",
-                            "1967",
-                            "1966",
-                            "1965",
-                            "1964",
-                            "1963",
-                            "1962",
-                            "1961",
-                            "1960",
-                            "1959",
-                            "1958",
-                            "1957",
-                            "1956",
-                            "1955",
-                            "1954",
-                            "1953",
-                            "1952",
-                            "1951",
-                            "1950",
-                            "1949",
-                            "1948",
-                            "1947",
-                            "1946",
-                            "1945",
-                            "1944",
-                            "1943",
-                            "1942",
-                            "1941",
-                            "1940",
-                            "1939",
-                            "1938",
-                            "1937",
-                            "1936",
-                            "1935",
-                            "1934",
-                            "1933",
-                            "1932",
-                            "1931",
-                            "1930",
-                            "1929",
-                            "1928",
-                            "1927",
-                            "1926",
-                            "1925",
-                            "1924",
-                            "1923",
-                            "1922",
-                            "1921",
-                            "1920",
-                            "1919",
-                            "1918",
-                            "1917",
-                            "1916",
-                            "1915",
-                            "1914",
-                            "1913",
-                            "1912",
-                            "1911",
-                            "1910",
-                            "1909",
-                            "1908",
-                            "1907",
-                            "1906",
-                            "1905",
-                            "1904",
-                            "1903",
-                            "1902",
-                            "1901",
-                            "1900"
-                    }));
-
-                    //---- label10 ----
-                    label10.setText("year:");
-
-                    //---- label11 ----
-                    label11.setText("month:");
-
-                    //---- comboBox5 ----
-                    comboBox5.setModel(new DefaultComboBoxModel<>(new String[] {
-                            "January",
-                            "February",
-                            "March",
-                            "April",
-                            "May",
-                            "June",
-                            "July",
-                            "August",
-                            "September",
-                            "October",
-                            "November",
-                            "December"
-                    }));
-
-                    //======== scrollPane2 ========
-                    {
-
-                        //---- table2 ----
-                        table2.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                        {"1", "Hotel Alpha", "10", "15"},
-                                        {"2", "Hotel Beta", "20", "25"},
-                                        {"3", "Hotel Gamma", "30", "35"},
-                                        {"4", "Hotel Delta", "40", "45"},
-                                        {"5", "Hotel Gamma", "50", "55"},
-                                },
-                                new String[] {
-                                        "ID", "Name", "Occup. rooms", "Occup. beds"
-                                }
-                        ));
-                        {
-                            TableColumnModel cm = table2.getColumnModel();
-                            cm.getColumn(0).setPreferredWidth(15);
-                        }
-                        scrollPane2.setViewportView(table2);
-                    }
-
-                    //---- comboBox15 ----
-                    comboBox15.setModel(new DefaultComboBoxModel<>(new String[] {
-                            "---select---",
-                            "Hotel Alpha",
-                            "Hotel Beta",
-                            "Hotel Gamma ",
-                            "Hotel Delta",
-                            "Hotel Epsilon"
-                    }));
-
-                    //---- label22 ----
-                    label22.setText("hotel:");
-
-                    //---- label24 ----
-                    label24.setText("hotel:");
-
-                    GroupLayout panel19Layout = new GroupLayout(panel19);
-                    panel19.setLayout(panel19Layout);
-                    panel19Layout.setHorizontalGroup(
-                            panel19Layout.createParallelGroup()
-                                    .addGroup(panel19Layout.createParallelGroup()
-                                            .addGroup(panel19Layout.createSequentialGroup()
-                                                    .addGap(0, 0, Short.MAX_VALUE)
-                                                    .addComponent(label24)
-                                                    .addGap(0, 0, Short.MAX_VALUE)))
-                                    .addGroup(panel19Layout.createSequentialGroup()
-                                            .addGroup(panel19Layout.createParallelGroup()
-                                                    .addComponent(panel20, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(button18))
-                                            .addGroup(panel19Layout.createParallelGroup()
-                                                    .addGroup(panel19Layout.createSequentialGroup()
-                                                            .addGap(51, 51, 51)
-                                                            .addGroup(panel19Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                                    .addComponent(label10)
-                                                                    .addComponent(label11))
-                                                            .addGap(18, 18, 18)
-                                                            .addGroup(panel19Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                                    .addGroup(panel19Layout.createSequentialGroup()
-                                                                            .addComponent(comboBox5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(label22))
-                                                                    .addGroup(panel19Layout.createSequentialGroup()
-                                                                            .addComponent(comboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                            .addGap(92, 92, 92)
-                                                                            .addComponent(label6)))
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                            .addGroup(panel19Layout.createParallelGroup()
-                                                                    .addComponent(comboBox15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                    .addComponent(comboBox3, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)))
-                                                    .addGroup(panel19Layout.createSequentialGroup()
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, 569, GroupLayout.PREFERRED_SIZE)))
-                                            .addContainerGap(152, Short.MAX_VALUE))
-                    );
-                    panel19Layout.setVerticalGroup(
-                            panel19Layout.createParallelGroup()
-                                    .addGroup(panel19Layout.createParallelGroup()
-                                            .addGroup(panel19Layout.createSequentialGroup()
-                                                    .addGap(0, 0, Short.MAX_VALUE)
-                                                    .addComponent(label24)
-                                                    .addGap(0, 0, Short.MAX_VALUE)))
-                                    .addGroup(GroupLayout.Alignment.TRAILING, panel19Layout.createSequentialGroup()
-                                            .addGap(15, 15, 15)
-                                            .addGroup(panel19Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(label10)
-                                                    .addComponent(comboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(label6)
-                                                    .addComponent(comboBox3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                            .addGap(18, 18, 18)
-                                            .addGroup(panel19Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(label11)
-                                                    .addComponent(comboBox5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(label22)
-                                                    .addComponent(comboBox15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(panel19Layout.createParallelGroup()
-                                                    .addGroup(panel19Layout.createSequentialGroup()
-                                                            .addGap(215, 215, 215)
-                                                            .addComponent(button18)
-                                                            .addContainerGap(42, Short.MAX_VALUE))
-                                                    .addGroup(panel19Layout.createSequentialGroup()
-                                                            .addGap(18, 18, 18)
-                                                            .addComponent(scrollPane2, GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
-                                                            .addContainerGap())))
-                                    .addComponent(panel20, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    );
-                }
-
-                GroupLayout panel4Layout = new GroupLayout(panel4);
-                panel4.setLayout(panel4Layout);
-                panel4Layout.setHorizontalGroup(
-                        panel4Layout.createParallelGroup()
-                                .addComponent(panel19, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                );
-                panel4Layout.setVerticalGroup(
-                        panel4Layout.createParallelGroup()
-                                .addComponent(panel19, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                );
-            }
-            tabbedPane1.addTab("Occupancy Summary", panel4);
 
             //======== panel5 ========
             {
@@ -1476,32 +1351,30 @@ public class startseite extends JPanel {
                             panel21Layout.createParallelGroup()
                                     .addGroup(panel21Layout.createSequentialGroup()
                                             .addComponent(panel22, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                            .addGroup(panel21Layout.createParallelGroup()
                                                     .addGroup(panel21Layout.createSequentialGroup()
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                            .addGroup(panel21Layout.createParallelGroup()
-                                                                    .addGroup(panel21Layout.createSequentialGroup()
+                                                            .addGap(18, 18, 18)
+                                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                                    .addGroup(GroupLayout.Alignment.LEADING, panel21Layout.createSequentialGroup()
+                                                                            .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 531, GroupLayout.PREFERRED_SIZE)
+                                                                            .addGap(0, 155, Short.MAX_VALUE))
+                                                                    .addGroup(GroupLayout.Alignment.LEADING, panel21Layout.createSequentialGroup()
                                                                             .addGap(399, 399, 399)
                                                                             .addComponent(button21)
-                                                                            .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                                    .addGroup(panel21Layout.createSequentialGroup()
-                                                                            .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 531, GroupLayout.PREFERRED_SIZE)
-                                                                            .addGap(0, 184, Short.MAX_VALUE))))
+                                                                            .addContainerGap(215, Short.MAX_VALUE))))
                                                     .addGroup(panel21Layout.createSequentialGroup()
-                                                            .addGap(90, 90, 90)
+                                                            .addGap(7, 7, 7)
                                                             .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                                     .addComponent(label23)
                                                                     .addComponent(label25))
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                                                    .addGroup(panel21Layout.createSequentialGroup()
-                                                                            .addComponent(comboBox18, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(label12))
-                                                                    .addGroup(panel21Layout.createSequentialGroup()
-                                                                            .addComponent(comboBox17, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
-                                                                            .addGap(40, 40, 40)
-                                                                            .addComponent(label14)))
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                            .addGroup(panel21Layout.createParallelGroup()
+                                                                    .addComponent(comboBox17, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+                                                                    .addComponent(comboBox18, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                            .addGap(24, 24, 24)
+                                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                                    .addComponent(label12)
+                                                                    .addComponent(label14))
                                                             .addGap(6, 6, 6)
                                                             .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                                                     .addGroup(panel21Layout.createSequentialGroup()
@@ -1518,14 +1391,22 @@ public class startseite extends JPanel {
                                                                     .addGroup(panel21Layout.createSequentialGroup()
                                                                             .addGap(6, 6, 6)
                                                                             .addComponent(comboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                                            .addGap(91, 91, 91))))
+                                                            .addGap(0, 201, Short.MAX_VALUE))))
                     );
                     panel21Layout.setVerticalGroup(
                             panel21Layout.createParallelGroup()
                                     .addGroup(GroupLayout.Alignment.TRAILING, panel21Layout.createSequentialGroup()
+                                            .addGap(15, 15, 15)
                                             .addGroup(panel21Layout.createParallelGroup()
                                                     .addGroup(panel21Layout.createSequentialGroup()
-                                                            .addGap(18, 18, 18)
+                                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(label25)
+                                                                    .addComponent(comboBox18, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(label23)
+                                                                    .addComponent(comboBox17, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                                                    .addGroup(panel21Layout.createSequentialGroup()
                                                             .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                                     .addComponent(comboBox7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                                     .addComponent(label12)
@@ -1536,17 +1417,8 @@ public class startseite extends JPanel {
                                                                     .addComponent(comboBox9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                                     .addComponent(label14)
                                                                     .addComponent(label15)
-                                                                    .addComponent(comboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                                    .addGroup(panel21Layout.createSequentialGroup()
-                                                            .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                                    .addComponent(label25)
-                                                                    .addComponent(comboBox18, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                                    .addComponent(label23)
-                                                                    .addComponent(comboBox17, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-                                            .addGap(18, 18, 18)
+                                                                    .addComponent(comboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(button21)
@@ -1559,11 +1431,14 @@ public class startseite extends JPanel {
                 panel5.setLayout(panel5Layout);
                 panel5Layout.setHorizontalGroup(
                         panel5Layout.createParallelGroup()
-                                .addComponent(panel21, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(panel5Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(panel21, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(17, 17, 17))
                 );
                 panel5Layout.setVerticalGroup(
                         panel5Layout.createParallelGroup()
-                                .addComponent(panel21, GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                                .addComponent(panel21, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 );
             }
             tabbedPane1.addTab("Transactional Data List", panel5);
@@ -1776,15 +1651,6 @@ public class startseite extends JPanel {
                     }));
                     comboBox16.setFont(new Font(".AppleSystemUIFont", Font.PLAIN, 15));
 
-                    //---- comboBox6 ----
-                    comboBox6.setModel(new DefaultComboBoxModel<>(new String[] {
-                            "\u2605",
-                            "\u2605\u2605",
-                            "\u2605\u2605\u2605",
-                            "\u2605\u2605\u2605\u2605",
-                            "\u2605\u2605\u2605\u2605\u2605"
-                    }));
-
                     //---- label7 ----
                     label7.setText("category:");
 
@@ -1857,15 +1723,13 @@ public class startseite extends JPanel {
                                                                                     .addComponent(label16)
                                                                                     .addComponent(label7))
                                                                             .addGap(18, 18, 18)
-                                                                            .addGroup(panel23Layout.createParallelGroup()
-                                                                                    .addComponent(comboBox6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                                    .addComponent(comboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                                                                            .addComponent(comboBox12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                                     .addGroup(panel23Layout.createSequentialGroup()
                                                                             .addGap(17, 17, 17)
                                                                             .addComponent(label17)
                                                                             .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                                             .addComponent(comboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                                            .addGap(50, 50, 50))
+                                                            .addGap(52, 52, 52))
                                                     .addGroup(panel23Layout.createSequentialGroup()
                                                             .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                                     .addGroup(panel23Layout.createSequentialGroup()
@@ -1880,7 +1744,7 @@ public class startseite extends JPanel {
                                                                             .addComponent(label9)
                                                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                                             .addComponent(textField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 311, Short.MAX_VALUE)
                                                             .addComponent(label20)
                                                             .addGap(16, 16, 16)
                                                             .addComponent(comboBox14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -1912,11 +1776,9 @@ public class startseite extends JPanel {
                                                                             .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                                                     .addComponent(label17)
                                                                                     .addComponent(comboBox13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                                            .addGap(12, 12, 12)
-                                                                            .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                                                    .addComponent(label7)
-                                                                                    .addComponent(comboBox6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                                            .addGap(3, 3, 3)))
+                                                                            .addGap(15, 15, 15)
+                                                                            .addComponent(label7)
+                                                                            .addGap(6, 6, 6)))
                                                             .addGap(48, 48, 48)
                                                             .addGroup(panel23Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                                     .addComponent(textField4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -1942,7 +1804,7 @@ public class startseite extends JPanel {
                                                                     .addComponent(textField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                             .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                     .addGroup(GroupLayout.Alignment.TRAILING, panel23Layout.createSequentialGroup()
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                                                             .addComponent(button24)
                                                             .addGap(36, 36, 36))))
                                     .addComponent(panel24, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1992,7 +1854,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
     private JPanel this2;
     private JLabel label21;
     private JTabbedPane tabbedPane1;
@@ -2023,23 +1885,6 @@ public class startseite extends JPanel {
     private JButton button28;
     private JButton button29;
     private JButton button5;
-    private JPanel panel4;
-    private JPanel panel19;
-    private JPanel panel20;
-    private JButton button16;
-    private JButton button17;
-    private JButton button18;
-    private JComboBox<String> comboBox3;
-    private JLabel label6;
-    private JComboBox<String> comboBox4;
-    private JLabel label10;
-    private JLabel label11;
-    private JComboBox<String> comboBox5;
-    private JScrollPane scrollPane2;
-    private JTable table2;
-    private JComboBox<String> comboBox15;
-    private JLabel label22;
-    private JLabel label24;
     private JPanel panel5;
     private JPanel panel21;
     private JPanel panel22;
@@ -2071,7 +1916,6 @@ public class startseite extends JPanel {
     private JLabel label17;
     private JComboBox<String> comboBox13;
     private JComboBox<String> comboBox16;
-    private JComboBox<String> comboBox6;
     private JLabel label7;
     private JLabel label8;
     private JLabel label9;
@@ -2090,18 +1934,52 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+            // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(
-                    startseite.this,                  // als Parent-Component am besten das Panel selbst
-                    "Changes successfully saved!",    // Deine Meldung
-                    "Save",                           // Fenstertitel
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            try {
+                DefaultTableModel model = (DefaultTableModel) table1.getModel();
+                List<Hotel> hotelListe = new ArrayList<>();
+
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    String heute = LocalDate.now().toString();
+                    int id = Integer.parseInt(model.getValueAt(i, 0).toString());
+                    String category = model.getValueAt(i, 1).toString();
+                    String name = model.getValueAt(i, 2).toString();
+                    String address = model.getValueAt(i, 3).toString();
+                    String city = model.getValueAt(i, 4).toString();
+                    String cityCode = model.getValueAt(i, 5).toString();
+                    int noRooms = Integer.parseInt(model.getValueAt(i, 6).toString());
+                    int noBeds = Integer.parseInt(model.getValueAt(i, 7).toString());
+                    String attribute = ""; // optional, falls du später State aus Tabelle brauchst
+                    String lastTransactionalData = model.getValueAt(i, 9) != null ? model.getValueAt(i, 9).toString() : "";
+
+                    Hotel hotel = new Hotel(id, category, name, address, city, cityCode, noRooms, noBeds, attribute, lastTransactionalData);
+                    hotelListe.add(hotel);
+                }
+
+                String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+                HotelFileWriter.writeHotelsToFile(hotelListe, filePath);
+
+                JOptionPane.showMessageDialog(
+                        startseite.this,
+                        "Changes successfully saved!",
+                        "Save",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(
+                        startseite.this,
+                        "Error while saving!",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
         }
+
     }
     private class DeleteHotelAction extends AbstractAction {
         @Override
@@ -2145,4 +2023,3 @@ public class startseite extends JPanel {
     }
 
 }
-

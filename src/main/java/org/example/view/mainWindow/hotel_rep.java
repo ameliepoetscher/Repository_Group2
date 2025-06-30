@@ -21,6 +21,8 @@ public class hotel_rep extends JPanel {
     private List<Map<String, Object>> occupancies = new ArrayList<>();
     private Map<Integer, String> lastTransactionMap = new HashMap<>();
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private List<Map<String, Object>> occupancyDataList = new ArrayList<>();
+
 
 
     public hotel_rep() {

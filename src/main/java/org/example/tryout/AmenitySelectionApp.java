@@ -1,7 +1,6 @@
 package org.example.tryout;
 
 import org.example.dao.AmenityDAO;
-import org.example.dao.HotelDAO;
 import org.example.entity.Amenity;
 import org.example.entity.Hotel;
 
@@ -26,7 +25,6 @@ public class AmenitySelectionApp extends JFrame {
         add(new JScrollPane(checkboxPanel), BorderLayout.CENTER);
 
         JButton loadButton = new JButton("Hotel laden");
-        loadButton.addActionListener(e -> loadHotelAmenities(2)); // Beispiel: Hotel mit ID 2
         add(loadButton, BorderLayout.SOUTH);
 
         loadAllAmenities();
@@ -52,21 +50,8 @@ public class AmenitySelectionApp extends JFrame {
         checkboxPanel.updateUI();
     }
 
-    private void loadHotelAmenities(int hotelId) {
-        Hotel hotel = HotelDAO.getHotelById(hotelId);
-        if (hotel == null) {
-            JOptionPane.showMessageDialog(this, "Hotel nicht gefunden!");
-            return;
-        }
 
-        Set<Amenity> hotelAmenities = hotel.getAmenities();
 
-        for (Component component : checkboxPanel.getComponents()) {
-            if (component instanceof JCheckBox checkBox) {
-                int amenityId = Integer.parseInt(checkBox.getActionCommand());
-                checkBox.setSelected(hotelAmenities.stream()
-                        .anyMatch(amenity -> amenity.getId() == amenityId));
-            }
-        }
-    }
+
+
 }
