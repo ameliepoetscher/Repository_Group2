@@ -39,13 +39,24 @@ public class startseite extends JPanel {
         button6.addActionListener(e -> addHotel());
         button3.addActionListener(e -> editHotel());
 
+        //für logout Buttons
+        button1.addActionListener(e -> logout());
+        button19.addActionListener(e -> logout());
+        button22.addActionListener(e -> logout());
+        button26.addActionListener(e -> logout());
+        button28.addActionListener(e -> logout());
+
         // Listener für weitere Panels (Beispiele)
         button15.addActionListener(e -> ladeHotelsSummary());
         button5.addActionListener(e -> openAddTransactionalDialog());
         button4.addActionListener(e -> saveTransactionalData());
         comboBox18.addActionListener(e -> ladeTransaktionsDatenMitAttributen());
-        button1.addActionListener(e -> logout());
+
         button2.addActionListener(e -> showHelp());
+        button27.addActionListener(e -> showHelp());
+        button29.addActionListener(e -> showHelp());
+        button20.addActionListener(e -> showHelp());
+        button23.addActionListener(e -> showHelp());
 
         ladeDropdownHotels();
         ladeHotelsInTabelle();
