@@ -32,6 +32,29 @@ public class startseite extends JPanel {
     public startseite() {
         initComponents();
 
+        //PANEL 5:
+
+        // Panel "combined Overview" – Hotel-Dropdown befüllen
+        comboBox16.removeAllItems();
+        comboBox16.addItem("---select---");
+        comboBox16.addActionListener(e -> {
+            ladeCombinedOverviewData();   // falls schon da
+            updateCombinedHotelDetails(); // neu
+        });
+
+
+// Lies alle Hotels aus der Text-Datei:
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+
+// Sortiere nach Name und füge in comboBox16 ein
+        new TreeSet<>(hotels.stream()
+                .map(Hotel::getName)
+                .collect(Collectors.toList()))
+                .forEach(comboBox16::addItem);
+        //__________________
+
+
 
         // Button-Listener für Hotel-Panel
         button25.addActionListener(e -> saveHotelData());
@@ -65,6 +88,9 @@ public class startseite extends JPanel {
         ladeHotelsInTabelle();
         ladeHotelsSummary();
         initialisiereLeereTransaktionsTabelle();
+
+        //Panel 5:
+        comboBox16.addActionListener(e -> ladeCombinedOverviewData());
     }
 
     // ===== Methoden für das Hotel-List-Panel =====
@@ -454,6 +480,93 @@ public class startseite extends JPanel {
         table3.setModel(model);
     }
 
+    // ===== PANEL 5: =====
+    private void ladeCombinedOverviewData() {
+        // 1) Lese alle Transaktionen ein
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> allOcc = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+        // 2) Welches Hotel ist ausgewählt?
+        String selHotel = (String) comboBox16.getSelectedItem();
+
+        // 3) Filtere (oder zeige alles bei "---select---")
+        List<Occupancy> toDisplay = allOcc.stream()
+                .filter(o -> selHotel.equals("---select---")
+                        || o.getHotel().getName().equals(selHotel))
+                .collect(Collectors.toList());
+
+        // 4) Sortiere nach Jahr/Monat
+        toDisplay.sort(Comparator
+                .comparingInt(Occupancy::getYear)
+                .thenComparingInt(Occupancy::getMonth));
+
+        // 5) Setze die Werte ins Formular (Beispiel für Textfelder):
+        if (toDisplay.isEmpty()) {
+            // leere Felder
+            textField4.setText("");
+            textField5.setText("");
+            textField6.setText("");
+            textField7.setText("");
+            return;
+        }
+
+        // Wir zeigen nur den neuesten Eintrag
+        Occupancy latest = toDisplay.get(toDisplay.size() - 1);
+        textField4.setText(String.valueOf(latest.getHotel().getNoRooms()));
+        textField5.setText(String.valueOf(latest.getUsedRooms()));
+        textField6.setText(String.valueOf(latest.getHotel().getNoBeds()));
+        textField7.setText(String.valueOf(latest.getUsedBeds()));
+        // Und setze noch Jahr/Monat/Attribute-Combos, falls gewünscht:
+        comboBox12.setSelectedItem(String.valueOf(latest.getYear()));
+        comboBox13.setSelectedIndex(latest.getMonth() - 1);
+    }
+
+    //part 2:
+    private void updateCombinedHotelDetails() {
+        // 1. Alle Hotels laden
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+
+        // 2. Gewähltes Hotel ermitteln
+        String selName = (String) comboBox16.getSelectedItem();
+        if (selName == null || selName.equals("---select---")) {
+            // Wenn nichts gewählt, leeres Modell setzen
+            table4.setModel(new DefaultTableModel(
+                    new Object[0][],
+                    new String[]{"ID","Address","City","PLZ"}
+            ));
+            return;
+        }
+        Hotel h = hotels.stream()
+                .filter(x -> x.getName().equals(selName))
+                .findFirst()
+                .orElse(null);
+        if (h == null) return;
+
+        // 3. Neues TableModel mit genau einer Zeile bauen
+        DefaultTableModel m = new DefaultTableModel(
+                new String[]{"ID","Address","City","PLZ"},
+                0
+        );
+        m.addRow(new Object[]{
+                h.getId(),
+                h.getAddress(),
+                h.getCity(),
+                h.getCityCode()
+        });
+
+        // 4. Auf table4 anwenden
+        table4.setModel(m);
+    }
+
+
+
+
+
+
+
     // ===== Hilfsmethoden =====
 
     private void ladeDropdownHotels() {
@@ -611,11 +724,13 @@ public class startseite extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
-        0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
-        .BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.
-        red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
-        beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
+        . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder
+        . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .
+        awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) )
+        ;  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
+        ) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
+        ;
 
         //======== this2 ========
         {
