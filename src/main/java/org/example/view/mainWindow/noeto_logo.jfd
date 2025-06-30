@@ -5,33 +5,29 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3"
-			"$columnConstraints": "[fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill]"
-			"$rowConstraints": "[][][][][][][][][]"
+			"$columnConstraints": "[fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill]"
+			"$rowConstraints": "[][][][][][][][][][][][][]"
 		} ) {
 			name: "this"
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "textField2"
-				"text": "NOE-TO"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 12 2"
+				"value": "cell 2 2 6 3"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button1"
 				"text": "Log In"
-				"background": &Color0 new java.awt.Color( 51, 153, 255, 255 )
+				"background": new java.awt.Color( 51, 153, 255, 255 )
 				"foreground": sfield java.awt.Color white
-				"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "loginbutton2", true ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 7 6 1"
+				"value": "cell 6 8 7 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "button2"
-				"text": "Create new Account"
-				"background": #Color0
-				"foreground": sfield java.awt.Color white
-				"font": #SwingDerivedFont0
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 11 7 2 1"
+				"value": "cell 1 12"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
