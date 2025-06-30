@@ -21,7 +21,6 @@ import java.util.Comparator;
 
 
 
-
 /*
  * Created by JFormDesigner on Fri May 16 15:12:45 CEST 2025
  */
@@ -83,7 +82,6 @@ public class startseite extends JPanel {
         button23.addActionListener(help);
         button27.addActionListener(help);
         button29.addActionListener(help);
-
 
 
 
