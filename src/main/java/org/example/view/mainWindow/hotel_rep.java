@@ -395,7 +395,7 @@ public class hotel_rep extends JPanel {
     //ab da nichts verändern ?!
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+        // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
         panel7 = new JPanel();
@@ -430,6 +430,13 @@ public class hotel_rep extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
+        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing
+        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
+        Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
+        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
+        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName (
+        ) )) throw new RuntimeException( ); }} );
 
         //======== tabbedPane1 ========
         {
@@ -961,7 +968,7 @@ public class hotel_rep extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+    // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private JPanel panel7;
