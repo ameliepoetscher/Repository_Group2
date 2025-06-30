@@ -253,6 +253,18 @@ public class startseite extends JPanel {
         if (choice == JOptionPane.YES_OPTION) {
             DefaultTableModel model = (DefaultTableModel) table1.getModel();
             model.removeRow(selectedRow);
+
+            // ---------- NEU: Auch aus der Transactional Data (table6) löschen ----------
+            DefaultTableModel transactionalModel = (DefaultTableModel) table6.getModel();
+            // Achtung: von HINTEN nach VORNE durchgehen, sonst Fehler!
+            for (int row = transactionalModel.getRowCount() - 1; row >= 0; row--) {
+                Object idObj = transactionalModel.getValueAt(row, 0);
+                if (idObj != null && idObj.toString().equals(hotelId)) {
+                    transactionalModel.removeRow(row);
+                }
+            }
+            // ---------------------------------------------------------------------------
+
             JOptionPane.showMessageDialog(
                     this,
                     "Hotel with ID " + hotelId + " has been deleted.",
@@ -261,7 +273,6 @@ public class startseite extends JPanel {
             );
         }
     }
-
 
 
     private void addHotel() {
@@ -726,7 +737,7 @@ public class startseite extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+        // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
         this2 = new JPanel();
         label21 = new JLabel();
         tabbedPane1 = new JTabbedPane();
@@ -797,6 +808,13 @@ public class startseite extends JPanel {
 
         //======== this ========
         setPreferredSize(new Dimension(900, 600));
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+        . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder
+        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .
+        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
+        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+        ) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+        ;
 
         //======== this2 ========
         {
@@ -2028,7 +2046,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+    // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
     private JPanel this2;
     private JLabel label21;
     private JTabbedPane tabbedPane1;
@@ -2101,7 +2119,7 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+            // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 
