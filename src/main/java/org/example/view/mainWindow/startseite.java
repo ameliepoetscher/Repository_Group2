@@ -90,7 +90,7 @@ public class startseite extends JPanel {
                     hotel.getNoRooms(),
                     hotel.getNoBeds(),
                     hotel.getAttribute() != null ? hotel.getAttribute() : "",
-                    hotel.getLastTransactionalData() != null ? hotel.getLastTransactionalData() : ""
+                    "" // <-- immer leer laden!
             };
             model.addRow(rowData);
         }
