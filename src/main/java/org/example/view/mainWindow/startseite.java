@@ -112,9 +112,13 @@ public class startseite extends JPanel {
                 if (!attribute.equals(attributeAlt)) {
                     lastTransactionalData = java.time.LocalDate.now().toString();
                     model.setValueAt(lastTransactionalData, i, 9); // GUI aktualisieren
-                } else if (lastTransactionalData == null || lastTransactionalData.isEmpty()) {
-                    lastTransactionalData = "2025-06-22"; // Defaultwert
-                    model.setValueAt(lastTransactionalData, i, 9); // GUI aktualisieren
+                    transactionalDataAlt.put(i, attribute);        // Merken für spätere Saves
+                } else {
+                    // Wenn kein Change und das Feld ist ein Default-Datum, dann leer lassen
+                    if (lastTransactionalData.equals("2025-06-22")) {
+                        lastTransactionalData = "";
+                        model.setValueAt("", i, 9);
+                    }
                 }
 
                 joiner.add(model.getValueAt(i, 0).toString()); // id
@@ -158,7 +162,6 @@ public class startseite extends JPanel {
             );
         }
     }
-
     private void deleteSelectedHotel() {
         int selectedRow = table1.getSelectedRow();
         if (selectedRow == -1) {
