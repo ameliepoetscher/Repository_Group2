@@ -25,9 +25,10 @@ public class Hotel {
     private Integer noRooms;
     private Integer noBeds;
     private String attribute;
+    private String lastTransactionalData;
 
     public Hotel(int id, String category, String name, String address, String city,
-                 String cityCode, int noRooms, int noBeds, String attribute) {
+                 String cityCode, int noRooms, int noBeds, String attribute, String lastTransactionalData) {
         this.id = id;
         this.category = category;
         this.name = name;
@@ -37,6 +38,7 @@ public class Hotel {
         this.noRooms = noRooms;
         this.noBeds = noBeds;
         this.attribute = attribute;
+        this.lastTransactionalData = lastTransactionalData;
     }
 
 
@@ -66,5 +68,14 @@ public class Hotel {
 
     public void removeAmenity(Amenity amenity) {
         this.amenities.remove(amenity);
+    }
+
+    // Getter & Setter
+    public String getLastTransactionalData() {
+        return lastTransactionalData;
+    }
+
+    public void setLastTransactionalData(String lastTransactionalData) {
+        this.lastTransactionalData = lastTransactionalData;
     }
 }
