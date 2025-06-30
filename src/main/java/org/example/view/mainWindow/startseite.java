@@ -6,6 +6,8 @@ import org.example.data.txt.HotelFileReader;
 import org.example.data.txt.HotelFileWriter;
 import org.example.data.txt.OccupancyFileReader;
 import java.time.LocalDate;
+import java.util.stream.Stream;
+
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -44,6 +46,23 @@ public class startseite extends JPanel {
             ladeCombinedOverviewData();   // falls schon da
             updateCombinedHotelDetails(); // neu
         });
+        // nach initComponents();
+
+        comboBox12.insertItemAt("---select---", 0);    // Jahr
+        comboBox13.insertItemAt("---select---", 0);    // Monat
+        comboBox1 .insertItemAt("---select---", 0);    // Kategorie
+
+        comboBox12.setSelectedIndex(0);
+        comboBox13.setSelectedIndex(0);
+        comboBox1 .setSelectedIndex(0);
+
+        // Wenn sich eines der Filter ändert, neu laden:
+        comboBox16.addActionListener(e -> ladeCombinedOverview());
+        comboBox1 .addActionListener(e -> ladeCombinedOverview());
+        comboBox12.addActionListener(e -> ladeCombinedOverview());
+        comboBox13.addActionListener(e -> ladeCombinedOverview());
+
+
 
 
 // Lies alle Hotels aus der Text-Datei:
@@ -555,56 +574,66 @@ public class startseite extends JPanel {
         // 1) Dateien einlesen
         String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
         String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
-
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
         List<Occupancy> occs = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
 
         // 2) Auswahl aus den Comboboxen holen
         String selHotel    = (String) comboBox16.getSelectedItem();
         String selCategory = (String) comboBox1 .getSelectedItem();
-        int    selYear     = Integer.parseInt((String)comboBox12.getSelectedItem());
-        int    selMonth    = comboBox13.getSelectedIndex() + 1;  // Jan→1, …
+        String selYearStr  = (String) comboBox12.getSelectedItem();
+        String selMonthStr = (String) comboBox13.getSelectedItem();
 
-        // 3) Hotels filtern nach Hotel-Name und Kategorie
-        List<Hotel> filteredHotels = hotels.stream()
-                .filter(h ->
-                        ("---select---".equals(selHotel)   || h.getName().equals(selHotel))   &&
-                                ("*".equals(selCategory)         || h.getCategory().equals(selCategory))
-                )
+        // 3) Stream über alle Occupancy-Records aufbauen
+        Stream<Occupancy> stream = occs.stream();
+
+        // 3a) erstmal nach Hotel-Name filtern, falls ausgewählt
+        if (selHotel != null && !selHotel.equals("---select---")) {
+            stream = stream.filter(o -> o.getHotel().getName().equals(selHotel));
+        }
+        // 3b) sonst nach Kategorie filtern, falls ausgewählt
+        else if (selCategory != null && !selCategory.equals("*")) {
+            stream = stream.filter(o -> o.getHotel().getCategory().equals(selCategory));
+        }
+
+        // 3c) Jahr filtern, falls nicht Default
+        if (selYearStr != null && !selYearStr.equals("---select---")) {
+            int selYear = Integer.parseInt(selYearStr);
+            stream = stream.filter(o -> o.getYear() == selYear);
+        }
+
+        // 3d) Monat filtern, falls nicht Default
+        if (selMonthStr != null && !selMonthStr.equals("---select---")) {
+            // Da wir "---select---" an Index 0 eingefügt haben,
+            // entspricht comboBox13.getSelectedIndex() genau dem Monat (1=Jan,…)
+            int selMonth = comboBox13.getSelectedIndex();
+            stream = stream.filter(o -> o.getMonth() == selMonth);
+        }
+
+        // 4) sortieren nach Jahr/Monat
+        List<Occupancy> toDisplay = stream
+                .sorted(Comparator.comparingInt(Occupancy::getYear)
+                        .thenComparingInt(Occupancy::getMonth))
                 .collect(Collectors.toList());
 
-        // 4) TableModel neu aufbauen
+        // 5) TableModel neu aufbauen – eine Zeile pro Occupancy
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{ "Hotel Name", "Rooms", "Room Occupancy", "Beds", "Bed Occupancy" },
-                0
+                new Object[]{ "Hotel Name","Rooms","Room Occupancy","Beds","Bed Occupancy" }, 0
         );
-
-        for (Hotel h : filteredHotels) {
-            // für jedes Hotel die Transaktionsdaten (occupancy) suchen
-            Optional<Occupancy> occOpt = occs.stream()
-                    .filter(o ->
-                            o.getHotel().equals(h) &&
-                                    o.getYear()  == selYear &&
-                                    o.getMonth() == selMonth
-                    )
-                    .findFirst();
-
-            int totalRooms = h.getNoRooms();
-            int totalBeds  = h.getNoBeds();
-            int roomOcc    = occOpt.map(Occupancy::getUsedRooms).orElse(0);
-            int bedOcc     = occOpt.map(Occupancy::getUsedBeds).orElse(0);
-
+        for (Occupancy o : toDisplay) {
+            Hotel h = o.getHotel();
             model.addRow(new Object[]{
                     h.getName(),
-                    totalRooms,
-                    roomOcc,
-                    totalBeds,
-                    bedOcc
+                    h.getNoRooms(),
+                    o.getUsedRooms(),
+                    h.getNoBeds(),
+                    o.getUsedBeds()
             });
         }
 
+        // 6) ins UI eintragen
         table2.setModel(model);
     }
+
 
 
 
