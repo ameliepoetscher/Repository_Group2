@@ -45305,4 +45305,3 @@ id,rooms,usedrooms,beds,usedbeds,year,month
 526,62,62,83,2,2019,5
 383,10,5,8,6,2019,5
 
-
