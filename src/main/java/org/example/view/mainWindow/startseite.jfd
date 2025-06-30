@@ -148,13 +148,13 @@ new FormModel {
 					name: "panel3"
 					"background": #Color0
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {seq t {comp panel25:::p::p, par l {seq {space :::p, comp scrollPane5:::p:562:p, space ::159:x}, seq t {space ::475:x, comp button15:::p::p, space :p:180:p}}}}"
-						"$verticalGroup": "par l {seq {space :p:32:p, comp scrollPane5:::p:136:p, space :::x, comp button15:::p::p, space :p:15:p}, seq l {comp panel25:::p::p, space :0:0:x}}"
+						"$horizontalGroup": "par l {seq t {comp panel25:::p::p, par l {seq {space :::p, comp scrollPane5:::p:562:p, space ::159:x}, seq t {space ::471:x, comp button15:::p::p, space :p:184:p}}}}"
+						"$verticalGroup": "par l {seq {space :p:32:p, comp scrollPane5:::p:136:p, space :::x, comp button15:::p::p, space :p:47:p}, seq l {comp panel25:::p::p, space :0:0:x}}"
 					} ) {
 						name: "panel17"
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button15"
-							"text": "save"
+							"text": "update"
 						} )
 						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 							name: "scrollPane5"
@@ -215,8 +215,8 @@ new FormModel {
 							} )
 						} )
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq {space :::p, par l {comp button26::l:::x, seq l {comp button27:::p:83:p, space :0:0:x}}, space :::p}}"
-							"$verticalGroup": "par l {seq t {space :p:25:p, comp button27:::p::p, space ::277:x, comp button26:::p::p, space :p:23:p}}"
+							"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp button27:::p:83:p, space :0:0:x}, comp button26::l:::x}, space :::p}}"
+							"$verticalGroup": "par l {seq t {space :p:25:p, comp button27:::p::p, space ::260:x, comp button26:::p::p, space :p:40:p}}"
 						} ) {
 							name: "panel25"
 							"background": #Color1

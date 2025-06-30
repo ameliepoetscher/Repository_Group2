@@ -5,6 +5,7 @@ import org.example.entity.Occupancy;
 import org.example.data.txt.HotelFileReader;
 import org.example.data.txt.HotelFileWriter;
 import org.example.data.txt.OccupancyFileReader;
+import java.time.LocalDate;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 public class startseite extends JPanel {
     private List<Map<String, Object>> occupancyDataList = new ArrayList<>();
+    private Map<Integer, String> transactionalDataAlt = new HashMap<>();
 
     // ===== JFormDesigner GUI-Komponenten =====
     // Die folgenden Felder müssen zu deinen JFormDesigner-Komponenten passen!
@@ -29,6 +31,7 @@ public class startseite extends JPanel {
 
     public startseite() {
         initComponents();
+
 
         // Button-Listener für Hotel-Panel
         button25.addActionListener(e -> saveHotelData());
@@ -57,7 +60,7 @@ public class startseite extends JPanel {
         List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
 
         DefaultTableModel model = new DefaultTableModel(new String[]{
-                "ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds", "Attribute", "Last Transaction"
+                "ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds", "Attribute", "Last Transactional Data"
         }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -75,36 +78,69 @@ public class startseite extends JPanel {
                     hotel.getCityCode(),
                     hotel.getNoRooms(),
                     hotel.getNoBeds(),
-                    "", // Attribute
-                    ""  // Last Transaction
+                    hotel.getAttribute() != null ? hotel.getAttribute() : "",
+                    hotel.getLastTransactionalData() != null ? hotel.getLastTransactionalData() : ""
             };
             model.addRow(rowData);
         }
         table1.setModel(model);
+
+        // HIER transactionalDataAlt befüllen:
+        transactionalDataAlt.clear();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            transactionalDataAlt.put(i, model.getValueAt(i, 8).toString());
+        }
     }
 
     private void saveHotelData() {
         try {
             DefaultTableModel model = (DefaultTableModel) table1.getModel();
-            List<Hotel> hotelListe = new ArrayList<>();
+            List<String> lines = new ArrayList<>();
+            // Neue Header-Zeile mit "attribute" und "lastTransactionalData"
+            lines.add("id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attribute,lastTransactionalData");
 
             for (int i = 0; i < model.getRowCount(); i++) {
-                int id = Integer.parseInt(model.getValueAt(i, 0).toString());
-                String category = model.getValueAt(i, 1).toString();
-                String name = model.getValueAt(i, 2).toString();
-                String address = model.getValueAt(i, 3).toString();
-                String city = model.getValueAt(i, 4).toString();
-                String cityCode = model.getValueAt(i, 5).toString();
-                int noRooms = Integer.parseInt(model.getValueAt(i, 6).toString());
-                int noBeds = Integer.parseInt(model.getValueAt(i, 7).toString());
-                String attribute = ""; // ggf. später ergänzen
+                StringJoiner joiner = new StringJoiner(",");
 
-                Hotel hotel = new Hotel(id, category, name, address, city, cityCode, noRooms, noBeds, attribute);
-                hotelListe.add(hotel);
+                String attribute = model.getValueAt(i, 8).toString();
+                String lastTransactionalData = model.getValueAt(i, 9) != null ? model.getValueAt(i, 9).toString() : "";
+
+                // ALT: alter Wert vom Laden
+                String attributeAlt = transactionalDataAlt.get(i);
+
+                // Prüfen: Hat sich das Attribut geändert?
+                if (!attribute.equals(attributeAlt)) {
+                    lastTransactionalData = java.time.LocalDate.now().toString();
+                    model.setValueAt(lastTransactionalData, i, 9); // GUI aktualisieren
+                } else if (lastTransactionalData == null || lastTransactionalData.isEmpty()) {
+                    lastTransactionalData = "2025-06-22"; // Defaultwert
+                    model.setValueAt(lastTransactionalData, i, 9); // GUI aktualisieren
+                }
+
+                joiner.add(model.getValueAt(i, 0).toString()); // id
+                joiner.add("\"" + model.getValueAt(i, 1).toString() + "\""); // category
+                joiner.add("\"" + model.getValueAt(i, 2).toString() + "\""); // name
+                joiner.add("\"-\""); // owner
+                joiner.add("\"-\""); // contact
+                joiner.add("\"" + model.getValueAt(i, 3).toString() + "\""); // address
+                joiner.add("\"" + model.getValueAt(i, 4).toString() + "\""); // city
+                joiner.add("\"" + model.getValueAt(i, 5).toString() + "\""); // cityCode
+                joiner.add("\"-\""); // phone
+                joiner.add(model.getValueAt(i, 6).toString()); // noRooms
+                joiner.add(model.getValueAt(i, 7).toString()); // noBeds
+                joiner.add("\"" + attribute + "\""); // attribute
+                joiner.add("\"" + lastTransactionalData + "\""); // lastTransactionalData
+
+                lines.add(joiner.toString());
             }
 
             String filePath = "src/main/java/org/example/data/txt/hotels.txt";
-            HotelFileWriter.writeHotelsToFile(hotelListe, filePath);
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+                for (String line : lines) {
+                    bw.write(line);
+                    bw.newLine();
+                }
+            }
 
             JOptionPane.showMessageDialog(
                     this,
@@ -159,6 +195,8 @@ public class startseite extends JPanel {
             );
         }
     }
+
+
 
     private void addHotel() {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
@@ -710,7 +748,7 @@ public class startseite extends JPanel {
                 {
 
                     //---- button15 ----
-                    button15.setText("save");
+                    button15.setText("update");
 
                     //======== scrollPane5 ========
                     {
@@ -750,10 +788,10 @@ public class startseite extends JPanel {
                                 .addGroup(panel25Layout.createSequentialGroup()
                                     .addContainerGap()
                                     .addGroup(panel25Layout.createParallelGroup()
-                                        .addComponent(button26, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(panel25Layout.createSequentialGroup()
                                             .addComponent(button27, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-                                            .addGap(0, 0, Short.MAX_VALUE)))
+                                            .addGap(0, 0, Short.MAX_VALUE))
+                                        .addComponent(button26, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addContainerGap())
                         );
                         panel25Layout.setVerticalGroup(
@@ -761,9 +799,9 @@ public class startseite extends JPanel {
                                 .addGroup(GroupLayout.Alignment.TRAILING, panel25Layout.createSequentialGroup()
                                     .addGap(25, 25, 25)
                                     .addComponent(button27)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
                                     .addComponent(button26)
-                                    .addGap(23, 23, 23))
+                                    .addGap(40, 40, 40))
                         );
                     }
 
@@ -779,9 +817,9 @@ public class startseite extends JPanel {
                                         .addComponent(scrollPane5, GroupLayout.PREFERRED_SIZE, 562, GroupLayout.PREFERRED_SIZE)
                                         .addContainerGap(159, Short.MAX_VALUE))
                                     .addGroup(GroupLayout.Alignment.TRAILING, panel17Layout.createSequentialGroup()
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 475, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 471, Short.MAX_VALUE)
                                         .addComponent(button15)
-                                        .addGap(180, 180, 180))))
+                                        .addGap(184, 184, 184))))
                     );
                     panel17Layout.setVerticalGroup(
                         panel17Layout.createParallelGroup()
@@ -790,7 +828,7 @@ public class startseite extends JPanel {
                                 .addComponent(scrollPane5, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(button15)
-                                .addGap(15, 15, 15))
+                                .addGap(47, 47, 47))
                             .addGroup(panel17Layout.createSequentialGroup()
                                 .addComponent(panel25, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1906,6 +1944,7 @@ public class startseite extends JPanel {
                 List<Hotel> hotelListe = new ArrayList<>();
 
                 for (int i = 0; i < model.getRowCount(); i++) {
+                    String heute = LocalDate.now().toString();
                     int id = Integer.parseInt(model.getValueAt(i, 0).toString());
                     String category = model.getValueAt(i, 1).toString();
                     String name = model.getValueAt(i, 2).toString();
@@ -1915,8 +1954,9 @@ public class startseite extends JPanel {
                     int noRooms = Integer.parseInt(model.getValueAt(i, 6).toString());
                     int noBeds = Integer.parseInt(model.getValueAt(i, 7).toString());
                     String attribute = ""; // optional, falls du später State aus Tabelle brauchst
+                    String lastTransactionalData = model.getValueAt(i, 9) != null ? model.getValueAt(i, 9).toString() : "";
 
-                    Hotel hotel = new Hotel(id, category, name, address, city, cityCode, noRooms, noBeds, attribute);
+                    Hotel hotel = new Hotel(id, category, name, address, city, cityCode, noRooms, noBeds, attribute, lastTransactionalData);
                     hotelListe.add(hotel);
                 }
 

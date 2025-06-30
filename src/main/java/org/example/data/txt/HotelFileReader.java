@@ -60,10 +60,17 @@ public class HotelFileReader {
                     int noRooms = Integer.parseInt(parts[9].replaceAll("\"", ""));
                     int noBeds = Integer.parseInt(parts[10].replaceAll("\"", ""));
 
-                    // Attribut (optional) - falls du später Attribute in Text speicherst
+                    // Attribut (optional)
                     String attribute = parts.length > 11 ? parts[11].replaceAll("\"", "") : "";
 
-                    Hotel hotel = new Hotel(id, category, name, address, city, cityCode, noRooms, noBeds, attribute);
+                    // lastTransactionalData (optional)
+                    String lastTransactionalData = parts.length > 12 ? parts[12].replaceAll("\"", "") : "";
+                    if (lastTransactionalData == null || lastTransactionalData.isEmpty()) {
+                        lastTransactionalData = "2025-06-22";
+                    }
+
+                    // Annahme: Hotel-Konstruktor nimmt jetzt lastTransactionalData als letzten Parameter
+                    Hotel hotel = new Hotel(id, category, name, address, city, cityCode, noRooms, noBeds, attribute, lastTransactionalData);
                     hotel.setOwner(owner);
                     hotel.setContact(contact);
                     hotel.setPhone(phone);
