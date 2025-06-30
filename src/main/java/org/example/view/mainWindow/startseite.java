@@ -581,6 +581,7 @@ public class startseite extends JPanel {
         m.addRow(new Object[]{ h.getId(), h.getAddress(), h.getCity(), h.getCityCode() });
         table4.setModel(m);
     }
+
     private void ladeCombinedOverview() {
         // 1) Dateien einlesen
         String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
