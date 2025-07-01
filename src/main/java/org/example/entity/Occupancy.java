@@ -18,6 +18,8 @@ public class Occupancy {
     private int year;
     private int rooms;
     private int beds;
+    private String nationality;
+
 
     @Column(name = "used_rooms")
     private int usedRooms;
@@ -28,4 +30,19 @@ public class Occupancy {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
+
+    /**
+     * Gibt die Nationalität dieses Eintrags zurück.
+     */
+    public String getNationality() {
+        return nationality;
+    }
+
+    /**
+     * Legt die Nationalität dieses Eintrags fest.
+     */
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
 }
