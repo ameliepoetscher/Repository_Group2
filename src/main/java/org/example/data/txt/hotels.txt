@@ -1,6 +1,6 @@
 id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attribute,lastTransactionalData
 0,"*","MOXY Vienna Airport","-","-","Ausfahrtsstraße 4","Schwechat","1300","-",42,76,"",""
-1,"****","NH Vienna Airport Conference Center","-","-","Einfahrtstraße 1-3","Schwechat","1300","-",17,81,"",""
+1,"****","NH Vienna Airport Conference Center","-","-","Einfahrtstraße 1-3","Schwechat","1300","-",17,81,"fitness","2025-07-01"
 2,"*","OEKOTEL Korneuburg","-","-","Kaiserallee 31","Bisamberg","2102","-",4,15,"",""
 3,"**","Hotel Rainers21","-","-","Liebermannstraße Campus 21","Brunn","2345","-",21,45,"",""
 4,"****","Therme Laa - Hotel & Silent Spa","-","-","Thermenplatz 3","Laa","2136","-",44,81,"",""

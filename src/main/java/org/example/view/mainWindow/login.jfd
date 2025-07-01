@@ -11,7 +11,7 @@ new FormModel {
 			"autoscrolls": true
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 				"$horizontalGroup": "par l {seq {par l {seq l {space :p:103:p, par l {comp label3:::p::p, comp label2:::p::p}, space s:::p, par l {comp textField1:::p:165:p, comp passwordField1::l:p:165:p}}, seq l {space :p:229:p, comp button1:::p::p}, seq l {space :p:150:p, comp label1:::p:221:p}}, space ::199:x}}"
-				"$verticalGroup": "par l {seq l {space :p:32:p, comp label1:::p:85:p, space ::51:x, par b {comp label2::b:p::p, comp textField1::b:p::p}, space s:p::p, par b {comp label3::b:p::p, comp passwordField1::b:p::p}, space :p:45:p, comp button1:::p::p, space :p:80:p}}"
+				"$verticalGroup": "par l {seq l {space :p:32:p, comp label1:::p:85:p, space ::69:x, par b {comp label2::b:p::p, comp textField1::b:p::p}, space s:p::p, par b {comp label3::b:p::p, comp passwordField1::b:p::p}, space :p:45:p, comp button1:::p::p, space :p:80:p}}"
 			} ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -37,7 +37,6 @@ new FormModel {
 					name: "button1"
 					"text": "Log In"
 					"background": new java.awt.Color( 51, 153, 255, 255 )
-					"foreground": sfield java.awt.Color white
 					"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
 				} )
 			} )
