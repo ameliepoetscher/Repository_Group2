@@ -24,14 +24,31 @@ public class Hotel {
     private String phone;
     private Integer noRooms;
     private Integer noBeds;
-    private String state;
+    private String attribute;
+    private String lastTransactionalData;
 
-    public void setState(String state) {
-        this.state = state;
+    public Hotel(int id, String category, String name, String address, String city,
+                 String cityCode, int noRooms, int noBeds, String attribute, String lastTransactionalData) {
+        this.id = id;
+        this.category = category;
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.cityCode = cityCode;
+        this.noRooms = noRooms;
+        this.noBeds = noBeds;
+        this.attribute = attribute;
+        this.lastTransactionalData = lastTransactionalData;
     }
 
-    public String getState() {
-        return state;
+
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
+
+    public String getAttribute() {
+        return attribute;
     }
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -51,5 +68,14 @@ public class Hotel {
 
     public void removeAmenity(Amenity amenity) {
         this.amenities.remove(amenity);
+    }
+
+    // Getter & Setter
+    public String getLastTransactionalData() {
+        return lastTransactionalData;
+    }
+
+    public void setLastTransactionalData(String lastTransactionalData) {
+        this.lastTransactionalData = lastTransactionalData;
     }
 }

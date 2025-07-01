@@ -61,7 +61,7 @@ public class login extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
         panel1 = new JPanel();
         label1 = new JLabel();
         textField1 = new JTextField();
@@ -72,13 +72,6 @@ public class login extends JPanel {
 
         //======== this ========
         setAutoscrolls(true);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-        . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder
-        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .
-        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
-        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-        ) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
-        ;
 
         //======== panel1 ========
         {
@@ -96,7 +89,6 @@ public class login extends JPanel {
             //---- button1 ----
             button1.setText("Log In");
             button1.setBackground(new Color(0x3399ff));
-            button1.setForeground(Color.white);
             button1.setFont(button1.getFont().deriveFont(button1.getFont().getStyle() | Font.BOLD));
 
             GroupLayout panel1Layout = new GroupLayout(panel1);
@@ -127,7 +119,7 @@ public class login extends JPanel {
                     .addGroup(panel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(label1, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                         .addGroup(panel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(label2)
                             .addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -155,7 +147,7 @@ public class login extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Amaim Mumtaz Rathor
+    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
     private JPanel panel1;
     private JLabel label1;
     private JTextField textField1;
