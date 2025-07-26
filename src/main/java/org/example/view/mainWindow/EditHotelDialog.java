@@ -5,6 +5,7 @@ import org.example.entity.Hotel;
 import javax.swing.*;
 import java.awt.*;
 //für hoterlrep
+
 public class EditHotelDialog extends JDialog {
     private JTextField idField;
     private JTextField nameField;
