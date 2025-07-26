@@ -751,7 +751,7 @@ public class startseite extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+        // Generated using JFormDesigner Educational license - amaim rathor
         this2 = new JPanel();
         label21 = new JLabel();
         tabbedPane1 = new JTabbedPane();
@@ -2053,7 +2053,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+    // Generated using JFormDesigner Educational license - amaim rathor
     private JPanel this2;
     private JLabel label21;
     private JTabbedPane tabbedPane1;
@@ -2126,7 +2126,7 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+            // Generated using JFormDesigner Educational license - amaim rathor
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 

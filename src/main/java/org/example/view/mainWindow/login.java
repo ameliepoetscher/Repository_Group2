@@ -61,7 +61,7 @@ public class login extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+        // Generated using JFormDesigner Educational license - amaim rathor
         panel1 = new JPanel();
         label1 = new JLabel();
         textField1 = new JTextField();
@@ -147,7 +147,7 @@ public class login extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+    // Generated using JFormDesigner Educational license - amaim rathor
     private JPanel panel1;
     private JLabel label1;
     private JTextField textField1;
