@@ -4,20 +4,23 @@ import org.example.entity.Hotel;
 
 import javax.swing.*;
 import java.awt.*;
-//für hoterlrep
 
 public class EditHotelDialog extends JDialog {
+    // Dieses Feld merkt, ob gespeichert wurde
+    private boolean saved = false;
+
     private JTextField idField;
     private JTextField nameField;
     private JTextField addressField;
     private JTextField roomsField;
     private JTextField bedsField;
-    //für hotelrep
+
+    // Dialog zum Bearbeiten eines Hotels
     public EditHotelDialog(JFrame parent, Hotel hotel) {
         super(parent, "Edit Master Data", true);
         setLayout(new BorderLayout());
 
-        // Panel für die Felder
+        // Panel für die Eingabefelder
         JPanel fieldsPanel = new JPanel(new GridLayout(5, 2, 10, 10));
         fieldsPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
@@ -32,28 +35,28 @@ public class EditHotelDialog extends JDialog {
         nameField = new JTextField(hotel.getName());
         fieldsPanel.add(nameField);
 
-        // Adresse
+        // Address
         fieldsPanel.add(new JLabel("Address:"));
         addressField = new JTextField(hotel.getAddress());
         fieldsPanel.add(addressField);
 
-        // Rooms
+        // Number of Rooms
         fieldsPanel.add(new JLabel("Number of Rooms:"));
         roomsField = new JTextField(String.valueOf(hotel.getNoRooms()));
         fieldsPanel.add(roomsField);
 
-        // Beds
+        // Number of Beds
         fieldsPanel.add(new JLabel("Number of Beds:"));
         bedsField = new JTextField(String.valueOf(hotel.getNoBeds()));
         fieldsPanel.add(bedsField);
 
         // Panel für Buttons
         JPanel buttonsPanel = new JPanel();
-        JButton saveButton = new JButton("OK");
+        JButton saveButton = new JButton("Save");
         JButton backButton = new JButton("Back to Hotel List");
 
+        // Wenn auf "Save" geklickt wird: Werte speichern und Merker setzen
         saveButton.addActionListener(e -> {
-            // Hier kannst du die Werte übernehmen/speichern
             hotel.setName(nameField.getText());
             hotel.setAddress(addressField.getText());
             try {
@@ -63,21 +66,27 @@ public class EditHotelDialog extends JDialog {
                 JOptionPane.showMessageDialog(this, "Please enter valid numbers for rooms and beds!");
                 return;
             }
-            // Hier ggf. noch Speichern in Datei/DB machen
+            saved = true; // <<--- WICHTIG: Merker setzen
             JOptionPane.showMessageDialog(this, "Saved successfully!");
             setVisible(false);
         });
 
+        // Wenn auf "Back" geklickt wird: Dialog einfach schließen (ohne speichern)
         backButton.addActionListener(e -> setVisible(false));
 
         buttonsPanel.add(saveButton);
         buttonsPanel.add(backButton);
 
-        // Zusammenbauen
+        // Alles zusammenbauen
         add(fieldsPanel, BorderLayout.CENTER);
         add(buttonsPanel, BorderLayout.SOUTH);
 
         pack();
         setLocationRelativeTo(parent);
+    }
+
+    // Getter, um abzufragen, ob gespeichert wurde
+    public boolean isSaved() {
+        return saved;
     }
 }

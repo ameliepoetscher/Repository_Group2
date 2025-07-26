@@ -23,7 +23,7 @@ public class noe_to_logo extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+        // Generated using JFormDesigner Educational license - amaim rathor
         button1 = new JButton();
         label1 = new JLabel();
         separator1 = new JPopupMenu.Separator();
@@ -77,7 +77,7 @@ public class noe_to_logo extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
+    // Generated using JFormDesigner Educational license - amaim rathor
     private JButton button1;
     private JLabel label1;
     private JPopupMenu.Separator separator1;
