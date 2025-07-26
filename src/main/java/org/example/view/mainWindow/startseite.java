@@ -2212,7 +2212,7 @@ public class startseite extends JPanel {
                         JOptionPane.INFORMATION_MESSAGE
                 );
             }
-            // Bei Stop (NO_OPTION) passiert nichts
+
         }
     }
 

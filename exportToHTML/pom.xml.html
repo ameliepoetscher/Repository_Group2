@@ -1,0 +1,160 @@
+<html>
+<head>
+<title>pom.xml</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #080808;}
+.s1 { color: #0033b3;}
+.s2 { color: #174ad4;}
+.s3 { color: #067d17;}
+.s4 { color: #080808;}
+.s5 { color: #8c8c8c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+pom.xml</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;</span><span class="s1">project </span><span class="s2">xmlns</span><span class="s3">=&quot;http://maven.apache.org/POM/4.0.0&quot;</span>
+         <span class="s2">xmlns:xsi</span><span class="s3">=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+         <span class="s2">xsi:schemaLocation</span><span class="s3">=&quot;http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="s0">&gt;</span>
+
+  <span class="s0">&lt;</span><span class="s1">modelVersion</span><span class="s0">&gt;</span><span class="s4">4.0.0</span><span class="s0">&lt;/</span><span class="s1">modelVersion</span><span class="s0">&gt;</span>
+
+  <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">at.ac.fhvie</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">rebuild</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">1.0-SNAPSHOT</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;</span><span class="s1">packaging</span><span class="s0">&gt;</span><span class="s4">jar</span><span class="s0">&lt;/</span><span class="s1">packaging</span><span class="s0">&gt;</span>
+
+  <span class="s0">&lt;</span><span class="s1">name</span><span class="s0">&gt;</span><span class="s4">rebuild</span><span class="s0">&lt;/</span><span class="s1">name</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;</span><span class="s1">url</span><span class="s0">&gt;</span><span class="s4">http://maven.apache.org</span><span class="s0">&lt;/</span><span class="s1">url</span><span class="s0">&gt;</span>
+
+  <span class="s0">&lt;</span><span class="s1">properties</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">project.build.sourceEncoding</span><span class="s0">&gt;</span><span class="s4">UTF-8</span><span class="s0">&lt;/</span><span class="s1">project.build.sourceEncoding</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;/</span><span class="s1">properties</span><span class="s0">&gt;</span>
+
+  <span class="s0">&lt;</span><span class="s1">dependencies</span><span class="s0">&gt;</span>
+    <span class="s5">&lt;!-- Tests --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">junit</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">junit</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">3.8.1</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">scope</span><span class="s0">&gt;</span><span class="s4">test</span><span class="s0">&lt;/</span><span class="s1">scope</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- Datenbank / Hibernate --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">com.h2database</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">h2</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">2.2.224</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">org.hibernate</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">hibernate-core</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">6.2.0.Final</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- Logging --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">org.slf4j</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">slf4j-api</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">2.0.5</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">ch.qos.logback</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">logback-classic</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">1.4.5</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- JPA --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">jakarta.persistence</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">jakarta.persistence-api</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">3.1.0</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- Lombok --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">org.projectlombok</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">lombok</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">1.18.30</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">scope</span><span class="s0">&gt;</span><span class="s4">provided</span><span class="s0">&lt;/</span><span class="s1">scope</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- SQL Server JDBC --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">com.microsoft.sqlserver</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">mssql-jdbc</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">12.10.0.jre11</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- Passwort-Hashing --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">org.mindrot</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">jbcrypt</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">0.4</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- CSV --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">com.opencsv</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">opencsv</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">5.8</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- GUI Layouts --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">com.jgoodies</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">jgoodies-forms</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">1.9.0</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- JSON --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">com.google.code.gson</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">gson</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">2.8.9</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- REST API Framework --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">com.sparkjava</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">spark-core</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">2.9.4</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+
+    <span class="s5">&lt;!-- MigLayout für GUI --&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">com.miglayout</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">miglayout-swing</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">version</span><span class="s0">&gt;</span><span class="s4">11.0</span><span class="s0">&lt;/</span><span class="s1">version</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">dependency</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;/</span><span class="s1">dependencies</span><span class="s0">&gt;</span>
+
+  <span class="s0">&lt;</span><span class="s1">repositories</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">repository</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">id</span><span class="s0">&gt;</span><span class="s4">central</span><span class="s0">&lt;/</span><span class="s1">id</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">url</span><span class="s0">&gt;</span><span class="s4">https://repo.maven.apache.org/maven2</span><span class="s0">&lt;/</span><span class="s1">url</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">repository</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;/</span><span class="s1">repositories</span><span class="s0">&gt;</span>
+
+  <span class="s0">&lt;</span><span class="s1">build</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;</span><span class="s1">plugins</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;</span><span class="s1">plugin</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;</span><span class="s1">groupId</span><span class="s0">&gt;</span><span class="s4">org.apache.maven.plugins</span><span class="s0">&lt;/</span><span class="s1">groupId</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;</span><span class="s1">artifactId</span><span class="s0">&gt;</span><span class="s4">maven-compiler-plugin</span><span class="s0">&lt;/</span><span class="s1">artifactId</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;</span><span class="s1">configuration</span><span class="s0">&gt;</span>
+          <span class="s0">&lt;</span><span class="s1">source</span><span class="s0">&gt;</span><span class="s4">16</span><span class="s0">&lt;/</span><span class="s1">source</span><span class="s0">&gt;</span>
+          <span class="s0">&lt;</span><span class="s1">target</span><span class="s0">&gt;</span><span class="s4">16</span><span class="s0">&lt;/</span><span class="s1">target</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;/</span><span class="s1">configuration</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;/</span><span class="s1">plugin</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;/</span><span class="s1">plugins</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;/</span><span class="s1">build</span><span class="s0">&gt;</span>
+
+<span class="s0">&lt;/</span><span class="s1">project</span><span class="s0">&gt;</span>
+</pre>
+</body>
+</html>

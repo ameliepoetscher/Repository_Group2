@@ -3,111 +3,126 @@ package org.example.view.mainWindow;
 import javax.swing.*;
 import java.awt.*;
 
-public class AddTransactionalDataDialog extends JDialog {
+import lombok.Getter;
+
+@Getter
+public class AddTransactionalDataDialog extends JDialog { //Standard Dialogfenster geerbt von JDialog
     private boolean saved = false;
-    private JComboBox<String> yearCombo;
-    private JComboBox<String> monthCombo;
-    private JTextField roomField;
-    private JTextField bedField;
+    // generiert eine Methode isSaved() um zu überprüfen ob Benutzer auf OK oder Abbrechen geklickt hat
+    private final JComboBox<String> yearCombo;
+    private final JComboBox<String> monthCombo;
+    //Drop-Down-listen
+    private final JTextField roomField; //Nutzer kann Zahl für Zimmer eingeben
+    private final JTextField bedField; //Nutzer ann Zahl für Betten angeben
+
 
     public AddTransactionalDataDialog(JFrame parent, int hotelId, String hotelName) {
         super(parent, "Add Transactional Data", true);
-        setLayout(new GridBagLayout());
+        this.yearCombo = new JComboBox<>();
+        this.monthCombo = new JComboBox<>();
+        this.roomField = new JTextField(10);
+        this.bedField = new JTextField(10);
+        //UI-Komponenten initialisieren
+
+        initializeComponents(hotelId, hotelName);
+        //Methode aufrufen, um Layout und Inhalte des Dialogs erstellen
+    }
+
+    private void initializeComponents(int hotelId, String hotelName) { //baut Benutzeroberfläche des Dialogs auf
+        setLayout(new GridBagLayout()); //Gitter Layout
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        gbc.gridx = 0; gbc.gridy = 0;
-        add(new JLabel("Hotel:"), gbc);
-        gbc.gridx = 1;
-        add(new JLabel(hotelName), gbc);
+        addFormRow(gbc, "Hotel:", new JLabel(hotelName), 0);
+        addFormRow(gbc, "Hotel ID:", new JLabel(String.valueOf(hotelId)), 1);
+        // nicht editierbar
 
-        gbc.gridx = 0; gbc.gridy++;
-        add(new JLabel("Hotel ID:"), gbc);
-        gbc.gridx = 1;
-        add(new JLabel(String.valueOf(hotelId)), gbc);
+        setupYearCombo(gbc);
+        setupMonthCombo(gbc);
+        addFormRow(gbc, "Room Occupancy:", roomField, 4);
+        addFormRow(gbc, "Bed Occupancy:", bedField, 5);
+        addButtons(gbc);
+        //Methoden aufrufen, um Dropdown-Menüs, Textfelder und Buttons hinzuzufügen
 
-        gbc.gridx = 0; gbc.gridy++;
-        add(new JLabel("Year:"), gbc);
+        pack(); //passt Größe des Dialogs an Inhalte an
+        setLocationRelativeTo(getParent()); //zentriert Dialog
+    }
+
+    private void addFormRow(GridBagConstraints gbc, String label, Component component, int row) { //Hilfsmethode für Hinzufügen von Label und dazugehörige Komponente
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        add(new JLabel(label), gbc);
         gbc.gridx = 1;
-        yearCombo = new JComboBox<>();
+        add(component, gbc);
+    }
+
+    private void setupYearCombo(GridBagConstraints gbc) { //Dropdown-Menü befüllen
         yearCombo.addItem("---select---");
-        for (int y = 2025; y >= 2000; y--) yearCombo.addItem(String.valueOf(y));
-        add(yearCombo, gbc);
+        for (int y = 2025; y >= 2000; y--) {
+            yearCombo.addItem(String.valueOf(y));
+        }
+        addFormRow(gbc, "Year:", yearCombo, 2);
+    }
 
-        gbc.gridx = 0; gbc.gridy++;
-        add(new JLabel("Month:"), gbc);
-        gbc.gridx = 1;
-        monthCombo = new JComboBox<>();
+    private void setupMonthCombo(GridBagConstraints gbc) { //Dropdown-Menü befüllen
         monthCombo.addItem("---select---");
-        String[] months = { "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December" };
-        for (String m : months) monthCombo.addItem(m);
-        add(monthCombo, gbc);
+        String[] months = {"January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"};
+        for (String month : months) {
+            monthCombo.addItem(month);
+        }
+        addFormRow(gbc, "Month:", monthCombo, 3);
+    }
 
-        gbc.gridx = 0; gbc.gridy++;
-        add(new JLabel("Room Occupancy:"), gbc);
-        gbc.gridx = 1;
-        roomField = new JTextField(10);
-        add(roomField, gbc);
-
-        gbc.gridx = 0; gbc.gridy++;
-        add(new JLabel("Bed Occupancy:"), gbc);
-        gbc.gridx = 1;
-        bedField = new JTextField(10);
-        add(bedField, gbc);
-
-        // Buttons
-        gbc.gridx = 0; gbc.gridy++;
+    private void addButtons(GridBagConstraints gbc) { // erstellt Schaltflächen
         JButton saveButton = new JButton("Ok");
         JButton cancelButton = new JButton("Cancel");
+
+        saveButton.addActionListener(e -> { //bestimmte Aktion wird ausgeführt
+            if (validateInput()) { //Methode wird aufgerufen und Eingabedaten werden überprüft
+                saved = true;       // Daten werden gespeichert
+                setVisible(false); //Dialogfesnter wird geschlossen
+            }
+        });
+        cancelButton.addActionListener(e -> setVisible(false)); //Dialogfenster wird sofort geschlossen ohne Speicherung der Daten
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
         add(saveButton, gbc);
         gbc.gridx = 1;
         add(cancelButton, gbc);
-
-        saveButton.addActionListener(e -> {
-            if (!validateInput()) return;
-            saved = true;
-            setVisible(false);
-        });
-
-        cancelButton.addActionListener(e -> setVisible(false));
-
-        pack();
-        setLocationRelativeTo(parent);
     }
 
-    private boolean validateInput() {
+    private boolean validateInput() { //Überprüfung der Eingabedaten
         if (yearCombo.getSelectedIndex() <= 0 || monthCombo.getSelectedIndex() <= 0) {
             JOptionPane.showMessageDialog(this, "Please select both year and month.");
             return false;
         }
-        if (roomField.getText().trim().isEmpty() || bedField.getText().trim().isEmpty()) {
+        String roomText = roomField.getText().trim();
+        String bedText = bedField.getText().trim();
+        // Überprüfung, ob Felder ausgefüllt sind
+
+        if (roomText.isEmpty() || bedText.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in both occupancy fields.");
             return false;
         }
         try {
-            Integer.parseInt(roomField.getText().trim());
-            Integer.parseInt(bedField.getText().trim());
+            Integer.parseInt(roomText);
+            Integer.parseInt(bedText);
+            return true;
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Occupancy must be numbers.");
             return false;
         }
-        return true;
     }
-
-    // === Getter-Methoden ===
-
-    public boolean isSaved() {
-        return saved;
-    }
-
+    // folgende Methoden geben die eingegebenen Werte des Benutzers zurück
     public int getSelectedYear() {
         return Integer.parseInt((String) yearCombo.getSelectedItem());
     }
 
     public int getSelectedMonth() {
-        return monthCombo.getSelectedIndex(); // January = 1 (weil erstes Element ist "---select---")
+        return monthCombo.getSelectedIndex();
     }
 
     public int getRoomOccupancy() {

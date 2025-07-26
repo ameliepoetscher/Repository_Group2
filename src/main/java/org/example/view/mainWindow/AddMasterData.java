@@ -4,131 +4,99 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class AddMasterData extends JDialog {
+public class AddMasterData extends JDialog { //modaler Dialogfenster
 
-    private JTextField idField;
-    private JTextField nameField;
-    private JTextField addressField;
-    private JTextField roomsField;
-    private JTextField bedsField;
-    private JButton saveButton;
-    private JButton cancelButton;
+    private final DefaultTableModel tableModel; //Datenmodell der Tabelle, zu der neue Hoteldaten hinzugefügt werden sollen
 
-    private DefaultTableModel tableModel;
+    private final Map<String, JTextField> fields = new LinkedHashMap<>(); //Map, die Beschriftungen den dazugehörigen Eingabefeldern zuordnet, linkedHashMap für die Reihenfolge
 
-    public AddMasterData(DefaultTableModel model) {
+    public AddMasterData(DefaultTableModel model) { // Konstruktor
         this.tableModel = model;
 
-        setTitle("Neues Hotel hinzufügen");
-        setModal(true);
-        setSize(400, 300);
-        setLocationRelativeTo(null);
-        setLayout(new GridBagLayout());
+        configureDialog(); // Grundeigenschaften des Dialogs
+        createForm(); //erstellt Eingabeformular mit Beschriftungen & Textfelder
+        createButtons(); // erzeugt "Speichern" und "Abbrechen"
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 5, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        pack(); // passt die Größe des Fensters automatisch an den Inhalt an
+        setLocationRelativeTo(null); //zentriert Fenster auf Bildschirm
+    }
 
-        // Label + Input für ID
-        gbc.gridx = 0; gbc.gridy = 0;
-        add(new JLabel("ID:"), gbc);
-        gbc.gridx = 1;
-        idField = new JTextField();
-        add(idField, gbc);
+    private void configureDialog() { // Methode
+        setTitle("Neues Hotel hinzufügen"); // Titel des Fensters
+        setModal(true); // macht den Dilog modal (d.h. setVisible(false))
+        setLayout(new GridBagLayout()); // flexibles Layout-Management-System
+    }
 
-        // Name
-        gbc.gridx = 0; gbc.gridy = 1;
-        add(new JLabel("Name:"), gbc);
-        gbc.gridx = 1;
-        nameField = new JTextField();
-        add(nameField, gbc);
+    private void createForm() { // Methode -> baut Formular dynamisch auf
+        GridBagConstraints gbc = new GridBagConstraints(); //Objekt für die Verwaltung von Positionierung und Verhalten von Komponenten (Labels, Textfelder)
+        gbc.insets = new Insets(5, 10, 5, 10); //definiert äußeren Abstand für jede Komponente
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Komponente solen den verfügbaren horizonatlen Platz in ihrer Zelle ausfüllen
+        String[] labels = {"ID:", "Name:", "Adresse:", "Rooms:", "Beds:"}; //Array für Beschriftung der Eingabefelder
+        for (int i = 0; i < labels.length; i++) { //durchläuft alle Elemenete des labels-Array
+            fields.put(labels[i], addLabelAndTextField(labels[i], i, gbc));
+            // eigentliche Aufbau des Formulars -> addLabelAndTextField wird aufgerufen
+        }
+    }
 
-        // Adresse
-        gbc.gridx = 0; gbc.gridy = 2;
-        add(new JLabel("Adresse:"), gbc);
-        gbc.gridx = 1;
-        addressField = new JTextField();
-        add(addressField, gbc);
+    private void createButtons() { // erzeugt Schaltfläche "Speichern" und "Abbrechen" und fügt es dem Dialogfenster hinzu
+        JPanel buttonPanel = new JPanel(); // Container, um GUI-Komponenten zu gruppieren
+        JButton saveButton = new JButton("Speichern"); // erstellt Schaltfläche
+        JButton cancelButton = new JButton("Abbrechen"); // erstellt Schaltfläche
 
-        // Rooms
-        gbc.gridx = 0; gbc.gridy = 3;
-        add(new JLabel("Rooms:"), gbc);
-        gbc.gridx = 1;
-        roomsField = new JTextField();
-        add(roomsField, gbc);
+        saveButton.addActionListener(this::saveHotel); // beim Klicken dieser Schaltfläche soll eine bestimmte Aktion ausgeführt werden
+        // dabei wird saveHotel ausgerufen, die die eingegebenen Daten speichert
 
-        // Beds
-        gbc.gridx = 0; gbc.gridy = 4;
-        add(new JLabel("Beds:"), gbc);
-        gbc.gridx = 1;
-        bedsField = new JTextField();
-        add(bedsField, gbc);
+        cancelButton.addActionListener(e -> dispose());
+        // dispose() wird aufgerufen - Fenster wird geschlossen, ohne dass die Daten gespeichert werden
 
-        // Buttons
-        JPanel buttonPanel = new JPanel();
-        saveButton = new JButton("Speichern");
-        cancelButton = new JButton("Abbrechen");
         buttonPanel.add(saveButton);
         buttonPanel.add(cancelButton);
+        // fügt beide erstellten Schaltflächen dem buttonPanel hinzu
 
-        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
+        GridBagConstraints gbc = new GridBagConstraints(); // Obejkt für die Posiitionierung von Komponenten
+        gbc.gridx = 0;
+        gbc.gridy = fields.size();
+        gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        add(buttonPanel, gbc);
-
-        // Button-Logik
-        saveButton.addActionListener(this::saveHotel);
-        cancelButton.addActionListener(e -> dispose());
+        //PLatzierung des Panels
+        add(buttonPanel, gbc); // fügt buttonPanel zum JDialog (Schaltfläche wird zum Hauptcontainer hinzugefüft)
     }
 
-    private void saveHotel(ActionEvent e) {
+    private JTextField addLabelAndTextField(String labelText, int y, GridBagConstraints gbc) { //Hilfsmethode - TextField wird dem dazugehörigen Label richtig positioniert
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        add(new JLabel(labelText), gbc);
+        //Positionierung des Labels
+
+        gbc.gridx = 1;
+        JTextField textField = new JTextField(15);
+        add(textField, gbc);
+        return textField;
+        //Positionierung und Erstellung des Textfeldes
+    }
+
+    private void saveHotel(ActionEvent e) { //Hotel wird gespeichert, sobald der Nuetezr auf "Speichern" klcikt
         try {
-            int id = Integer.parseInt(idField.getText().trim());
-            String name = nameField.getText().trim();
-            String address = addressField.getText().trim();
-            int rooms = Integer.parseInt(roomsField.getText().trim());
-            int beds = Integer.parseInt(bedsField.getText().trim());
+            //liest die Eingaben aus den Textfeldern und entfernt Leerzeichen am Anfang/Ende
+            int id = Integer.parseInt(fields.get("ID:").getText().trim());
+            String name = fields.get("Name:").getText().trim();
+            String address = fields.get("Adresse:").getText().trim();
+            int rooms = Integer.parseInt(fields.get("Rooms:").getText().trim());
+            int beds = Integer.parseInt(fields.get("Beds:").getText().trim());
 
-            // Neue Zeile zur Tabelle hinzufügen
+            //Fügt neue Daten als Zeile zu einem Tabellenmodell hinzu
             tableModel.addRow(new Object[]{id, name, address, rooms, beds});
-            dispose(); // Fenster schließen
+            //Dialogfenster wird geschlossen
+            dispose();
+            //Fehlermeldung als Dialogfenster
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Bitte gib gültige Zahlen für ID, Rooms und Beds ein.",
-                    "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Bitte gib gültige Zahlen für ID, Rooms und Beds ein.",
+                    "Ungültige Eingabe",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    private void initComponents() {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Maria Malik
-        panel1 = new JPanel();
-
-        //======== panel1 ========
-        {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-            javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax
-            . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-            .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt
-            . Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans.
-            PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("borde\u0072" .
-            equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
-
-            GroupLayout panel1Layout = new GroupLayout(panel1);
-            panel1.setLayout(panel1Layout);
-            panel1Layout.setHorizontalGroup(
-                panel1Layout.createParallelGroup()
-                    .addGap(0, 540, Short.MAX_VALUE)
-            );
-            panel1Layout.setVerticalGroup(
-                panel1Layout.createParallelGroup()
-                    .addGap(0, 480, Short.MAX_VALUE)
-            );
-        }
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
-    }
-
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Maria Malik
-    private JPanel panel1;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
