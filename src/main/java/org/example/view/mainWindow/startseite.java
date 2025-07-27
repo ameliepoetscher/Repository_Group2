@@ -110,9 +110,14 @@ public class startseite extends JPanel {
 
         // Button-Listener für Hotel-Panel
         button25.addActionListener(e -> saveHotelData());
-        deleteButton.addActionListener(e -> deleteSelectedHotel());
-        button6.addActionListener(e -> addHotel());
-        button3.addActionListener(e -> editHotel());
+        deleteButton.addActionListener(e -> {
+            DeleteMasterDataHandler.deleteHotel(table1);
+        });
+        button3.addActionListener(e -> {
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            EditMasterDataHandler.editHotel(parentFrame, table1);
+        });
+
 
         //für logout Buttons
         button1.addActionListener(e -> logout());
@@ -305,34 +310,7 @@ public class startseite extends JPanel {
     }
 
 
-    private void addHotel() {
-        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        HotelDialog dialog = new HotelDialog(parentFrame, null, false, table1);
-        dialog.setVisible(true);
-        if (dialog.isSaved()) {
-            Object[] newHotel = dialog.getHotelData();
-            ((DefaultTableModel) table1.getModel()).addRow(newHotel);
-        }
-    }
 
-    private void editHotel() {
-        int selectedRow = table1.getSelectedRow();
-        if (selectedRow == -1) return;
-        DefaultTableModel model = (DefaultTableModel) table1.getModel();
-        Object[] rowData = new Object[model.getColumnCount()];
-        for (int i = 0; i < model.getColumnCount(); i++) {
-            rowData[i] = model.getValueAt(selectedRow, i);
-        }
-        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-        HotelDialog dialog = new HotelDialog(parent, rowData, true, table1);
-        dialog.setVisible(true);
-        if (dialog.isSaved()) {
-            Object[] editedHotel = dialog.getHotelData();
-            for (int i = 0; i < model.getColumnCount(); i++) {
-                model.setValueAt(editedHotel[i], selectedRow, i);
-            }
-        }
-    }
 
     // ===== Methoden für das Hotel-Summary-Panel =====
 
@@ -747,22 +725,6 @@ public class startseite extends JPanel {
         );
     }
 
-    private void Add(ActionEvent e) {
-        // TODO add your code here
-    }
-
-    private void button6(ActionEvent e) {
-        // TODO add your code here
-    }
-
-    private void AddButton(ActionEvent e) {
-        // TODO add your code here
-    }
-
-    private void EditButton(ActionEvent e) {
-        // TODO add your code here
-    }
-
     private void button7(ActionEvent e) {
         // TODO add your code here
     }
@@ -943,12 +905,11 @@ public class startseite extends JPanel {
                     }
 
                     //---- button6 ----
-                    button6.setText("+");
                     button6.addActionListener(e -> {
-			Add(e);
-			button6(e);
-			AddButton(e);
-		});
+                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                        AddMasterDataHandler.addHotel(parentFrame, table1);
+                    });
+
 
                     //---- button25 ----
                     button25.setText("Save");
@@ -958,7 +919,11 @@ public class startseite extends JPanel {
 
                     //---- button3 ----
                     button3.setText("Edit");
-                    button3.addActionListener(e -> EditButton(e));
+                    button3.addActionListener(e -> {
+                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                        EditMasterDataHandler.editHotel(parentFrame, table1);
+                    });
+
 
                     GroupLayout panel7Layout = new GroupLayout(panel7);
                     panel7.setLayout(panel7Layout);
@@ -1181,7 +1146,9 @@ public class startseite extends JPanel {
                 //---- button7 ----
                 button7.setText("Delete");
                 button7.addActionListener(e -> {
-			button7(e);
+                    DeleteMasterDataHandler.deleteHotel(table1);
+
+                button7(e);
 			button7(e);
 		});
 
