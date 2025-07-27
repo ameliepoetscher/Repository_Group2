@@ -1,8 +1,10 @@
-package org.example.view.mainWindow;
+package org.example.view.hotelRep;
 
 import org.example.dao.HotelDAO;
 import org.example.entity.Hotel;
 import org.example.entity.Occupancy;
+import org.example.view.auth.login;
+import org.example.view.hotel.EditHotelDialog;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

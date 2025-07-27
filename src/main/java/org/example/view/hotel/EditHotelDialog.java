@@ -1,12 +1,14 @@
 package org.example.view.hotel;
 
+import org.example.dao.HotelDAO;
 import org.example.entity.Hotel;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Ein Dialogfenster zum Bearbeiten der Daten eines Hotels.
+ * In hotel_rep
+ * Ein Dialogfenster zum Bearbeiten der Daten eines Hotels
  *
  * Dieses Fenster zeigt eine grafische Oberfläche, mit der man Stammdaten wie
  * Name, Adresse, Anzahl der Zimmer und Betten eines ausgewählten Hotels ändern kann.
@@ -15,7 +17,6 @@ import java.awt.*;
  * das bearbeitet werden soll.
  */
 public class EditHotelDialog extends JDialog {
-    // Dieses Feld merkt, ob gespeichert wurde
     private boolean saved = false;
 
     private JTextField idField;
@@ -24,47 +25,46 @@ public class EditHotelDialog extends JDialog {
     private JTextField roomsField;
     private JTextField bedsField;
 
-    // Dialog zum Bearbeiten eines Hotels
     public EditHotelDialog(JFrame parent, Hotel hotel) {
         super(parent, "Edit Master Data", true);
         setLayout(new BorderLayout());
 
-        // Panel für die Eingabefelder
+        // Eingabefelder
         JPanel fieldsPanel = new JPanel(new GridLayout(5, 2, 10, 10));
         fieldsPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
-        // ID (read-only)
+        // Hotel-ID (read-only)
         fieldsPanel.add(new JLabel("Hotel ID:"));
         idField = new JTextField(String.valueOf(hotel.getId()));
         idField.setEditable(false);
         fieldsPanel.add(idField);
 
-        // Name
+        // Hotel-Name
         fieldsPanel.add(new JLabel("Hotel Name:"));
         nameField = new JTextField(hotel.getName());
         fieldsPanel.add(nameField);
 
-        // Address
+        // Adresse
         fieldsPanel.add(new JLabel("Address:"));
         addressField = new JTextField(hotel.getAddress());
         fieldsPanel.add(addressField);
 
-        // Number of Rooms
+        // Zimmeranzahl
         fieldsPanel.add(new JLabel("Number of Rooms:"));
         roomsField = new JTextField(String.valueOf(hotel.getNoRooms()));
         fieldsPanel.add(roomsField);
 
-        // Number of Beds
+        // Bettenanzahl
         fieldsPanel.add(new JLabel("Number of Beds:"));
         bedsField = new JTextField(String.valueOf(hotel.getNoBeds()));
         fieldsPanel.add(bedsField);
 
-        // Panel für Buttons
+        // Button-Bereich
         JPanel buttonsPanel = new JPanel();
         JButton saveButton = new JButton("Save");
         JButton backButton = new JButton("Back to Hotel List");
 
-        // Wenn auf "Save" geklickt wird: Werte speichern und Merker setzen
+        // Speichern-Button mit DB-Anbindung
         saveButton.addActionListener(e -> {
             hotel.setName(nameField.getText());
             hotel.setAddress(addressField.getText());
@@ -75,18 +75,22 @@ public class EditHotelDialog extends JDialog {
                 JOptionPane.showMessageDialog(this, "Please enter valid numbers for rooms and beds!");
                 return;
             }
-            saved = true; // <<--- WICHTIG: Merker setzen
+
+            //  Datenbank-Update
+            HotelDAO.updateHotel(hotel);
+
+            saved = true;
             JOptionPane.showMessageDialog(this, "Saved successfully!");
             setVisible(false);
         });
 
-        // Wenn auf "Back" geklickt wird: Dialog einfach schließen (ohne speichern)
+        // Zurück-Button
         backButton.addActionListener(e -> setVisible(false));
 
         buttonsPanel.add(saveButton);
         buttonsPanel.add(backButton);
 
-        // Alles zusammenbauen
+        // Komponenten zusammenbauen
         add(fieldsPanel, BorderLayout.CENTER);
         add(buttonsPanel, BorderLayout.SOUTH);
 
@@ -94,7 +98,6 @@ public class EditHotelDialog extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    // Getter, um abzufragen, ob gespeichert wurde
     public boolean isSaved() {
         return saved;
     }

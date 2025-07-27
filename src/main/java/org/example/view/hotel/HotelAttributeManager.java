@@ -1,37 +1,56 @@
 package org.example.view.hotel;
 
+import org.example.dao.AmenityDAO;
+import org.example.entity.Amenity;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Verwaltet die Attribute (startseite), die Hotels zugeordnet werden können.
+/** In startseite
+ * Verwaltet Hotelattribute aus der Datenbank.
  */
-
 public class HotelAttributeManager {
-    // Statische Liste aller verfügbaren Hotel\-Attribute
-    private static final List<String> attributeList = new ArrayList<>();
-//attribute für senioruser
-    static {
-        attributeList.add("family friendly");
-        attributeList.add("dog friendly");
-        attributeList.add("spa");
-        attributeList.add("fitness");
-    }
+
+    // Standardattribute
+    private static final List<String> DEFAULT_ATTRIBUTES = List.of(
+            "family friendly", "dog friendly", "spa", "fitness"
+    );
+
     /**
-     * Gibt eine Kopie der aktuellen Attribut\-Liste zurück.
-     * So kann die Liste von außen gelesen werden, aber nicht direkt verändert werden.
+     * Initialisiert die Standardattribute in der Datenbank (falls nicht vorhanden).
      */
-    public static List<String> getAttributes() {
-        return new ArrayList<>(attributeList);
+    public static void initDefaults() {
+        for (String attr : DEFAULT_ATTRIBUTES) {
+            if (AmenityDAO.findByName(attr) == null) {
+                AmenityDAO.createAmenity(new Amenity(attr));
+            }
+        }
     }
 
     /**
-     * Fügt ein neues Attribut zur Liste hinzu, falls es noch nicht existiert.
-     * So können weitere Merkmale für Hotels ergänzt werden.
+     * Gibt alle Attributnamen aus der Datenbank zurück.
      */
-    public static void addAttribute(String attr) {
-        if (!attributeList.contains(attr)) {
-            attributeList.add(attr);
+    public static List<String> getAllAttributeNames() {
+        List<String> result = new ArrayList<>();
+        for (Amenity a : AmenityDAO.getAllAmenities()) {
+            result.add(a.getName());
         }
+        return result;
+    }
+
+    /**
+     * Gibt Amenity-Objekte für gegebene Namen zurück (neue werden automatisch erstellt).
+     */
+    public static List<Amenity> getOrCreateAmenities(List<String> names) {
+        List<Amenity> result = new ArrayList<>();
+        for (String name : names) {
+            Amenity a = AmenityDAO.findByName(name);
+            if (a == null) {
+                a = new Amenity(name);
+                AmenityDAO.createAmenity(a);
+            }
+            result.add(a);
+        }
+        return result;
     }
 }

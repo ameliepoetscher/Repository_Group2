@@ -1,28 +1,26 @@
 package org.example.view.hotel;
 
 import org.example.dao.HotelDAO;
+import org.example.entity.Amenity;
 import org.example.entity.Hotel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
+ * In hotel_rep
  * Dialogfenster für das Hinzufügen oder Bearbeiten eines Hotels, speichert direkt in der Datenbank.
  */
 public class HotelDialog extends JDialog {
     private boolean saved = false;
     private final JTextField[] fields = new JTextField[8];
-    private final JComboBox<String> attributeBox = new JComboBox<>();
+    private final DefaultListModel<String> listModel = new DefaultListModel<>();
+    private final JList<String> attributeList = new JList<>(listModel);
     private final JTextField addNewAttrField = new JTextField(15);
 
-    /**
-     * Öffnet den Dialog.
-     * @param parent     Das übergeordnete Fenster
-     * @param data       Hoteldaten (als Array), oder null für ein neues Hotel
-     * @param isEdit     true = Bearbeiten, false = Neu anlegen
-     * @param hotelTable JTable (nur für automatische ID-Vergabe, sonst null)
-     */
     public HotelDialog(JFrame parent, Object[] data, boolean isEdit, JTable hotelTable) {
         super(parent, isEdit ? "Edit Hotel" : "Add Hotel", true);
         setLayout(new GridBagLayout());
@@ -31,7 +29,7 @@ public class HotelDialog extends JDialog {
 
         String[] labels = {"ID:", "Category:", "Name:", "Adresse:", "City:", "PLZ:", "Rooms:", "Beds:"};
 
-        // Felder erzeugen und ggf. mit bestehenden Werten befüllen
+        // Eingabefelder anlegen
         for (int i = 0; i < labels.length; i++) {
             addField(labels[i], i, gbc);
             if (i == 0) {
@@ -42,10 +40,10 @@ public class HotelDialog extends JDialog {
             }
         }
 
-        // Attribut-Auswahl (mit Manager und Option für neues Attribut)
-        addAttributeRow(gbc, isEdit && data != null && data.length >= 9 ? String.valueOf(data[8]) : null);
+        // Attribute-Mehrfachauswahl
+        addAttributeSection(gbc);
 
-        // Speicher- und Cancel-Buttons
+        // Buttons
         JPanel btnPanel = new JPanel();
         JButton saveBtn = new JButton("Save");
         JButton cancelBtn = new JButton("Cancel");
@@ -57,17 +55,17 @@ public class HotelDialog extends JDialog {
         gbc.gridwidth = 2;
         add(btnPanel, gbc);
 
-        // Speichern: Holt die Eingaben und speichert per DAO in der Datenbank
+        // Event: Save
         saveBtn.addActionListener(e -> {
-            // Wenn neues Attribut eingegeben wurde, erst hinzufügen
-            if (addNewAttrField.isVisible() && !addNewAttrField.getText().trim().isEmpty()) {
-                String newAttr = addNewAttrField.getText().trim();
-                HotelAttributeManager.addAttribute(newAttr);
-                attributeBox.insertItemAt(newAttr, attributeBox.getItemCount() - 1);
-                attributeBox.setSelectedItem(newAttr);
+            // Neuen Attributnamen hinzufügen, falls vorhanden
+            String newAttr = addNewAttrField.getText().trim();
+            if (!newAttr.isEmpty() && !listModel.contains(newAttr)) {
+                HotelAttributeManager.getOrCreateAmenities(List.of(newAttr));
+                listModel.addElement(newAttr);
+                attributeList.setSelectedValue(newAttr, true);
             }
 
-            // Auslesen & Objekt bauen
+            // Eingabewerte sammeln
             Object[] hotelData = getHotelData();
             Hotel hotel = new Hotel();
             hotel.setId(Integer.parseInt(hotelData[0].toString()));
@@ -78,18 +76,23 @@ public class HotelDialog extends JDialog {
             hotel.setCityCode(hotelData[5].toString());
             hotel.setNoRooms(Integer.parseInt(hotelData[6].toString()));
             hotel.setNoBeds(Integer.parseInt(hotelData[7].toString()));
-            hotel.setAttribute(hotelData[8].toString());
 
-            // Speichern/Update in die DB
+            // Attribute zuweisen
+            List<String> selectedAttr = attributeList.getSelectedValuesList();
+            List<Amenity> amenities = HotelAttributeManager.getOrCreateAmenities(selectedAttr);
+            hotel.setAmenities(Set.copyOf(amenities));
+
+            // DB speichern
             if (isEdit) {
-                HotelDAO.updateHotel(hotel);   // Das muss es im DAO geben!
+                HotelDAO.updateHotel(hotel);
             } else {
-                HotelDAO.createHotel(hotel);   // So heißt die Methode im DAO!
+                HotelDAO.createHotel(hotel);
             }
 
             saved = true;
             setVisible(false);
         });
+
         cancelBtn.addActionListener(e -> {
             saved = false;
             setVisible(false);
@@ -99,7 +102,6 @@ public class HotelDialog extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    /** Fügt ein Label und ein Eingabefeld für einen Hoteldatenpunkt hinzu. */
     private void addField(String label, int index, GridBagConstraints gbc) {
         gbc.gridx = 0;
         gbc.gridy = index;
@@ -109,7 +111,6 @@ public class HotelDialog extends JDialog {
         add(fields[index], gbc);
     }
 
-    /** Holt die nächste freie Hotel-ID, oder übernimmt die bestehende */
     private int getId(Object[] data, boolean isEdit, JTable table) {
         if (isEdit && data != null)
             return Integer.parseInt(String.valueOf(data[0]));
@@ -125,47 +126,37 @@ public class HotelDialog extends JDialog {
         return maxId + 1;
     }
 
-    /** Lädt alle Attribute aus dem Manager in das Dropdown + Feld für neue Attribute */
-    private void addAttributeRow(GridBagConstraints gbc, String selected) {
+    private void addAttributeSection(GridBagConstraints gbc) {
         gbc.gridy++;
         gbc.gridx = 0;
-        add(new JLabel("Attribute:"), gbc);
+        add(new JLabel("Attributes:"), gbc);
 
         gbc.gridx = 1;
-        attributeBox.removeAllItems();
 
-        // Attribute aus dem Manager holen!
-        List<String> attrs = HotelAttributeManager.getAttributes();
-        for (String attr : attrs) {
-            attributeBox.addItem(attr);
-        }
-        attributeBox.addItem("Add new attribute...");
-        if (selected != null) attributeBox.setSelectedItem(selected);
-        add(attributeBox, gbc);
+        // Mehrfachauswahlliste
+        attributeList.setVisibleRowCount(4);
+        attributeList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        List<String> attrs = HotelAttributeManager.getAllAttributeNames();
+        for (String a : attrs) listModel.addElement(a);
 
-        // Textfeld für neues Attribut (am Anfang unsichtbar)
+        JScrollPane scrollPane = new JScrollPane(attributeList);
+        scrollPane.setPreferredSize(new Dimension(150, 80));
+        add(scrollPane, gbc);
+
+        // Neues Attributfeld
         gbc.gridy++;
         gbc.gridx = 1;
-        addNewAttrField.setVisible(false);
+        addNewAttrField.setToolTipText("Add new attribute");
         add(addNewAttrField, gbc);
-
-        // Dropdown-Listener: zeigt Textfeld wenn "Add new attribute..." gewählt wird
-        attributeBox.addActionListener(e -> {
-            boolean isNew = "Add new attribute...".equals(attributeBox.getSelectedItem());
-            addNewAttrField.setVisible(isNew);
-            pack();
-        });
     }
 
-    /** Gibt zurück, ob gespeichert wurde. */
-    public boolean isSaved() { return saved; }
+    public boolean isSaved() {
+        return saved;
+    }
 
-    /** Holt die Daten aus allen Eingabefeldern als Array */
     public Object[] getHotelData() {
-        Object[] data = new Object[9];
+        Object[] data = new Object[8];
         for (int i = 0; i < 8; i++) data[i] = fields[i].getText();
-        data[8] = "Add new attribute...".equals(attributeBox.getSelectedItem())
-                ? addNewAttrField.getText() : attributeBox.getSelectedItem();
         return data;
     }
 }
