@@ -1,4 +1,4 @@
-package org.example.view;
+package org.example.main;
 
 import org.example.view.mainWindow.noe_to_logo;
 

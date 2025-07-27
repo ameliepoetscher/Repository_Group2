@@ -1,10 +1,16 @@
-package org.example.view.mainWindow;
+package org.example.view.occupancy;
 
 import javax.swing.*;
 import java.awt.*;
 
 import lombok.Getter;
 
+/**
+ * Diese Klasse zeigt ein Dialogfenster an, in dem man Belegungsdaten für ein Hotel eingeben kann –
+ * zum Beispiel wie viele Zimmer und Betten belegt sind, für einen bestimmten Monat und ein bestimmtes Jahr.
+ *
+ * Die Klasse basiert auf {@link JDialog} und übernimmt dessen Funktionen.
+ */
 @Getter
 public class AddTransactionalDataDialog extends JDialog { //Standard Dialogfenster geerbt von JDialog
     private boolean saved = false;

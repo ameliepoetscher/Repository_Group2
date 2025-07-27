@@ -1,4 +1,4 @@
-package org.example.view.mainWindow;
+package org.example.view.hotel;
 
 import org.example.dao.HotelDAO;
 import org.example.entity.Hotel;

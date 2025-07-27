@@ -1,5 +1,7 @@
 package org.example.view.mainWindow;
 
+import org.example.view.auth.login;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;

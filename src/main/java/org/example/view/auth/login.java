@@ -1,4 +1,7 @@
-package org.example.view.mainWindow;
+package org.example.view.auth;
+
+import org.example.view.hotelRep.hotel_rep;
+import org.example.view.mainWindow.startseite;
 
 import java.awt.*;
 import javax.swing.*;

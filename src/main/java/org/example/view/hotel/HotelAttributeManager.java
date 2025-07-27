@@ -1,4 +1,4 @@
-package org.example.view.mainWindow;
+package org.example.view.hotel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,19 @@
-package org.example.view.mainWindow;
+package org.example.view.hotel;
 
 import org.example.entity.Hotel;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Ein Dialogfenster zum Bearbeiten der Daten eines Hotels.
+ *
+ * Dieses Fenster zeigt eine grafische Oberfläche, mit der man Stammdaten wie
+ * Name, Adresse, Anzahl der Zimmer und Betten eines ausgewählten Hotels ändern kann.
+ *
+ * Als Eingabe bekommt die Klasse das übergeordnete Fenster (JFrame) und das Hotel-Objekt,
+ * das bearbeitet werden soll.
+ */
 public class EditHotelDialog extends JDialog {
     // Dieses Feld merkt, ob gespeichert wurde
     private boolean saved = false;
