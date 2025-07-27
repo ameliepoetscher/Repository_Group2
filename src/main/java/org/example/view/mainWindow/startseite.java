@@ -5,6 +5,10 @@ import org.example.entity.Occupancy;
 import org.example.data.txt.HotelFileReader;
 import org.example.data.txt.HotelFileWriter;
 import org.example.data.txt.OccupancyFileReader;
+import org.example.view.auth.login;
+import org.example.view.hotel.HotelDialog;
+import org.example.view.occupancy.AddTransactionalDataDialog;
+
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
@@ -18,6 +22,25 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ *  * Die Klasse startseite stellt das Haupt-Bedienfeld der Benutzeroberfläche zur Verwaltung von Hotels und zugehörigen Daten dar.
+ *  * Sie erweitert JPanel und nutzt verschiedene GUI-Komponenten wie Buttons, ComboBoxen und Tabellen.
+ *  *
+ *  * Diese Klasse bietet Funktionen zur Verwaltung von Hoteldaten, einschließlich Anzeigen, Bearbeiten, Löschen und Filtern.
+ *  * Zusätzlich enthält sie Mechanismen zur Datenspeicherung sowie zur Verarbeitung von Benutzerinteraktionen über Event-Listener.
+ *  *
+ *  * Wichtige Funktionen dieser Klasse:
+ *  * - Initialisierung der grafischen Komponenten und dynamische Aktualisierung basierend auf Benutzeraktionen.
+ *  * - Laden von Hoteldaten aus einer Datei und Befüllen der Tabelle mit diesen Daten.
+ *  * - Verwaltung von Filter-Comboboxen mit dynamischen Listen und Auswahlverarbeitung.
+ *  * - Ereignisbehandlung für Buttons zur Hotelverwaltung (Speichern, Bearbeiten, Hinzufügen, Löschen).
+ *  * - Dauerhafte Speicherung der Hoteldaten im Dateisystem mit Änderungsverfolgung.
+ *  * - Unterstützung für Benutzerabmeldung über das Panel.
+ *  * - Erweiterte Funktionen wie Transaktionsverwaltung und kombinierte Datenübersicht.
+ *  *
+ *  * Diese Klasse arbeitet mit weiteren Komponenten wie Hotel, HotelFileReader und verschiedenen Hilfsmethoden zusammen,
+ *  * um eine leistungsfähige Hotelverwaltungsoberfläche in der Anwendung bereitzustellen.
+ */
 public class startseite extends JPanel {
     private List<Map<String, Object>> occupancyDataList = new ArrayList<>();
     private Map<Integer, String> transactionalDataAlt = new HashMap<>();
@@ -751,7 +774,7 @@ public class startseite extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - amaim rathor
+        // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
         this2 = new JPanel();
         label21 = new JLabel();
         tabbedPane1 = new JTabbedPane();
@@ -2053,7 +2076,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - amaim rathor
+    // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
     private JPanel this2;
     private JLabel label21;
     private JTabbedPane tabbedPane1;
@@ -2126,7 +2149,7 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Educational license - amaim rathor
+            // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 

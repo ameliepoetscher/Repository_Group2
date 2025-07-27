@@ -1,4 +1,4 @@
-package org.example.view.mainWindow;
+package org.example.view.occupancy;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -7,6 +7,15 @@ import java.awt.event.ActionEvent;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ ** Die Klasse AddMasterData öffnet ein kleines Fenster, in dem man neue Hoteldaten eingeben kann.
+ *  * Die Daten werden dann zur Tabelle hinzugefügt.
+ *  *
+ *  * In diesem Fenster gibt es Textfelder zum Ausfüllen und Schaltflächen zum Speichern oder Abbrechen.
+ *  *
+ *  * Die Klasse baut auf JDialog auf und sorgt dafür, dass man erst dieses Fenster schließen muss,
+ *  * bevor man im Hauptfenster weiterarbeiten kann.
+ */
 public class AddMasterData extends JDialog { //modaler Dialogfenster
 
     private final DefaultTableModel tableModel; //Datenmodell der Tabelle, zu der neue Hoteldaten hinzugefügt werden sollen

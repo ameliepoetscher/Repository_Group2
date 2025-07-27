@@ -1,7 +1,9 @@
-package org.example.view.mainWindow;
+package org.example.view.hotelRep;
 
 import org.example.dao.HotelDAO;
 import org.example.entity.Hotel;
+import org.example.view.auth.login;
+import org.example.view.hotel.EditHotelDialog;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -376,7 +378,7 @@ public class hotel_rep extends JPanel {
 //ab da nichts verändern ?!
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - amaim rathor
+        // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
         panel7 = new JPanel();
@@ -509,7 +511,7 @@ public class hotel_rep extends JPanel {
                                                 .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
                                                 .addContainerGap())
                                             .addGroup(GroupLayout.Alignment.TRAILING, panel7Layout.createSequentialGroup()
-                                                .addGap(0, 520, Short.MAX_VALUE)
+                                                .addGap(0, 529, Short.MAX_VALUE)
                                                 .addComponent(button5)
                                                 .addGap(122, 122, 122))))
                                     .addGroup(panel7Layout.createSequentialGroup()
@@ -621,7 +623,7 @@ public class hotel_rep extends JPanel {
                                     .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 682, GroupLayout.PREFERRED_SIZE)
                                     .addContainerGap(76, Short.MAX_VALUE))
                                 .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 454, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 475, Short.MAX_VALUE)
                                     .addGroup(panel2Layout.createParallelGroup()
                                         .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
                                             .addComponent(label5)
@@ -894,7 +896,7 @@ public class hotel_rep extends JPanel {
                                     .addComponent(label3)
                                     .addGap(18, 18, 18)
                                     .addComponent(comboBox15, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 200, Short.MAX_VALUE)
                                     .addComponent(label4)
                                     .addGap(78, 78, 78))))
                 );
@@ -942,7 +944,7 @@ public class hotel_rep extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - amaim rathor
+    // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private JPanel panel7;
