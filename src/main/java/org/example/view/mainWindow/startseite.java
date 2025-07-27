@@ -8,6 +8,8 @@ import org.example.data.txt.OccupancyFileReader;
 import org.example.view.auth.login;
 import org.example.view.hotel.HotelDialog;
 import org.example.view.occupancy.AddTransactionalDataDialog;
+import org.example.view.hotel.HotelTableBuilder;
+import org.example.view.hotelRep.TransactionTableBuilder;
 
 import java.time.LocalDate;
 import java.util.stream.Stream;
@@ -746,11 +748,8 @@ public class startseite extends JPanel {
         button1 = new JButton();
         button2 = new JButton();
         scrollPane1 = new JScrollPane();
-        table1 = new JTable();
-        button6 = new JButton();
         button25 = new JButton();
         deleteButton = new JButton();
-        button3 = new JButton();
         panel3 = new JPanel();
         panel17 = new JPanel();
         button15 = new JButton();
@@ -876,27 +875,8 @@ public class startseite extends JPanel {
                     //======== scrollPane1 ========
                     {
 
-                        //---- table1 ----
-                        table1.setModel(new DefaultTableModel(
-                            new Object[][] {
-                                {"1", "Hotel Alpha", "Vienna", "20", "35"},
-                                {"2", "Hotel Beta", "Graz", "30", "45"},
-                                {"3", "Hotel Gamma", "Linz", "40", "55"},
-                                {"4", "Hotel Delta", "Salzburg ", "50", "65"},
-                                {"5", "Hotel Epsilon", "Klagenfurt", "60", "75"},
-                            },
-                            new String[] {
-                                "ID", "name", "adresse", "rooms", "beds"
-                            }
-                        ) {
-                            boolean[] columnEditable = new boolean[] {
-                                false, true, true, true, true
-                            };
-                            @Override
-                            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                return columnEditable[columnIndex];
-                            }
-                        });
+                        table1 = HotelTableBuilder.createHotelTable();
+
                         {
                             TableColumnModel cm = table1.getColumnModel();
                             cm.getColumn(0).setPreferredWidth(5);
@@ -1927,15 +1907,8 @@ public class startseite extends JPanel {
                     {
 
                         //---- table2 ----
-                        table2.setModel(new DefaultTableModel(
-                            new Object[][] {
-                                {null, null, null, null, null, null},
-                                {null, null, null, null, null, null},
-                            },
-                            new String[] {
-                                "hotel name", "rooms", "room occupancy", "beds", "bed occupancy", "category"
-                            }
-                        ));
+                        table2 = TransactionTableBuilder.createTransactionTable();
+
                         scrollPane2.setViewportView(table2);
                     }
 
@@ -2052,12 +2025,12 @@ public class startseite extends JPanel {
     private JPanel panel8;
     private JButton button1;
     private JButton button2;
+    private JButton button3;
+    private JButton button6;
     private JScrollPane scrollPane1;
     private JTable table1;
-    private JButton button6;
     private JButton button25;
     private JButton deleteButton;
-    private JButton button3;
     private JPanel panel3;
     private JPanel panel17;
     private JButton button15;
