@@ -6,10 +6,13 @@ import org.example.data.txt.HotelFileReader;
 import org.example.data.txt.HotelFileWriter;
 import org.example.data.txt.OccupancyFileReader;
 import org.example.view.auth.login;
-import org.example.view.hotel.HotelDialog;
 import org.example.view.occupancy.AddTransactionalDataDialog;
 import org.example.view.hotel.HotelTableBuilder;
 import org.example.view.hotelRep.TransactionTableBuilder;
+import org.example.view.hotel.HotelDataSaver;
+import org.example.view.hotelRep.TransactionalDataFiller;
+import org.example.view.hotel.HotelTableModelBuilder;
+
 
 import java.time.LocalDate;
 import java.util.stream.Stream;
@@ -111,7 +114,16 @@ public class startseite extends JPanel {
 
 
         // Button-Listener für Hotel-Panel
-        button25.addActionListener(e -> saveHotelData());
+        button25.addActionListener(e -> {
+            List<String[]> hotelRows = HotelDataSaver.extractDataFromTable(table1);
+
+            for (String[] row : hotelRows) {
+                System.out.println("Hotel: " + String.join(", ", row));
+            }
+
+            // Optional: hier kannst du die Daten weiterverarbeiten oder speichern
+        });
+
         deleteButton.addActionListener(e -> {
             DeleteMasterDataHandler.deleteHotel(table1);
         });
@@ -185,11 +197,11 @@ public class startseite extends JPanel {
         }
         table1.setModel(model);
 
+
+
         // HIER transactionalDataAlt befüllen:
-        transactionalDataAlt.clear();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            transactionalDataAlt.put(i, model.getValueAt(i, 8).toString());
-        }
+        TransactionalDataFiller.fill(transactionalDataAlt, model, 8);
+
     }
 
     private void saveHotelData() {
@@ -507,20 +519,24 @@ public class startseite extends JPanel {
                         .thenComparingInt(Occupancy::getMonth)
         );
 
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{ "Hotel Name","Room Occupancy","Bed Occupancy","Month","Year","Attribute" },
-                0
-        );
+        String[] columnNames = {
+                "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year", "Attribute"
+        };
+
+        List<Object[]> rowDataList = new ArrayList<>();
         for (Occupancy o : toDisplay) {
-            model.addRow(new Object[]{
+            rowDataList.add(new Object[]{
                     o.getHotel().getName(),
                     o.getUsedRooms(),
                     o.getUsedBeds(),
                     getMonthName(o.getMonth()),
                     o.getYear(),
-                    ""  // Platz für Attribute
+                    "" // Platz für Attribute
             });
         }
+
+        DefaultTableModel model = HotelTableModelBuilder.createHotelTableModel(rowDataList, columnNames);
+
         table3.setModel(model);
     }
 
@@ -885,10 +901,11 @@ public class startseite extends JPanel {
                     }
 
                     //---- button6 ----
+                    button6 = new JButton("Speichern");  // <--- das initialisiert den Button
                     button6.addActionListener(e -> {
-                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                        AddMasterDataHandler.addHotel(parentFrame, table1);
+
                     });
+
 
 
                     //---- button25 ----
@@ -897,7 +914,9 @@ public class startseite extends JPanel {
                     //---- deleteButton ----
                     deleteButton.setText("Delete");
 
+
                     //---- button3 ----
+                    button3 = new JButton();
                     button3.setText("Edit");
                     button3.addActionListener(e -> {
                         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
