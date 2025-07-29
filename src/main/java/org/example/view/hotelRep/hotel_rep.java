@@ -1,66 +1,59 @@
-package org.example.view.hotelRep;
+/*
+ * Created by JFormDesigner on Sun May 18 18:16:41 CEST 2025
+ */
+package org.example.view.mainWindow;
 
-import org.example.dao.HotelDAO;
+import org.example.data.txt.HotelFileReader;
 import org.example.entity.Hotel;
-import org.example.view.auth.login;
-import org.example.view.hotel.EditHotelDialog;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Objects;
 
 public class hotel_rep extends JPanel {
-    // Liste aller Hotels aus der Datenbank
     private List<Hotel> hotels;
-    // Belegungsdaten (nur im RAM, nicht in DB)
     private List<Map<String, Object>> occupancies = new ArrayList<>();
-    // Zuletzt bearbeitete Transaktion pro Hotel
     private Map<Integer, String> lastTransactionMap = new HashMap<>();
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private List<Map<String, Object>> occupancyDataList = new ArrayList<>();
+
+
 
     public hotel_rep() {
-        // 1. Hotels aus DB laden
-        hotels = HotelDAO.getAllHotels();
+        String hotelFilePath = "src/main/java/org/example/data/txt/hotels.txt";
+        hotels = HotelFileReader.readHotelsFromFile(hotelFilePath);
 
-        // 2. UI initialisieren
         initComponents();
 
-        // 3. ID-Spalte schmal machen
+        // Set column width for ID in Hotel List
         TableColumnModel cm = table1.getColumnModel();
         cm.getColumn(0).setPreferredWidth(15);
 
-        // 4. Tabellen und Dropdowns füllen
-        showHotelsInTable();
-        showTransactionalTable();
-        updateHotelComboBox();
+        loadHotelsInTable();
+        loadTransactionalTable();
 
-        // 5. Jahr- und Monatsauswahl vorbereiten
+        updateHotelComboBox(); // Wichtig: Initialisiere das Dropdown mit aktuellen Namen
+
         comboBox4.removeAllItems();
         comboBox4.addItem("---select---");
         for (int y = 2025; y >= 2000; y--) comboBox4.addItem(String.valueOf(y));
+
         comboBox5.removeAllItems();
         comboBox5.addItem("---select---");
         String[] months = {"January", "February", "March", "April", "May", "June", "July", "August",
                 "September", "October", "November", "December"};
         for (String month : months) comboBox5.addItem(month);
 
-        // 6. Filter für Tab 3 (Jahr, Monat, Hotel)
         comboBox4.addActionListener(e -> filterTransactionalData());
         comboBox5.addActionListener(e -> filterTransactionalData());
         comboBox15.addActionListener(e -> filterTransactionalData());
 
-        // 7. Logout-Buttons (alle Tabs)
         ActionListener logout = e -> {
             JFrame top = (JFrame) SwingUtilities.getWindowAncestor(this);
             top.setContentPane(new login());
@@ -71,7 +64,6 @@ public class hotel_rep extends JPanel {
         button3.addActionListener(logout);
         button7.addActionListener(logout);
 
-        // 8. Help-Buttons (alle Tabs)
         ActionListener help = e -> {
             JOptionPane.showMessageDialog(
                     hotel_rep.this,
@@ -89,11 +81,45 @@ public class hotel_rep extends JPanel {
         button6.addActionListener(help);
         button8.addActionListener(help);
 
-        // 9. "Add Transactional Data"-Button (Tab 2)
-        button4.addActionListener(e -> openAddTransactionDialog());
+        // "Add Transactional Data" Button (Tab 2)
+        button4.addActionListener(e -> {
+            int row = table2.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Please select a hotel first!");
+                return;
+            }
+            int hotelId = Integer.parseInt(table2.getValueAt(row, 0).toString());
+            String hotelName = (String) table2.getValueAt(row, 1);
+
+            AddTransactionalDataDialog dialog = new AddTransactionalDataDialog(
+                    (JFrame) SwingUtilities.getWindowAncestor(this), hotelId, hotelName);
+            dialog.setVisible(true);
+
+            if (dialog.isSaved()) {
+                int year = dialog.getSelectedYear();
+                int month = dialog.getSelectedMonth();
+                int roomOcc = dialog.getRoomOccupancy();
+                int bedOcc = dialog.getBedOccupancy();
+
+                Map<String, Object> occ = new HashMap<>();
+                occ.put("hotelId", hotelId);
+                occ.put("hotelName", hotelName);
+                occ.put("year", year);
+                occ.put("month", month);
+                occ.put("roomOcc", roomOcc);
+                occ.put("bedOcc", bedOcc);
+                occupancies.add(occ);
+
+                lastTransactionMap.put(hotelId, LocalDate.now().format(dateFormatter));
+
+                loadHotelsInTable();
+                loadTransactionalTable();
+                filterTransactionalData();
+            }
+        });
     }
 
-    // Aktualisiert das Dropdown für Hotelwahl (Tab 3)
+    // Dropdown für Hotels aktualisieren
     private void updateHotelComboBox() {
         comboBox15.removeAllItems();
         comboBox15.addItem("---select---");
@@ -102,12 +128,13 @@ public class hotel_rep extends JPanel {
         }
     }
 
-    // Zeigt alle Hotels in Tabelle 1 (Tab 1)
-    private void showHotelsInTable() {
-        String[] columns = {"ID", "Category", "Hotel Name", "Address", "City", "City Code", "No. of Rooms", "No. of Beds", "Last Transaction"};
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
+    private void loadHotelsInTable() {
+        DefaultTableModel model = new DefaultTableModel(new String[]{
+                "ID", "Category", "Hotel Name", "Adresse", "City", "PLZ", "Rooms", "Beds", "Last Reported Transactional Data"
+        }, 0);
+
         for (Hotel hotel : hotels) {
-            model.addRow(new Object[] {
+            Object[] rowData = {
                     hotel.getId(),
                     hotel.getCategory(),
                     hotel.getName(),
@@ -117,60 +144,58 @@ public class hotel_rep extends JPanel {
                     hotel.getNoRooms(),
                     hotel.getNoBeds(),
                     lastTransactionMap.getOrDefault(hotel.getId(), "")
-            });
+            };
+            model.addRow(rowData);
         }
         table1.setModel(model);
     }
 
-    // Zeigt pro Hotel die letzte Buchung in Tabelle 2 (Tab 2)
-    private void showTransactionalTable() {
-        String[] columns = {"ID", "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year"};
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
+    private void loadTransactionalTable() {
+        DefaultTableModel model = new DefaultTableModel(new String[]{
+                "ID", "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year"
+        }, 0);
+
         for (Hotel hotel : hotels) {
-            Map<String, Object> occ = getLastOccupancy(hotel.getId());
-            if (occ == null) {
-                model.addRow(new Object[] {hotel.getId(), hotel.getName(), "", "", "", ""});
+            Map<String, Object> lastOcc = null;
+            for (Map<String, Object> occ : occupancies) {
+                if (((int) occ.get("hotelId")) == hotel.getId()) {
+                    if (lastOcc == null) {
+                        lastOcc = occ;
+                    } else {
+                        int y1 = (int) lastOcc.get("year");
+                        int m1 = (int) lastOcc.get("month");
+                        int y2 = (int) occ.get("year");
+                        int m2 = (int) occ.get("month");
+                        if (y2 > y1 || (y2 == y1 && m2 > m1)) lastOcc = occ;
+                    }
+                }
+            }
+            Object[] rowData;
+            if (lastOcc == null) {
+                rowData = new Object[]{hotel.getId(), hotel.getName(), "", "", "", ""};
             } else {
-                model.addRow(new Object[] {
+                rowData = new Object[]{
                         hotel.getId(),
                         hotel.getName(),
-                        occ.get("roomOcc"),
-                        occ.get("bedOcc"),
-                        occ.get("month"),
-                        occ.get("year")
-                });
+                        lastOcc.get("roomOcc"),
+                        lastOcc.get("bedOcc"),
+                        lastOcc.get("month"),
+                        lastOcc.get("year")
+                };
             }
+            model.addRow(rowData);
         }
         table2.setModel(model);
     }
 
-    // Sucht die letzte Belegung eines Hotels (hilfreich für Anzeige)
-    private Map<String, Object> getLastOccupancy(int hotelId) {
-        Map<String, Object> latest = null;
-        for (Map<String, Object> occ : occupancies) {
-            if (((int) occ.get("hotelId")) == hotelId) {
-                if (latest == null) latest = occ;
-                else if (isLater(occ, latest)) latest = occ;
-            }
-        }
-        return latest;
-    }
-
-    // Vergleicht, ob occ1 später ist als occ2 (nach Jahr und Monat)
-    private boolean isLater(Map<String, Object> occ1, Map<String, Object> occ2) {
-        int y1 = (int) occ1.get("year"), m1 = (int) occ1.get("month");
-        int y2 = (int) occ2.get("year"), m2 = (int) occ2.get("month");
-        return y1 > y2 || (y1 == y2 && m1 > m2);
-    }
-
-    // Filtert Tabelle 3 nach Auswahl
     private void filterTransactionalData() {
         String selectedYear = (String) comboBox4.getSelectedItem();
         String selectedMonth = (String) comboBox5.getSelectedItem();
         String selectedHotel = (String) comboBox15.getSelectedItem();
 
-        DefaultTableModel occModel = new DefaultTableModel(
-                new String[]{"ID", "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year"}, 0);
+        DefaultTableModel occModel = new DefaultTableModel(new String[]{
+                "ID", "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year"
+        }, 0);
 
         for (Map<String, Object> occ : occupancies) {
             boolean match = true;
@@ -185,61 +210,24 @@ public class hotel_rep extends JPanel {
                 if (!Objects.equals(occ.get("hotelName"), selectedHotel)) match = false;
             }
             if (match) {
-                occModel.addRow(new Object[]{
+                Object[] row = {
                         occ.get("hotelId"),
                         occ.get("hotelName"),
                         occ.get("roomOcc"),
                         occ.get("bedOcc"),
                         occ.get("month"),
                         occ.get("year")
-                });
+                };
+                occModel.addRow(row);
             }
         }
         table3.setModel(occModel);
     }
 
-    // Öffnet einen Dialog, um eine neue Buchung einzutragen (Tab 2)
-    private void openAddTransactionDialog() {
-        int row = table2.getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a hotel first!");
-            return;
-        }
-        int hotelId = Integer.parseInt(table2.getValueAt(row, 0).toString());
-        String hotelName = (String) table2.getValueAt(row, 1);
-
-        AddTransactionalDataDialog dialog = new AddTransactionalDataDialog(
-                (JFrame) SwingUtilities.getWindowAncestor(this), hotelId, hotelName);
-        dialog.setVisible(true);
-
-        if (dialog.isSaved()) {
-            int year = dialog.getSelectedYear();
-            int month = dialog.getSelectedMonth();
-            int roomOcc = dialog.getRoomOccupancy();
-            int bedOcc = dialog.getBedOccupancy();
-
-            Map<String, Object> occ = new HashMap<>();
-            occ.put("hotelId", hotelId);
-            occ.put("hotelName", hotelName);
-            occ.put("year", year);
-            occ.put("month", month);
-            occ.put("roomOcc", roomOcc);
-            occ.put("bedOcc", bedOcc);
-            occupancies.add(occ);
-
-            lastTransactionMap.put(hotelId, LocalDate.now().format(dateFormatter));
-
-            showHotelsInTable();
-            showTransactionalTable();
-            filterTransactionalData();
-        }
-    }
-
-    // Hotel bearbeiten (Tab 1)
     private void button5(ActionEvent e) {
         int row = table1.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a hotel to edit!");
+            JOptionPane.showMessageDialog(this, "Please select a hotel!");
             return;
         }
         int id = Integer.parseInt(table1.getValueAt(row, 0).toString());
@@ -262,6 +250,7 @@ public class hotel_rep extends JPanel {
         hotel.setNoRooms(noRooms);
         hotel.setNoBeds(noBeds);
 
+        // Hotelname auch in Transaktionsdaten aktualisieren
         for (Map<String, Object> occ : occupancies) {
             if (((int) occ.get("hotelId")) == hotel.getId()) {
                 occ.put("hotelName", hotel.getName());
@@ -272,68 +261,77 @@ public class hotel_rep extends JPanel {
         EditHotelDialog dialog = new EditHotelDialog(topFrame, hotel);
         dialog.setVisible(true);
 
-        if (dialog.isSaved()) {
-            HotelDAO.updateHotel(hotel);
-            hotels = HotelDAO.getAllHotels();
-        }
-
-        showHotelsInTable();
-        showTransactionalTable();
+        loadHotelsInTable();
+        loadTransactionalTable();
         filterTransactionalData();
-        updateHotelComboBox();
+        updateHotelComboBox(); // Wichtig: Nach Namensänderung Dropdown aktualisieren!
     }
 
-    // Vereinfachter Dialog zum Hinzufügen von Transaktionsdaten
     private static class AddTransactionalDataDialog extends JDialog {
         private boolean saved = false;
-        private JComboBox<String> yearCombo, monthCombo;
-        private JTextField roomField, bedField;
+        private JComboBox<String> yearCombo;
+        private JComboBox<String> monthCombo;
+        private JTextField roomField;
+        private JTextField bedField;
 
         public AddTransactionalDataDialog(JFrame parent, int hotelId, String hotelName) {
             super(parent, "Add Transactional Data", true);
+            setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.anchor = GridBagConstraints.WEST;
 
-            JPanel mainPanel = new JPanel();
-            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-            mainPanel.add(new JLabel("Hotel: " + hotelName + " (ID: " + hotelId + ")"));
+            gbc.gridx = 0; gbc.gridy = 0;
+            add(new JLabel("Hotel:"), gbc);
+            gbc.gridx = 1;
+            JLabel nameLabel = new JLabel(hotelName);
+            nameLabel.setFont(nameLabel.getFont().deriveFont(Font.BOLD));
+            add(nameLabel, gbc);
 
-            JPanel yearPanel = new JPanel();
-            yearPanel.add(new JLabel("Year:"));
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Hotel ID:"), gbc);
+            gbc.gridx = 1;
+            JLabel idLabel = new JLabel(Integer.toString(hotelId));
+            idLabel.setFont(idLabel.getFont().deriveFont(Font.BOLD));
+            add(idLabel, gbc);
+
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Year:"), gbc);
+            gbc.gridx = 1;
             yearCombo = new JComboBox<>();
             yearCombo.addItem("---select---");
             for (int y = 2025; y >= 2000; y--) yearCombo.addItem(String.valueOf(y));
-            yearPanel.add(yearCombo);
-            mainPanel.add(yearPanel);
+            add(yearCombo, gbc);
 
-            JPanel monthPanel = new JPanel();
-            monthPanel.add(new JLabel("Month:"));
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Month:"), gbc);
+            gbc.gridx = 1;
             monthCombo = new JComboBox<>();
             monthCombo.addItem("---select---");
             String[] months = {"January", "February", "March", "April", "May", "June", "July", "August",
                     "September", "October", "November", "December"};
             for (String month : months) monthCombo.addItem(month);
-            monthPanel.add(monthCombo);
-            mainPanel.add(monthPanel);
+            add(monthCombo, gbc);
 
-            JPanel roomPanel = new JPanel();
-            roomPanel.add(new JLabel("Room Occupancy:"));
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Room Occupancy:"), gbc);
+            gbc.gridx = 1;
             roomField = new JTextField(10);
-            roomPanel.add(roomField);
-            mainPanel.add(roomPanel);
+            add(roomField, gbc);
 
-            JPanel bedPanel = new JPanel();
-            bedPanel.add(new JLabel("Bed Occupancy:"));
+            gbc.gridx = 0; gbc.gridy++;
+            add(new JLabel("Bed Occupancy:"), gbc);
+            gbc.gridx = 1;
             bedField = new JTextField(10);
-            bedPanel.add(bedField);
-            mainPanel.add(bedPanel);
+            add(bedField, gbc);
 
-            JPanel btnPanel = new JPanel();
+            gbc.gridx = 0; gbc.gridy++;
             JButton saveBtn = new JButton("Save");
             JButton cancelBtn = new JButton("Cancel");
-            btnPanel.add(saveBtn);
-            btnPanel.add(cancelBtn);
-            mainPanel.add(btnPanel);
+            add(saveBtn, gbc);
+            gbc.gridx = 1;
+            add(cancelBtn, gbc);
 
-            // Speichern: Prüfe Eingaben
             saveBtn.addActionListener(e -> {
                 String yearSel = (String) yearCombo.getSelectedItem();
                 String monthSel = (String) monthCombo.getSelectedItem();
@@ -341,31 +339,52 @@ public class hotel_rep extends JPanel {
                 String bedText = bedField.getText().trim();
 
                 if ("---select---".equals(yearSel) || "---select---".equals(monthSel)) {
-                    JOptionPane.showMessageDialog(this, "Please select both Year and Month.");
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Please select both Year and Month before saving.",
+                            "Selection missing",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                     return;
                 }
                 if (roomText.isEmpty() || bedText.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Please enter both Room and Bed Occupancy.");
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Please enter both Room Occupancy and Bed Occupancy.",
+                            "Missing input",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                     return;
                 }
                 if (!isNumeric(roomText) || !isNumeric(bedText)) {
-                    JOptionPane.showMessageDialog(this, "Please enter valid numbers for Room and Bed Occupancy.");
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Please enter valid numbers for Room Occupancy and Bed Occupancy.",
+                            "Invalid input",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                     return;
                 }
                 saved = true;
                 setVisible(false);
             });
+
             cancelBtn.addActionListener(e -> setVisible(false));
 
-            setContentPane(mainPanel);
             pack();
             setLocationRelativeTo(parent);
         }
 
         private boolean isNumeric(String str) {
-            try { Integer.parseInt(str); return true; }
-            catch (Exception e) { return false; }
+            if (str == null || str.isEmpty()) return false;
+            try {
+                Integer.parseInt(str);
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
         }
+
         public boolean isSaved() { return saved; }
         public int getSelectedYear() { return Integer.parseInt((String) yearCombo.getSelectedItem()); }
         public int getSelectedMonth() { return monthCombo.getSelectedIndex(); }
@@ -374,11 +393,9 @@ public class hotel_rep extends JPanel {
     }
 
     //ab da nichts verändern ?!
-
-//ab da nichts verändern ?!
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
+        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
         panel7 = new JPanel();
@@ -511,7 +528,7 @@ public class hotel_rep extends JPanel {
                                                 .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
                                                 .addContainerGap())
                                             .addGroup(GroupLayout.Alignment.TRAILING, panel7Layout.createSequentialGroup()
-                                                .addGap(0, 525, Short.MAX_VALUE)
+                                                .addGap(0, 520, Short.MAX_VALUE)
                                                 .addComponent(button5)
                                                 .addGap(122, 122, 122))))
                                     .addGroup(panel7Layout.createSequentialGroup()
@@ -539,7 +556,7 @@ public class hotel_rep extends JPanel {
                     panel1Layout.createParallelGroup()
                         .addGroup(panel1Layout.createSequentialGroup()
                             .addComponent(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 21, Short.MAX_VALUE))
+                            .addGap(0, 25, Short.MAX_VALUE))
                 );
                 panel1Layout.setVerticalGroup(
                     panel1Layout.createParallelGroup()
@@ -595,14 +612,14 @@ public class hotel_rep extends JPanel {
                                     .addGroup(panel9Layout.createSequentialGroup()
                                         .addGap(9, 9, 9)
                                         .addComponent(button6)))
-                                .addContainerGap(7, Short.MAX_VALUE))
+                                .addContainerGap(11, Short.MAX_VALUE))
                     );
                     panel9Layout.setVerticalGroup(
                         panel9Layout.createParallelGroup()
                             .addGroup(GroupLayout.Alignment.TRAILING, panel9Layout.createSequentialGroup()
                                 .addGap(32, 32, 32)
                                 .addComponent(button6)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 369, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 377, Short.MAX_VALUE)
                                 .addComponent(button3)
                                 .addGap(23, 23, 23))
                     );
@@ -623,7 +640,7 @@ public class hotel_rep extends JPanel {
                                     .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 682, GroupLayout.PREFERRED_SIZE)
                                     .addContainerGap(76, Short.MAX_VALUE))
                                 .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 471, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 454, Short.MAX_VALUE)
                                     .addGroup(panel2Layout.createParallelGroup()
                                         .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
                                             .addComponent(label5)
@@ -637,7 +654,7 @@ public class hotel_rep extends JPanel {
                         .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
                             .addContainerGap()
                             .addComponent(label5)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                             .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 349, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(button4)
@@ -676,14 +693,14 @@ public class hotel_rep extends JPanel {
                                     .addGroup(panel10Layout.createSequentialGroup()
                                         .addGap(15, 15, 15)
                                         .addComponent(button7)))
-                                .addContainerGap(8, Short.MAX_VALUE))
+                                .addContainerGap(12, Short.MAX_VALUE))
                     );
                     panel10Layout.setVerticalGroup(
                         panel10Layout.createParallelGroup()
                             .addGroup(GroupLayout.Alignment.TRAILING, panel10Layout.createSequentialGroup()
                                 .addGap(27, 27, 27)
                                 .addComponent(button8)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 384, Short.MAX_VALUE)
                                 .addComponent(button7)
                                 .addGap(21, 21, 21))
                     );
@@ -896,7 +913,7 @@ public class hotel_rep extends JPanel {
                                     .addComponent(label3)
                                     .addGap(18, 18, 18)
                                     .addComponent(comboBox15, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
                                     .addComponent(label4)
                                     .addGap(78, 78, 78))))
                 );
@@ -915,7 +932,7 @@ public class hotel_rep extends JPanel {
                             .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(comboBox5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(label2))
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                             .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE)
                             .addGap(34, 34, 34))
                         .addComponent(panel10, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
@@ -944,7 +961,7 @@ public class hotel_rep extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
+    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private JPanel panel7;

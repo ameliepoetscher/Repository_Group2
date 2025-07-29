@@ -694,4 +694,5 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attrib
 693,"**","Blumenhof für die Gäste","-","-","Wultendorf 8","Staatz","2134","-",27,46,"",""
 694,"**","Privatzimmer Hofer","-","-","17 Bärnkopf","Bärnkopf","3665","-",11,37,"",""
 695,"***","Angerhof","-","-","Forstamt 9","Dorfstetten","4392","-",23,62,"",""
-696,"*","Heurigenhof Bründlmayer","-","-","Walterstraße 14","Langenlois","3550","-",80,43,"",""
+696,"*","Heurigenhof Bründlmayer","-","-","Walterstraße 14","Langenlois","3550","-",80,43,"family friendly",""
+697,"*****","TestHotel","-","-","Wohlmutstraße","Vienna","1020","-",400,500,"sauna",""

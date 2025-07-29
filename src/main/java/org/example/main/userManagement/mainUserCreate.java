@@ -18,9 +18,9 @@ public class mainUserCreate {
         }
 
         // === Normaler Benutzer ===
-        User user = UserDAO.findByUsername("normalUser");
+        User user = UserDAO.findByUsername("fancyUser");
         if (user == null) {
-            user = new User("normalUser", "1234", Role.USER);
+            user = new User("fancyUser", "1234", Role.USER);
             UserDAO.saveUser(user);
             System.out.println("Normal user created.");
         } else {
