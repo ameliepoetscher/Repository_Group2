@@ -56,7 +56,7 @@ public class startseite extends JPanel {
     // private JButton button25, deleteButton, button6, button3, button15, button5, button4, button1, button2;
     // private JComboBox<String> comboBox18;
 
-    // Bitte deklariere alle Komponenten entsprechend deiner .form Datei
+    // Bitte deklariere alle Komponenten entsprechend deiner .form Date
 
     public startseite() {
         initComponents();
