@@ -56,7 +56,7 @@ public class startseite extends JPanel {
     // private JButton button25, deleteButton, button6, button3, button15, button5, button4, button1, button2;
     // private JComboBox<String> comboBox18;
 
-    // Bitte deklariere alle Komponenten entsprechend deiner .form Date
+    // Bitte deklariere alle Komponenten entsprechend deiner .form Datei!
 
     public startseite() {
         initComponents();
@@ -715,13 +715,13 @@ public class startseite extends JPanel {
         JOptionPane.showMessageDialog(
                 this,
                 "Welcome to the Lower Austria Tourist Portal!\n\n" +
-                        "Using the Tabs & Controls:\n" +
-                        "1. In the Hotel List tab, click + to add a hotel, select a row and use Edit or Delete, then click Save to commit changes.\n" +
-                        "2. In Hotel Summary, click Update to refresh aggregated statistics per hotel category.\n" +
-                        "3. In Transactional Data, choose a hotel, year, and month, enter room and bed occupancy, optionally use Add Attribute, then click Save to record.\n" +
-                        "4. In Transactional Data List, browse existing occupancy entries and use Save for edits or Delete to remove.\n" +
-                        "5. In Combined Overview, apply filters (hotel, year, month, category) to view consolidated occupancy data.\n\n" +
-                        "If you need further assistance, please consult the user guide or contact support@cloud4you.com.",
+                        "Here’s how to use this application:\n" +
+                        "1. In the Hotels tab, view and edit master data for all hotels.\n" +
+                        "2. In Hotels Summary, see aggregate statistics per hotel category.\n" +
+                        "3. In Occupancy, select a year, month, and category to view occupancy trends.\n" +
+                        "4. In Occupancy Summary, choose date ranges or hotel to see summarized occupancy data.\n\n" +
+                        "Use the +, save and logout buttons as needed. If you need further assistance,\n" +
+                        "please consult the user guide or contact support@example.com.",
                 "Help",
                 JOptionPane.INFORMATION_MESSAGE
         );
@@ -921,10 +921,10 @@ public class startseite extends JPanel {
                     //---- button6 ----
                     button6.setText("+");
                     button6.addActionListener(e -> {
-                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                        AddMasterDataHandler.addHotel(parentFrame, table1);
-                    });
-
+			Add(e);
+			button6(e);
+			AddButton(e);
+		});
 
                     //---- button25 ----
                     button25.setText("Save");
@@ -934,11 +934,7 @@ public class startseite extends JPanel {
 
                     //---- button3 ----
                     button3.setText("Edit");
-                    button3.addActionListener(e -> {
-                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                        EditMasterDataHandler.editHotel(parentFrame, table1);
-                    });
-
+                    button3.addActionListener(e -> EditButton(e));
 
                     GroupLayout panel7Layout = new GroupLayout(panel7);
                     panel7.setLayout(panel7Layout);
