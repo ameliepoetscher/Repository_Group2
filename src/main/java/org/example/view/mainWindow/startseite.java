@@ -56,7 +56,7 @@ public class startseite extends JPanel {
     // private JButton button25, deleteButton, button6, button3, button15, button5, button4, button1, button2;
     // private JComboBox<String> comboBox18;
 
-    // Bitte deklariere alle Komponenten entsprechend deiner .form Datei!
+    // Bitte deklariere alle Komponenten entsprechend deiner .form Date
 
     public startseite() {
         initComponents();
@@ -715,13 +715,13 @@ public class startseite extends JPanel {
         JOptionPane.showMessageDialog(
                 this,
                 "Welcome to the Lower Austria Tourist Portal!\n\n" +
-                        "Here’s how to use this application:\n" +
-                        "1. In the Hotels tab, view and edit master data for all hotels.\n" +
-                        "2. In Hotels Summary, see aggregate statistics per hotel category.\n" +
-                        "3. In Occupancy, select a year, month, and category to view occupancy trends.\n" +
-                        "4. In Occupancy Summary, choose date ranges or hotel to see summarized occupancy data.\n\n" +
-                        "Use the +, save and logout buttons as needed. If you need further assistance,\n" +
-                        "please consult the user guide or contact support@example.com.",
+                        "Using the Tabs & Controls:\n" +
+                        "1. In the Hotel List tab, click + to add a hotel, select a row and use Edit or Delete, then click Save to commit changes.\n" +
+                        "2. In Hotel Summary, click Update to refresh aggregated statistics per hotel category.\n" +
+                        "3. In Transactional Data, choose a hotel, year, and month, enter room and bed occupancy, optionally use Add Attribute, then click Save to record.\n" +
+                        "4. In Transactional Data List, browse existing occupancy entries and use Save for edits or Delete to remove.\n" +
+                        "5. In Combined Overview, apply filters (hotel, year, month, category) to view consolidated occupancy data.\n\n" +
+                        "If you need further assistance, please consult the user guide or contact support@cloud4you.com.",
                 "Help",
                 JOptionPane.INFORMATION_MESSAGE
         );
@@ -756,7 +756,6 @@ public class startseite extends JPanel {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
         this2 = new JPanel();
-        label21 = new JLabel();
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
         panel7 = new JPanel();
@@ -840,9 +839,6 @@ public class startseite extends JPanel {
                     .addGap(0, 0, Short.MAX_VALUE)
             );
         }
-
-        //---- label21 ----
-        label21.setIcon(new ImageIcon(getClass().getResource("/logo2.png")));
 
         //======== tabbedPane1 ========
         {
@@ -1053,9 +1049,9 @@ public class startseite extends JPanel {
                                 .addGroup(GroupLayout.Alignment.TRAILING, panel25Layout.createSequentialGroup()
                                     .addGap(25, 25, 25)
                                     .addComponent(button27)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 261, Short.MAX_VALUE)
                                     .addComponent(button26)
-                                    .addGap(40, 40, 40))
+                                    .addGap(39, 39, 39))
                         );
                     }
 
@@ -1586,11 +1582,11 @@ public class startseite extends JPanel {
 
                     //---- comboBox17 ----
                     comboBox17.setModel(new DefaultComboBoxModel<>(new String[] {
-                        "\u2605",
-                        "\u2605\u2605",
-                        "\u2605\u2605\u2605",
-                        "\u2605\u2605\u2605\u2605",
-                        "\u2605\u2605\u2605\u2605\u2605"
+                        "*",
+                        "**",
+                        "***",
+                        "****",
+                        "*****"
                     }));
 
                     //---- label23 ----
@@ -1635,27 +1631,29 @@ public class startseite extends JPanel {
                                         .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                             .addComponent(comboBox17)
                                             .addComponent(comboBox18, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                            .addComponent(label12)
-                                            .addComponent(label14))
-                                        .addGap(6, 6, 6)
-                                        .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(panel21Layout.createParallelGroup()
+                                            .addGroup(panel21Layout.createSequentialGroup()
+                                                .addComponent(label12)
+                                                .addGap(6, 6, 6))
+                                            .addGroup(GroupLayout.Alignment.TRAILING, panel21Layout.createSequentialGroup()
+                                                .addComponent(label14)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)))
+                                        .addGroup(panel21Layout.createParallelGroup()
                                             .addGroup(panel21Layout.createSequentialGroup()
                                                 .addComponent(comboBox9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(label15))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                                                .addComponent(label15)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(comboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(241, Short.MAX_VALUE))
                                             .addGroup(panel21Layout.createSequentialGroup()
                                                 .addComponent(comboBox7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(31, 31, 31)
-                                                .addComponent(label13)))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(panel21Layout.createParallelGroup()
-                                            .addComponent(comboBox8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(panel21Layout.createSequentialGroup()
-                                                .addGap(6, 6, 6)
-                                                .addComponent(comboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(0, 226, Short.MAX_VALUE))))
+                                                .addComponent(label13)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(comboBox8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 244, Short.MAX_VALUE))))))
                     );
                     panel21Layout.setVerticalGroup(
                         panel21Layout.createParallelGroup()
@@ -1669,20 +1667,22 @@ public class startseite extends JPanel {
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(panel21Layout.createParallelGroup()
                                             .addComponent(label23)
-                                            .addComponent(comboBox17, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE))
+                                            .addComponent(comboBox17, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(panel21Layout.createSequentialGroup()
                                         .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                             .addComponent(comboBox7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                             .addComponent(label12)
                                             .addComponent(label13)
                                             .addComponent(comboBox8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                            .addComponent(comboBox9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(label14)
-                                            .addComponent(label15)
-                                            .addComponent(comboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(panel21Layout.createParallelGroup()
+                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                .addComponent(comboBox9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(label14))
+                                            .addGroup(panel21Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                .addComponent(label15)
+                                                .addComponent(comboBox10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(0, 6, Short.MAX_VALUE)
                                 .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(button21)
@@ -1992,7 +1992,7 @@ public class startseite extends JPanel {
                     panel23Layout.setVerticalGroup(
                         panel23Layout.createParallelGroup()
                             .addComponent(panel24, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(GroupLayout.Alignment.TRAILING, panel23Layout.createSequentialGroup()
+                            .addGroup(panel23Layout.createSequentialGroup()
                                 .addGap(15, 15, 15)
                                 .addGroup(panel23Layout.createParallelGroup()
                                     .addGroup(panel23Layout.createSequentialGroup()
@@ -2040,15 +2040,12 @@ public class startseite extends JPanel {
                     .addComponent(this2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 822, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(label21, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap())
+                    .addContainerGap(452, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup()
                 .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addComponent(label21, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                    .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(this2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addGap(412, 412, 412))
                 .addGroup(layout.createSequentialGroup()
@@ -2062,7 +2059,6 @@ public class startseite extends JPanel {
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
     private JPanel this2;
-    private JLabel label21;
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private JPanel panel7;
