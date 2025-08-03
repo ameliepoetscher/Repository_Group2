@@ -6,13 +6,10 @@ import org.example.data.txt.HotelFileReader;
 import org.example.data.txt.HotelFileWriter;
 import org.example.data.txt.OccupancyFileReader;
 import org.example.view.auth.login;
+import org.example.view.hotel.HotelDialog;
 import org.example.view.occupancy.AddTransactionalDataDialog;
 import org.example.view.hotel.HotelTableBuilder;
 import org.example.view.hotelRep.TransactionTableBuilder;
-import org.example.view.hotel.HotelDataSaver;
-import org.example.view.hotelRep.TransactionalDataFiller;
-import org.example.view.hotel.HotelTableModelBuilder;
-
 
 import java.time.LocalDate;
 import java.util.stream.Stream;
@@ -114,16 +111,7 @@ public class startseite extends JPanel {
 
 
         // Button-Listener für Hotel-Panel
-        button25.addActionListener(e -> {
-            List<String[]> hotelRows = HotelDataSaver.extractDataFromTable(table1);
-
-            for (String[] row : hotelRows) {
-                System.out.println("Hotel: " + String.join(", ", row));
-            }
-
-            // Optional: hier kannst du die Daten weiterverarbeiten oder speichern
-        });
-
+        button25.addActionListener(e -> saveHotelData());
         deleteButton.addActionListener(e -> {
             DeleteMasterDataHandler.deleteHotel(table1);
         });
@@ -197,11 +185,11 @@ public class startseite extends JPanel {
         }
         table1.setModel(model);
 
-
-
         // HIER transactionalDataAlt befüllen:
-        TransactionalDataFiller.fill(transactionalDataAlt, model, 8);
-
+        transactionalDataAlt.clear();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            transactionalDataAlt.put(i, model.getValueAt(i, 8).toString());
+        }
     }
 
     private void saveHotelData() {
@@ -519,24 +507,20 @@ public class startseite extends JPanel {
                         .thenComparingInt(Occupancy::getMonth)
         );
 
-        String[] columnNames = {
-                "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year", "Attribute"
-        };
-
-        List<Object[]> rowDataList = new ArrayList<>();
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{ "Hotel Name","Room Occupancy","Bed Occupancy","Month","Year","Attribute" },
+                0
+        );
         for (Occupancy o : toDisplay) {
-            rowDataList.add(new Object[]{
+            model.addRow(new Object[]{
                     o.getHotel().getName(),
                     o.getUsedRooms(),
                     o.getUsedBeds(),
                     getMonthName(o.getMonth()),
                     o.getYear(),
-                    "" // Platz für Attribute
+                    ""  // Platz für Attribute
             });
         }
-
-        DefaultTableModel model = HotelTableModelBuilder.createHotelTableModel(rowDataList, columnNames);
-
         table3.setModel(model);
     }
 
@@ -747,6 +731,22 @@ public class startseite extends JPanel {
         // TODO add your code here
     }
 
+    private void Add(ActionEvent e) {
+        // TODO add your code here
+    }
+
+    private void button6(ActionEvent e) {
+        // TODO add your code here
+    }
+
+    private void AddButton(ActionEvent e) {
+        // TODO add your code here
+    }
+
+    private void EditButton(ActionEvent e) {
+        // TODO add your code here
+    }
+
     // ===== JFormDesigner initComponents und Variablen-Deklaration =====
     // ... hier bleibt alles wie vom JFormDesigner erzeugt!
 
@@ -764,8 +764,11 @@ public class startseite extends JPanel {
         button1 = new JButton();
         button2 = new JButton();
         scrollPane1 = new JScrollPane();
+        table1 = new JTable();
+        button6 = new JButton();
         button25 = new JButton();
         deleteButton = new JButton();
+        button3 = new JButton();
         panel3 = new JPanel();
         panel17 = new JPanel();
         button15 = new JButton();
@@ -891,8 +894,27 @@ public class startseite extends JPanel {
                     //======== scrollPane1 ========
                     {
 
-                        table1 = HotelTableBuilder.createHotelTable();
-
+                        //---- table1 ----
+                        table1.setModel(new DefaultTableModel(
+                            new Object[][] {
+                                {"1", "Hotel Alpha", "Vienna", "20", "35"},
+                                {"2", "Hotel Beta", "Graz", "30", "45"},
+                                {"3", "Hotel Gamma", "Linz", "40", "55"},
+                                {"4", "Hotel Delta", "Salzburg ", "50", "65"},
+                                {"5", "Hotel Epsilon", "Klagenfurt", "60", "75"},
+                            },
+                            new String[] {
+                                "ID", "name", "adresse", "rooms", "beds"
+                            }
+                        ) {
+                            boolean[] columnEditable = new boolean[] {
+                                false, true, true, true, true
+                            };
+                            @Override
+                            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                return columnEditable[columnIndex];
+                            }
+                        });
                         {
                             TableColumnModel cm = table1.getColumnModel();
                             cm.getColumn(0).setPreferredWidth(5);
@@ -901,11 +923,11 @@ public class startseite extends JPanel {
                     }
 
                     //---- button6 ----
-                    button6 = new JButton("Speichern");  // <--- das initialisiert den Button
+                    button6.setText("+");
                     button6.addActionListener(e -> {
-
+                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                        AddMasterDataHandler.addHotel(parentFrame, table1);
                     });
-
 
 
                     //---- button25 ----
@@ -914,9 +936,7 @@ public class startseite extends JPanel {
                     //---- deleteButton ----
                     deleteButton.setText("Delete");
 
-
                     //---- button3 ----
-                    button3 = new JButton();
                     button3.setText("Edit");
                     button3.addActionListener(e -> {
                         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
@@ -1145,9 +1165,7 @@ public class startseite extends JPanel {
                 //---- button7 ----
                 button7.setText("Delete");
                 button7.addActionListener(e -> {
-                    DeleteMasterDataHandler.deleteHotel(table1);
-
-                button7(e);
+			button7(e);
 			button7(e);
 		});
 
@@ -1926,8 +1944,15 @@ public class startseite extends JPanel {
                     {
 
                         //---- table2 ----
-                        table2 = TransactionTableBuilder.createTransactionTable();
-
+                        table2.setModel(new DefaultTableModel(
+                            new Object[][] {
+                                {null, null, null, null, null, null},
+                                {null, null, null, null, null, null},
+                            },
+                            new String[] {
+                                "hotel name", "rooms", "room occupancy", "beds", "bed occupancy", "category"
+                            }
+                        ));
                         scrollPane2.setViewportView(table2);
                     }
 
@@ -2044,12 +2069,12 @@ public class startseite extends JPanel {
     private JPanel panel8;
     private JButton button1;
     private JButton button2;
-    private JButton button3;
-    private JButton button6;
     private JScrollPane scrollPane1;
     private JTable table1;
+    private JButton button6;
     private JButton button25;
     private JButton deleteButton;
+    private JButton button3;
     private JPanel panel3;
     private JPanel panel17;
     private JButton button15;

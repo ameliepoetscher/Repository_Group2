@@ -375,7 +375,7 @@ public class hotel_rep extends JPanel {
 
     //ab da nichts verändern ?!
 
-//ab da nichts verändern ?!
+    //ab da nichts verändern ?!
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
