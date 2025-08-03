@@ -12,7 +12,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attrib
 11,"*","Win Budget B&B","-","-","Wiener Straße-Werkstraße 113/2.4 2.5","Wiener","2700","-",44,142,""
 12,"****","Diamond City Hotel Tulln","-","-","Nussallee 18","Tulln","3430","-",41,345,""
 13,"***","Hotel Unter den Linden","-","-","Schillerstraße 5","Krems","3500","-",32,69,""
-14,"***","Stadthotel Deutsch Wagram","-","-","25 Hauptstrasse","Deutsch-Wagram","2232","-",3,19,""
+14,"***","Stadthotel Deutsch Wagram","-","-","25 Hauptstrasse","Deutsch-Wagram","2232","-",4,19,""
 15,"****","Steigenberger Hotel and Spa","-","-","Am Goldberg 2","Krems","3500","-",1,4,""
 16,"**","Das Alfred","-","-","Rödlgasse 11","St.","3100","-",24,21,""
 17,"***","Hotel Zentral","-","-","Hauptplatz 27","Wiener","2700","-",59,288,""
