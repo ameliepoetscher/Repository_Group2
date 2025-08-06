@@ -9,7 +9,6 @@ import org.example.view.auth.login;
 import org.example.view.hotel.HotelDialog;
 import org.example.view.occupancy.AddTransactionalDataDialog;
 
-
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
