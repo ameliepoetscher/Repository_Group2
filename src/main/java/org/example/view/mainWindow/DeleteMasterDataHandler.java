@@ -11,7 +11,7 @@ public class DeleteMasterDataHandler {
         if (selectedRow != -1) {
             ((DefaultTableModel) table.getModel()).removeRow(selectedRow);
         } else {
-            JOptionPane.showMessageDialog(null, "Bitte eine Zeile auswählen!");
+            JOptionPane.showMessageDialog(null, "Please select one hotel!");
         }
     }
 }
