@@ -397,7 +397,7 @@ public class hotel_rep extends JPanel {
     //ab da nichts verändern ?!
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - amaim rathor
+        // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
         panel7 = new JPanel();
@@ -460,25 +460,25 @@ public class hotel_rep extends JPanel {
                         GroupLayout panel8Layout = new GroupLayout(panel8);
                         panel8.setLayout(panel8Layout);
                         panel8Layout.setHorizontalGroup(
-                                panel8Layout.createParallelGroup()
+                            panel8Layout.createParallelGroup()
+                                .addGroup(panel8Layout.createSequentialGroup()
+                                    .addGroup(panel8Layout.createParallelGroup()
                                         .addGroup(panel8Layout.createSequentialGroup()
-                                                .addGroup(panel8Layout.createParallelGroup()
-                                                        .addGroup(panel8Layout.createSequentialGroup()
-                                                                .addGap(24, 24, 24)
-                                                                .addComponent(button2))
-                                                        .addGroup(panel8Layout.createSequentialGroup()
-                                                                .addGap(15, 15, 15)
-                                                                .addComponent(button1)))
-                                                .addContainerGap(15, Short.MAX_VALUE))
+                                            .addGap(24, 24, 24)
+                                            .addComponent(button2))
+                                        .addGroup(panel8Layout.createSequentialGroup()
+                                            .addGap(15, 15, 15)
+                                            .addComponent(button1)))
+                                    .addContainerGap(15, Short.MAX_VALUE))
                         );
                         panel8Layout.setVerticalGroup(
-                                panel8Layout.createParallelGroup()
-                                        .addGroup(GroupLayout.Alignment.TRAILING, panel8Layout.createSequentialGroup()
-                                                .addGap(34, 34, 34)
-                                                .addComponent(button2)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(button1)
-                                                .addGap(33, 33, 33))
+                            panel8Layout.createParallelGroup()
+                                .addGroup(GroupLayout.Alignment.TRAILING, panel8Layout.createSequentialGroup()
+                                    .addGap(34, 34, 34)
+                                    .addComponent(button2)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(button1)
+                                    .addGap(33, 33, 33))
                         );
                     }
 
@@ -487,15 +487,15 @@ public class hotel_rep extends JPanel {
 
                         //---- table1 ----
                         table1.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                        {"", null, "", " ", null, null, "  ", "    ", null},
-                                },
-                                new String[] {
-                                        "ID", "Category", "Hotel Name", "Adress", "City", "PLZ", "Rooms", "Beds", "Last Transaction"
-                                }
+                            new Object[][] {
+                                {"", null, "", " ", null, null, "  ", "    ", null},
+                            },
+                            new String[] {
+                                "ID", "Category", "Hotel Name", "Adress", "City", "PLZ", "Rooms", "Beds", "Last Transaction"
+                            }
                         ) {
                             boolean[] columnEditable = new boolean[] {
-                                    false, true, true, true, true, true, true, true, true
+                                false, true, true, true, true, true, true, true, true
                             };
                             @Override
                             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -519,52 +519,52 @@ public class hotel_rep extends JPanel {
                     GroupLayout panel7Layout = new GroupLayout(panel7);
                     panel7.setLayout(panel7Layout);
                     panel7Layout.setHorizontalGroup(
-                            panel7Layout.createParallelGroup()
+                        panel7Layout.createParallelGroup()
+                            .addGroup(panel7Layout.createSequentialGroup()
+                                .addComponent(panel8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panel7Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                     .addGroup(panel7Layout.createSequentialGroup()
-                                            .addComponent(panel8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(panel7Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                    .addGroup(panel7Layout.createSequentialGroup()
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addGroup(panel7Layout.createParallelGroup()
-                                                                    .addGroup(panel7Layout.createSequentialGroup()
-                                                                            .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
-                                                                            .addContainerGap())
-                                                                    .addGroup(GroupLayout.Alignment.TRAILING, panel7Layout.createSequentialGroup()
-                                                                            .addGap(0, 525, Short.MAX_VALUE)
-                                                                            .addComponent(button5)
-                                                                            .addGap(122, 122, 122))))
-                                                    .addGroup(panel7Layout.createSequentialGroup()
-                                                            .addGap(54, 564, Short.MAX_VALUE)
-                                                            .addComponent(label6)
-                                                            .addGap(15, 15, 15))))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(panel7Layout.createParallelGroup()
+                                            .addGroup(panel7Layout.createSequentialGroup()
+                                                .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
+                                                .addContainerGap())
+                                            .addGroup(GroupLayout.Alignment.TRAILING, panel7Layout.createSequentialGroup()
+                                                .addGap(0, 525, Short.MAX_VALUE)
+                                                .addComponent(button5)
+                                                .addGap(122, 122, 122))))
+                                    .addGroup(panel7Layout.createSequentialGroup()
+                                        .addGap(54, 564, Short.MAX_VALUE)
+                                        .addComponent(label6)
+                                        .addGap(15, 15, 15))))
                     );
                     panel7Layout.setVerticalGroup(
-                            panel7Layout.createParallelGroup()
-                                    .addGroup(panel7Layout.createSequentialGroup()
-                                            .addContainerGap()
-                                            .addComponent(label6)
-                                            .addGap(27, 27, 27)
-                                            .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(button5)
-                                            .addContainerGap(37, Short.MAX_VALUE))
-                                    .addComponent(panel8, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        panel7Layout.createParallelGroup()
+                            .addGroup(panel7Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(label6)
+                                .addGap(27, 27, 27)
+                                .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(button5)
+                                .addContainerGap(37, Short.MAX_VALUE))
+                            .addComponent(panel8, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     );
                 }
 
                 GroupLayout panel1Layout = new GroupLayout(panel1);
                 panel1.setLayout(panel1Layout);
                 panel1Layout.setHorizontalGroup(
-                        panel1Layout.createParallelGroup()
-                                .addGroup(panel1Layout.createSequentialGroup()
-                                        .addComponent(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 21, Short.MAX_VALUE))
+                    panel1Layout.createParallelGroup()
+                        .addGroup(panel1Layout.createSequentialGroup()
+                            .addComponent(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 21, Short.MAX_VALUE))
                 );
                 panel1Layout.setVerticalGroup(
-                        panel1Layout.createParallelGroup()
-                                .addGroup(GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    panel1Layout.createParallelGroup()
+                        .addGroup(GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addComponent(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 );
             }
             tabbedPane1.addTab("Hotel List", panel1);
@@ -577,12 +577,12 @@ public class hotel_rep extends JPanel {
 
                     //---- table2 ----
                     table2.setModel(new DefaultTableModel(
-                            new Object[][] {
-                                    {"", "", null, null, null, null},
-                            },
-                            new String[] {
-                                    "ID", "Hotel Name", "Room Occupany", "Bed Occupancy", "Month", "Year"
-                            }
+                        new Object[][] {
+                            {"", "", null, null, null, null},
+                        },
+                        new String[] {
+                            "ID", "Hotel Name", "Room Occupany", "Bed Occupancy", "Month", "Year"
+                        }
                     ));
                     scrollPane3.setViewportView(table2);
                 }
@@ -606,24 +606,24 @@ public class hotel_rep extends JPanel {
                     GroupLayout panel9Layout = new GroupLayout(panel9);
                     panel9.setLayout(panel9Layout);
                     panel9Layout.setHorizontalGroup(
-                            panel9Layout.createParallelGroup()
+                        panel9Layout.createParallelGroup()
+                            .addGroup(panel9Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(panel9Layout.createParallelGroup()
+                                    .addComponent(button3)
                                     .addGroup(panel9Layout.createSequentialGroup()
-                                            .addGap(15, 15, 15)
-                                            .addGroup(panel9Layout.createParallelGroup()
-                                                    .addComponent(button3)
-                                                    .addGroup(panel9Layout.createSequentialGroup()
-                                                            .addGap(9, 9, 9)
-                                                            .addComponent(button6)))
-                                            .addContainerGap(7, Short.MAX_VALUE))
+                                        .addGap(9, 9, 9)
+                                        .addComponent(button6)))
+                                .addContainerGap(7, Short.MAX_VALUE))
                     );
                     panel9Layout.setVerticalGroup(
-                            panel9Layout.createParallelGroup()
-                                    .addGroup(GroupLayout.Alignment.TRAILING, panel9Layout.createSequentialGroup()
-                                            .addGap(32, 32, 32)
-                                            .addComponent(button6)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 369, Short.MAX_VALUE)
-                                            .addComponent(button3)
-                                            .addGap(23, 23, 23))
+                        panel9Layout.createParallelGroup()
+                            .addGroup(GroupLayout.Alignment.TRAILING, panel9Layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(button6)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 369, Short.MAX_VALUE)
+                                .addComponent(button3)
+                                .addGap(23, 23, 23))
                     );
                 }
 
@@ -633,35 +633,35 @@ public class hotel_rep extends JPanel {
                 GroupLayout panel2Layout = new GroupLayout(panel2);
                 panel2.setLayout(panel2Layout);
                 panel2Layout.setHorizontalGroup(
-                        panel2Layout.createParallelGroup()
+                    panel2Layout.createParallelGroup()
+                        .addGroup(panel2Layout.createSequentialGroup()
+                            .addComponent(panel9, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panel2Layout.createParallelGroup()
                                 .addGroup(panel2Layout.createSequentialGroup()
-                                        .addComponent(panel9, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(panel2Layout.createParallelGroup()
-                                                .addGroup(panel2Layout.createSequentialGroup()
-                                                        .addGap(10, 10, 10)
-                                                        .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 682, GroupLayout.PREFERRED_SIZE)
-                                                        .addContainerGap(76, Short.MAX_VALUE))
-                                                .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 471, Short.MAX_VALUE)
-                                                        .addGroup(panel2Layout.createParallelGroup()
-                                                                .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                                                                        .addComponent(label5)
-                                                                        .addGap(84, 84, 84))
-                                                                .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                                                                        .addComponent(button4)
-                                                                        .addGap(140, 140, 140))))))
+                                    .addGap(10, 10, 10)
+                                    .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 682, GroupLayout.PREFERRED_SIZE)
+                                    .addContainerGap(76, Short.MAX_VALUE))
+                                .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 471, Short.MAX_VALUE)
+                                    .addGroup(panel2Layout.createParallelGroup()
+                                        .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
+                                            .addComponent(label5)
+                                            .addGap(84, 84, 84))
+                                        .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
+                                            .addComponent(button4)
+                                            .addGap(140, 140, 140))))))
                 );
                 panel2Layout.setVerticalGroup(
-                        panel2Layout.createParallelGroup()
-                                .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(label5)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                                        .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 349, GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(button4)
-                                        .addGap(21, 21, 21))
-                                .addComponent(panel9, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                    panel2Layout.createParallelGroup()
+                        .addGroup(GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(label5)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                            .addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 349, GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(button4)
+                            .addGap(21, 21, 21))
+                        .addComponent(panel9, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                 );
             }
             tabbedPane1.addTab("Transactional Data", panel2);
@@ -686,25 +686,25 @@ public class hotel_rep extends JPanel {
                     GroupLayout panel10Layout = new GroupLayout(panel10);
                     panel10.setLayout(panel10Layout);
                     panel10Layout.setHorizontalGroup(
-                            panel10Layout.createParallelGroup()
+                        panel10Layout.createParallelGroup()
+                            .addGroup(panel10Layout.createSequentialGroup()
+                                .addGroup(panel10Layout.createParallelGroup()
                                     .addGroup(panel10Layout.createSequentialGroup()
-                                            .addGroup(panel10Layout.createParallelGroup()
-                                                    .addGroup(panel10Layout.createSequentialGroup()
-                                                            .addGap(24, 24, 24)
-                                                            .addComponent(button8))
-                                                    .addGroup(panel10Layout.createSequentialGroup()
-                                                            .addGap(15, 15, 15)
-                                                            .addComponent(button7)))
-                                            .addContainerGap(8, Short.MAX_VALUE))
+                                        .addGap(24, 24, 24)
+                                        .addComponent(button8))
+                                    .addGroup(panel10Layout.createSequentialGroup()
+                                        .addGap(15, 15, 15)
+                                        .addComponent(button7)))
+                                .addContainerGap(8, Short.MAX_VALUE))
                     );
                     panel10Layout.setVerticalGroup(
-                            panel10Layout.createParallelGroup()
-                                    .addGroup(GroupLayout.Alignment.TRAILING, panel10Layout.createSequentialGroup()
-                                            .addGap(27, 27, 27)
-                                            .addComponent(button8)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
-                                            .addComponent(button7)
-                                            .addGap(21, 21, 21))
+                        panel10Layout.createParallelGroup()
+                            .addGroup(GroupLayout.Alignment.TRAILING, panel10Layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(button8)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
+                                .addComponent(button7)
+                                .addGap(21, 21, 21))
                     );
                 }
 
@@ -713,24 +713,24 @@ public class hotel_rep extends JPanel {
 
                     //---- table3 ----
                     table3.setModel(new DefaultTableModel(
-                            new Object[][] {
-                                    {null, null, "", null, null, null},
-                            },
-                            new String[] {
-                                    "ID", "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year"
-                            }
+                        new Object[][] {
+                            {null, null, "", null, null, null},
+                        },
+                        new String[] {
+                            "ID", "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year"
+                        }
                     ));
                     scrollPane4.setViewportView(table3);
                 }
 
                 //---- comboBox15 ----
                 comboBox15.setModel(new DefaultComboBoxModel<>(new String[] {
-                        "---select---",
-                        "Hotel Alpha",
-                        "Hotel Beta",
-                        "Hotel Gamma ",
-                        "Hotel Delta",
-                        "Hotel Epsilon"
+                    "---select---",
+                    "Hotel Alpha",
+                    "Hotel Beta",
+                    "Hotel Gamma ",
+                    "Hotel Delta",
+                    "Hotel Epsilon"
                 }));
 
                 //---- label1 ----
@@ -747,197 +747,197 @@ public class hotel_rep extends JPanel {
 
                 //---- comboBox4 ----
                 comboBox4.setModel(new DefaultComboBoxModel<>(new String[] {
-                        "2025",
-                        "2024",
-                        "2023",
-                        "2022",
-                        "2021",
-                        "2020",
-                        "2019",
-                        "2018",
-                        "2017",
-                        "2016",
-                        "2015",
-                        "2014",
-                        "2013",
-                        "2012",
-                        "2011",
-                        "2010",
-                        "2009",
-                        "2008",
-                        "2007",
-                        "2006",
-                        "2005",
-                        "2004",
-                        "2003",
-                        "2002",
-                        "2001",
-                        "2000",
-                        "1999",
-                        "1998",
-                        "1997",
-                        "1996",
-                        "1995",
-                        "1994",
-                        "1993",
-                        "1992",
-                        "1991",
-                        "1990",
-                        "1989",
-                        "1988",
-                        "1987",
-                        "1986",
-                        "1985",
-                        "1984",
-                        "1983",
-                        "1982",
-                        "1981",
-                        "1980",
-                        "1979",
-                        "1978",
-                        "1977",
-                        "1976",
-                        "1975",
-                        "1974",
-                        "1973",
-                        "1972",
-                        "1971",
-                        "1970",
-                        "1969",
-                        "1968",
-                        "1967",
-                        "1966",
-                        "1965",
-                        "1964",
-                        "1963",
-                        "1962",
-                        "1961",
-                        "1960",
-                        "1959",
-                        "1958",
-                        "1957",
-                        "1956",
-                        "1955",
-                        "1954",
-                        "1953",
-                        "1952",
-                        "1951",
-                        "1950",
-                        "1949",
-                        "1948",
-                        "1947",
-                        "1946",
-                        "1945",
-                        "1944",
-                        "1943",
-                        "1942",
-                        "1941",
-                        "1940",
-                        "1939",
-                        "1938",
-                        "1937",
-                        "1936",
-                        "1935",
-                        "1934",
-                        "1933",
-                        "1932",
-                        "1931",
-                        "1930",
-                        "1929",
-                        "1928",
-                        "1927",
-                        "1926",
-                        "1925",
-                        "1924",
-                        "1923",
-                        "1922",
-                        "1921",
-                        "1920",
-                        "1919",
-                        "1918",
-                        "1917",
-                        "1916",
-                        "1915",
-                        "1914",
-                        "1913",
-                        "1912",
-                        "1911",
-                        "1910",
-                        "1909",
-                        "1908",
-                        "1907",
-                        "1906",
-                        "1905",
-                        "1904",
-                        "1903",
-                        "1902",
-                        "1901",
-                        "1900"
+                    "2025",
+                    "2024",
+                    "2023",
+                    "2022",
+                    "2021",
+                    "2020",
+                    "2019",
+                    "2018",
+                    "2017",
+                    "2016",
+                    "2015",
+                    "2014",
+                    "2013",
+                    "2012",
+                    "2011",
+                    "2010",
+                    "2009",
+                    "2008",
+                    "2007",
+                    "2006",
+                    "2005",
+                    "2004",
+                    "2003",
+                    "2002",
+                    "2001",
+                    "2000",
+                    "1999",
+                    "1998",
+                    "1997",
+                    "1996",
+                    "1995",
+                    "1994",
+                    "1993",
+                    "1992",
+                    "1991",
+                    "1990",
+                    "1989",
+                    "1988",
+                    "1987",
+                    "1986",
+                    "1985",
+                    "1984",
+                    "1983",
+                    "1982",
+                    "1981",
+                    "1980",
+                    "1979",
+                    "1978",
+                    "1977",
+                    "1976",
+                    "1975",
+                    "1974",
+                    "1973",
+                    "1972",
+                    "1971",
+                    "1970",
+                    "1969",
+                    "1968",
+                    "1967",
+                    "1966",
+                    "1965",
+                    "1964",
+                    "1963",
+                    "1962",
+                    "1961",
+                    "1960",
+                    "1959",
+                    "1958",
+                    "1957",
+                    "1956",
+                    "1955",
+                    "1954",
+                    "1953",
+                    "1952",
+                    "1951",
+                    "1950",
+                    "1949",
+                    "1948",
+                    "1947",
+                    "1946",
+                    "1945",
+                    "1944",
+                    "1943",
+                    "1942",
+                    "1941",
+                    "1940",
+                    "1939",
+                    "1938",
+                    "1937",
+                    "1936",
+                    "1935",
+                    "1934",
+                    "1933",
+                    "1932",
+                    "1931",
+                    "1930",
+                    "1929",
+                    "1928",
+                    "1927",
+                    "1926",
+                    "1925",
+                    "1924",
+                    "1923",
+                    "1922",
+                    "1921",
+                    "1920",
+                    "1919",
+                    "1918",
+                    "1917",
+                    "1916",
+                    "1915",
+                    "1914",
+                    "1913",
+                    "1912",
+                    "1911",
+                    "1910",
+                    "1909",
+                    "1908",
+                    "1907",
+                    "1906",
+                    "1905",
+                    "1904",
+                    "1903",
+                    "1902",
+                    "1901",
+                    "1900"
                 }));
 
                 //---- comboBox5 ----
                 comboBox5.setModel(new DefaultComboBoxModel<>(new String[] {
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December"
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December"
                 }));
 
                 GroupLayout panel3Layout = new GroupLayout(panel3);
                 panel3.setLayout(panel3Layout);
                 panel3Layout.setHorizontalGroup(
-                        panel3Layout.createParallelGroup()
+                    panel3Layout.createParallelGroup()
+                        .addGroup(panel3Layout.createSequentialGroup()
+                            .addComponent(panel10, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
+                            .addGap(35, 35, 35)
+                            .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                 .addGroup(panel3Layout.createSequentialGroup()
-                                        .addComponent(panel10, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(35, 35, 35)
-                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addGroup(panel3Layout.createParallelGroup()
-                                                                .addGroup(panel3Layout.createSequentialGroup()
-                                                                        .addComponent(label2)
-                                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                        .addComponent(comboBox5, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
-                                                                .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 674, GroupLayout.PREFERRED_SIZE))
-                                                        .addContainerGap(58, Short.MAX_VALUE))
-                                                .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addComponent(label1)
-                                                        .addGap(33, 33, 33)
-                                                        .addComponent(comboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(label3)
-                                                        .addGap(18, 18, 18)
-                                                        .addComponent(comboBox15, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
-                                                        .addComponent(label4)
-                                                        .addGap(78, 78, 78))))
+                                    .addGroup(panel3Layout.createParallelGroup()
+                                        .addGroup(panel3Layout.createSequentialGroup()
+                                            .addComponent(label2)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(comboBox5, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 674, GroupLayout.PREFERRED_SIZE))
+                                    .addContainerGap(58, Short.MAX_VALUE))
+                                .addGroup(panel3Layout.createSequentialGroup()
+                                    .addComponent(label1)
+                                    .addGap(33, 33, 33)
+                                    .addComponent(comboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(label3)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(comboBox15, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                                    .addComponent(label4)
+                                    .addGap(78, 78, 78))))
                 );
                 panel3Layout.setVerticalGroup(
-                        panel3Layout.createParallelGroup()
-                                .addGroup(panel3Layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(comboBox15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(label3)
-                                                        .addComponent(label1)
-                                                        .addComponent(comboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(label4))
-                                        .addGap(33, 33, 33)
-                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                .addComponent(comboBox5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(label2))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                                        .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(34, 34, 34))
-                                .addComponent(panel10, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                    panel3Layout.createParallelGroup()
+                        .addGroup(panel3Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(comboBox15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(label3)
+                                    .addComponent(label1)
+                                    .addComponent(comboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addComponent(label4))
+                            .addGap(33, 33, 33)
+                            .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(comboBox5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(label2))
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                            .addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE)
+                            .addGap(34, 34, 34))
+                        .addComponent(panel10, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                 );
             }
             tabbedPane1.addTab("Transactional Data List", panel3);
@@ -946,24 +946,24 @@ public class hotel_rep extends JPanel {
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup()
-                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(74, Short.MAX_VALUE)
-                                .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 875, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
+            layout.createParallelGroup()
+                .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(74, Short.MAX_VALUE)
+                    .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 875, GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap())
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup()
-                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 509, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
+            layout.createParallelGroup()
+                .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 509, GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap())
         );
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - amaim rathor
+    // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private JPanel panel7;

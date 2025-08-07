@@ -35,7 +35,7 @@ public class Occupancy {
     @Column(name = "reported_date")
     private LocalDate reportedDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // <-- WICHTIGE ÄNDERUNG HIER
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 

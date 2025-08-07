@@ -2,13 +2,13 @@ package org.example.view.mainWindow;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import org.example.view.hotel.HotelDialog;
 
+import org.example.view.hotel.HotelDialog;
 
 public class EditMasterDataHandler {
 
     public static void editHotel(JFrame parentFrame, JTable table) {
-        int selectedRow = table.getSelectedRow(); // Wichtig: muss vor der Verwendung bekannt sein!
+        int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(parentFrame, "Please select one hotel.");
             return;
@@ -31,6 +31,10 @@ public class EditMasterDataHandler {
             for (int i = 0; i < updatedData.length; i++) {
                 model.setValueAt(updatedData[i], selectedRow, i);
             }
+
+            // Persistiere Änderungen in hotels.txt
+            AddMasterDataHandler.persistAllRowsToFile(model, parentFrame);
+            JOptionPane.showMessageDialog(parentFrame, "Änderungen gespeichert.");
         }
     }
 }
