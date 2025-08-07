@@ -86,7 +86,8 @@ public class HotelDialog extends JDialog {
             if (isEdit) {
                 HotelDAO.updateHotel(hotel);
             } else {
-                HotelDAO.createHotel(hotel);
+                HotelDAO.createHotel(hotel); // ✅ richtiger Methodenname
+
             }
 
             saved = true;

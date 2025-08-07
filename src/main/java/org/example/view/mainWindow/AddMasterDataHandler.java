@@ -3,6 +3,7 @@ package org.example.view.mainWindow;
 import org.example.entity.Hotel;
 import org.example.view.hotel.EditHotelDialog;
 import org.example.data.txt.HotelFileWriter;
+import org.example.dao.HotelDAO; // <-- Wichtig: Stelle sicher, dass dieser Import da ist
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,10 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Component;
 
-
 /**
  * Fügt ein neues Hotel über den EditHotelDialog hinzu
- * und speichert ausschließlich in hotels.txt (keine DB/DAO).
+ * und speichert sowohl in hotels.txt als auch in die Datenbank.
  */
 public final class AddMasterDataHandler {
 
@@ -27,8 +27,9 @@ public final class AddMasterDataHandler {
         for (int i = 0; i < m.getRowCount(); i++) {
             Object v = m.getValueAt(i, 0);
             if (v != null) {
-                try { newId = Math.max(newId, Integer.parseInt(v.toString()) + 1); }
-                catch (NumberFormatException ignored) {}
+                try {
+                    newId = Math.max(newId, Integer.parseInt(v.toString()) + 1);
+                } catch (NumberFormatException ignored) {}
             }
         }
 
@@ -39,6 +40,16 @@ public final class AddMasterDataHandler {
         EditHotelDialog dlg = new EditHotelDialog(parent, h, true);
         dlg.setVisible(true);
         if (!dlg.isSaved()) return;
+
+        // 🔥 Hotel in die Datenbank schreiben
+        try {
+            HotelDAO.createHotel(h);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(parent,
+                    "Fehler beim Speichern in die Datenbank:\n" + e.getMessage(),
+                    "DB-Fehler", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         // In Tabelle neue Zeile einfügen (Spaltenreihenfolge beachten!)
         m.addRow(new Object[]{
@@ -54,12 +65,12 @@ public final class AddMasterDataHandler {
                 ""                    // 9 Last Transactional Data
         });
 
-        // Gesamte Tabelle -> Liste<Hotel> -> hotels.txt schreiben
+        // hotels.txt aktualisieren (falls weiterhin benötigt)
         persistAllRowsToFile(m, parent);
         JOptionPane.showMessageDialog(parent, "Neues Hotel gespeichert.");
     }
 
-    static void persistAllRowsToFile(DefaultTableModel m, Component parentForError) {
+    public static void persistAllRowsToFile(DefaultTableModel m, Component parentForError) {
         try {
             List<Hotel> hotels = new ArrayList<>();
             for (int i = 0; i < m.getRowCount(); i++) {
@@ -87,9 +98,14 @@ public final class AddMasterDataHandler {
 
     private static int parseInt(Object v) {
         if (v == null) return 0;
-        try { return Integer.parseInt(v.toString().trim()); }
-        catch (NumberFormatException e) { return 0; }
+        try {
+            return Integer.parseInt(v.toString().trim());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
-    private static String str(Object v) { return v == null ? "" : v.toString(); }
+    private static String str(Object v) {
+        return v == null ? "" : v.toString();
+    }
 }

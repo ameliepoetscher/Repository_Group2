@@ -1,2 +1,3 @@
 id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attribute
-8,"***","test","-","-","meidlingg","Vienna","1200","-",1,1,"family friendly"
+7,"*","adttttttt","-","-","awt","null","null","-",10,300,""
+8,"***","test","-","-","meidlingg","Vienna","1200","-",1,100,""

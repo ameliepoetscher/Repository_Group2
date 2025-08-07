@@ -107,6 +107,8 @@ public class AddMasterData extends JDialog { //modales Dialogfenster
             // Hotel wird über DAO in die Datenbank geschrieben
             HotelDAO.createHotel(hotel);
 
+
+
             // zusätzlich in die Tabelle eingefügt (z. B. für UI-Refresh)
             tableModel.addRow(new Object[]{id, name, address, rooms, beds});
 
