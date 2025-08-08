@@ -1,1 +1,1 @@
-id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attribute,lastTransactionalData
+id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attribute
