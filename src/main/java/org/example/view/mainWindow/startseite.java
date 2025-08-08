@@ -120,7 +120,10 @@ public class startseite extends JPanel {
         // Button-Listener für Hotel-Panel
         button25.addActionListener(e -> saveHotelData());
         deleteButton.addActionListener(e -> {
-            DeleteMasterDataHandler.deleteHotel(table1);
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            DeleteMasterDataHandler.deleteHotel(parentFrame, table1);
+
+
         });
         button3.addActionListener(e -> {
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
@@ -759,6 +762,26 @@ public class startseite extends JPanel {
     private void EditButton(ActionEvent e) {
         // TODO add your code here
     }
+
+    private void delete(ActionEvent e) {
+        // 1. Aktuelles Fenster als Parent holen
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+        // 2. Zeile aus Tabelle löschen
+        DeleteMasterDataHandler.deleteHotel(parentFrame, table1); // ← ACHTUNG: table1 muss existieren!
+
+        // 3. Tabelle in Datei speichern
+        DefaultTableModel model = (DefaultTableModel) table1.getModel();
+        AddMasterDataHandler.persistAllRowsToFile(model, parentFrame);
+
+        // 4. Erfolgsnachricht anzeigen
+        JOptionPane.showMessageDialog(this, "Hotel erfolgreich gelöscht.");
+    }
+
+
+
+
+
 // ===== JFormDesigner initComponents und Variablen-Deklaration =====
     // ... hier bleibt alles wie vom JFormDesigner erzeugt!
 
@@ -945,6 +968,7 @@ public class startseite extends JPanel {
 
                     //---- deleteButton ----
                     deleteButton.setText("Delete");
+                    deleteButton.addActionListener(e -> delete(e));
 
                     //---- button3 ----
                     button3.setText("Edit");
