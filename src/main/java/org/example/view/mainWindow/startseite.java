@@ -667,20 +667,6 @@ public class startseite extends JPanel {
         table2.setModel(model);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // ===== Hilfsmethoden =====
 
     private void ladeDropdownHotels() {
