@@ -8,7 +8,6 @@ import org.example.data.txt.OccupancyFileReader;
 import org.example.view.auth.login;
 import org.example.view.hotel.HotelDialog;
 import org.example.view.occupancy.AddTransactionalDataDialog;
-import org.example.dao.HotelDAO;
 import org.example.dao.OccupancyDAO;
 
 
