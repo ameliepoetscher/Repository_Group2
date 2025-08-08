@@ -1,1 +1,2 @@
 id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attribute
+7,"*","adttttttt","-","-","awt","null","null","-",10,300,""

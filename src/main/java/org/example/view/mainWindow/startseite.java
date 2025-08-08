@@ -112,6 +112,7 @@ public class startseite extends JPanel {
         // Button-Listener für Hotel-Panel
         deleteButton.addActionListener(e -> deleteSelectedHotel());
 
+        button25.addActionListener(e -> saveHotelData());
 
 
 
@@ -212,6 +213,7 @@ public class startseite extends JPanel {
             }
 
             JOptionPane.showMessageDialog(this, "Changes successfully saved to database!");
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error while saving to database: " + ex.getMessage());
         }
