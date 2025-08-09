@@ -1,8 +1,6 @@
 package org.example.view.mainWindow;
 
 import org.example.dao.HotelDAO;
-import org.example.data.txt.HotelFileReader;
-import org.example.data.txt.OccupancyFileReader;
 import org.example.entity.Hotel;
 import org.example.entity.Occupancy;
 
@@ -10,38 +8,62 @@ import javax.swing.*;
 import java.util.List;
 
 public class Main {
+
     public static void main(String[] args) {
-        // 1. Datenbank ggf. initialisieren
+        // 1) DB ggf. initial befüllen
         initializeDatabaseIfNeeded();
 
-        // 2. Starte GUI
+        // 2) GUI starten
         SwingUtilities.invokeLater(() -> {
             noe_to_logo frame = new noe_to_logo();
             frame.setTitle("Lower Austria Tourist Portal");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setVisible(true);
         });
     }
 
+    /**
+     * Wenn keine Hotels vorhanden sind, importiere sie aus den Ressourcen:
+     *  - src/main/resources/data.txt/hotels.txt
+     *  - src/main/resources/data.txt/occupancies.txt
+     */
     private static void initializeDatabaseIfNeeded() {
-        if (HotelDAO.getAllHotels().isEmpty()) {  // ODER: HotelDAO.countHotels() == 0, je nachdem was du hast
-            System.out.println("No hotels in DB. Importing from txt files...");
+        int before = HotelDAO.getAllHotels().size();
+        System.out.println("Hotels in DB (vor Import): " + before);
 
-            // Hotels aus TXT lesen und speichern
-            List<Hotel> hotels = HotelFileReader.readHotelsFromFile("src/main/resources/data.txt/hotels.txt");
-            for (Hotel hotel : hotels) {
-                HotelDAO.createHotel(hotel); // ACHTUNG: Methode muss es in deinem HotelDAO geben
+        if (before > 0) {
+            System.out.println("Hotels bereits in der DB. Import übersprungen.");
+            return;
+        }
+
+        try {
+            System.out.println("Keine Hotels in der DB. Importiere aus TXT-Dateien...");
+
+            // ⚠️ Pfade sind CLASSPATH-relativ – Dateien müssen in resources/data.txt liegen!
+            List<Hotel> hotels = HotelFileReader.readHotelsFromFile("data.txt/hotels.txt");
+            System.out.println("Hotels aus Datei gelesen: " + hotels.size());
+
+            // In die DB schreiben
+            for (Hotel h : hotels) {
+                HotelDAO.createHotel(h);
             }
 
-            // Occupancies aus TXT lesen und speichern
-            List<Occupancy> occupancies = OccupancyFileReader.readOccupanciesFromFile("src/main/resources/data.txt/occupancies.txt", hotels);
+            // Occupancies importieren (optional – nur wenn vorhanden)
+            List<Occupancy> occupancies =
+                    OccupancyFileReader.readOccupanciesFromFile("data.txt/occupancies.txt", hotels);
+            System.out.println("Occupancies aus Datei gelesen: " + occupancies.size());
+
             for (Occupancy occ : occupancies) {
-                HotelDAO.saveOccupancy(occ); // Methode wie bei der anderen Gruppe im DAO (siehe unten)
+                HotelDAO.saveOccupancy(occ);
             }
 
-            System.out.println("Import finished.");
-        } else {
-            System.out.println("Hotels already in DB. Skipping import.");
+            int after = HotelDAO.getAllHotels().size();
+            System.out.println("Hotels in DB (nach Import): " + after);
+            System.out.println("Import abgeschlossen.");
+
+        } catch (Exception e) {
+            System.err.println("Fehler beim Initialimport: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
