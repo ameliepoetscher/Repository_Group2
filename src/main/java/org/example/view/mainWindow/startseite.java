@@ -2,14 +2,18 @@ package org.example.view.mainWindow;
 
 import org.example.entity.Hotel;
 import org.example.entity.Occupancy;
-import org.example.dao.HotelDAO;
-
+import org.example.data.txt.HotelFileReader;
+import org.example.data.txt.HotelFileWriter;
+import org.example.data.txt.OccupancyFileReader;
 import org.example.view.auth.login;
+import org.example.view.hotel.HotelDialog;
 import org.example.view.occupancy.AddTransactionalDataDialog;
-import org.example.dao.OccupancyDAO;
+import org.example.view.hotel.HotelTableBuilder;
+import org.example.view.hotelRep.TransactionTableBuilder;
 
 import java.time.LocalDate;
 import java.util.stream.Stream;
+
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -42,7 +46,7 @@ import java.util.stream.Collectors;
 public class startseite extends JPanel {
     private List<Map<String, Object>> occupancyDataList = new ArrayList<>();
     private Map<Integer, String> transactionalDataAlt = new HashMap<>();
-    private JTable hotelTable;
+
 
 
     // ===== JFormDesigner GUI-Komponenten =====
@@ -52,11 +56,10 @@ public class startseite extends JPanel {
     // private JButton button25, deleteButton, button6, button3, button15, button5, button4, button1, button2;
     // private JComboBox<String> comboBox18;
 
-    // Bitte deklariere alle Komponenten entsprechend deiner .form Datei!
+    // Bitte deklariere alle Komponenten entsprechend deiner .form Date
 
     public startseite() {
         initComponents();
-
 
         //PANEL 5:
 
@@ -94,11 +97,9 @@ public class startseite extends JPanel {
 
 
 
-
-        // Lade Hotels aus der Datenbank
-        List<Hotel> hotels = HotelDAO.getAllHotels();
-
-
+// Lies alle Hotels aus der Text-Datei:
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
 
 // Sortiere nach Name und füge in comboBox16 ein
         new TreeSet<>(hotels.stream()
@@ -110,12 +111,10 @@ public class startseite extends JPanel {
 
 
         // Button-Listener für Hotel-Panel
-        deleteButton.addActionListener(e -> deleteSelectedHotel());
-
         button25.addActionListener(e -> saveHotelData());
-
-
-
+        deleteButton.addActionListener(e -> {
+            DeleteMasterDataHandler.deleteHotel(table1);
+        });
         button3.addActionListener(e -> {
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             EditMasterDataHandler.editHotel(parentFrame, table1);
@@ -157,19 +156,20 @@ public class startseite extends JPanel {
     // ===== Methoden für das Hotel-List-Panel =====
 
     private void ladeHotelsInTabelle() {
-        List<Hotel> hotels = HotelDAO.getAllHotels();
+        String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
 
         DefaultTableModel model = new DefaultTableModel(new String[]{
                 "ID", "Category", "Name", "Adresse", "City", "PLZ", "Rooms", "Beds", "Attribute", "Last Transactional Data"
         }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column != 0; // ID nicht editierbar
+                return column != 0;
             }
         };
 
         for (Hotel hotel : hotels) {
-            model.addRow(new Object[]{
+            Object[] rowData = {
                     hotel.getId(),
                     hotel.getCategory(),
                     hotel.getName(),
@@ -179,140 +179,146 @@ public class startseite extends JPanel {
                     hotel.getNoRooms(),
                     hotel.getNoBeds(),
                     hotel.getAttribute() != null ? hotel.getAttribute() : "",
-                    hotel.getLastTransactionalData() != null ? hotel.getLastTransactionalData() : ""
-            });
+                    "" // <-- immer leer laden!
+            };
+            model.addRow(rowData);
         }
         table1.setModel(model);
 
-        // Merke den "alten" Attribute-Wert pro Zeile (um LastTransactionalData zu setzen)
+        // HIER transactionalDataAlt befüllen:
         transactionalDataAlt.clear();
         for (int i = 0; i < model.getRowCount(); i++) {
-            transactionalDataAlt.put(i, Objects.toString(model.getValueAt(i, 8), ""));
+            transactionalDataAlt.put(i, model.getValueAt(i, 8).toString());
         }
     }
-
 
     private void saveHotelData() {
         try {
             DefaultTableModel model = (DefaultTableModel) table1.getModel();
+            List<String> lines = new ArrayList<>();
+            // Neue Header-Zeile mit "attribute" und "lastTransactionalData"
+            lines.add("id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,attribute,lastTransactionalData");
 
             for (int i = 0; i < model.getRowCount(); i++) {
-                Hotel hotel = new Hotel();
-                hotel.setId(Integer.parseInt(model.getValueAt(i, 0).toString()));
-                hotel.setCategory(model.getValueAt(i, 1).toString());
-                hotel.setName(model.getValueAt(i, 2).toString());
-                hotel.setAddress(model.getValueAt(i, 3).toString());
-                hotel.setCity(model.getValueAt(i, 4).toString());
-                hotel.setCityCode(model.getValueAt(i, 5).toString());
-                hotel.setNoRooms(Integer.parseInt(model.getValueAt(i, 6).toString()));
-                hotel.setNoBeds(Integer.parseInt(model.getValueAt(i, 7).toString()));
-                hotel.setAttribute(model.getValueAt(i, 8).toString());
-                hotel.setLastTransactionalData(model.getValueAt(i, 9).toString());
+                StringJoiner joiner = new StringJoiner(",");
 
-                HotelDAO.updateHotel(hotel);
+                String attribute = model.getValueAt(i, 8).toString();
+                String lastTransactionalData = model.getValueAt(i, 9) != null ? model.getValueAt(i, 9).toString() : "";
+
+                // ALT: alter Wert vom Laden
+                String attributeAlt = transactionalDataAlt.get(i);
+
+                // Prüfen: Hat sich das Attribut geändert?
+                if (!attribute.equals(attributeAlt)) {
+                    lastTransactionalData = java.time.LocalDate.now().toString();
+                    model.setValueAt(lastTransactionalData, i, 9); // GUI aktualisieren
+                    transactionalDataAlt.put(i, attribute);        // Merken für spätere Saves
+                } else {
+                    // Wenn kein Change und das Feld ist ein Default-Datum, dann leer lassen
+                    if (lastTransactionalData.equals("2025-06-22")) {
+                        lastTransactionalData = "";
+                        model.setValueAt("", i, 9);
+                    }
+                }
+
+                joiner.add(model.getValueAt(i, 0).toString()); // id
+                joiner.add("\"" + model.getValueAt(i, 1).toString() + "\""); // category
+                joiner.add("\"" + model.getValueAt(i, 2).toString() + "\""); // name
+                joiner.add("\"-\""); // owner
+                joiner.add("\"-\""); // contact
+                joiner.add("\"" + model.getValueAt(i, 3).toString() + "\""); // address
+                joiner.add("\"" + model.getValueAt(i, 4).toString() + "\""); // city
+                joiner.add("\"" + model.getValueAt(i, 5).toString() + "\""); // cityCode
+                joiner.add("\"-\""); // phone
+                joiner.add(model.getValueAt(i, 6).toString()); // noRooms
+                joiner.add(model.getValueAt(i, 7).toString()); // noBeds
+                joiner.add("\"" + attribute + "\""); // attribute
+                joiner.add("\"" + lastTransactionalData + "\""); // lastTransactionalData
+
+                lines.add(joiner.toString());
             }
 
-            JOptionPane.showMessageDialog(this, "Changes successfully saved to database!");
+            String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+                for (String line : lines) {
+                    bw.write(line);
+                    bw.newLine();
+                }
+            }
 
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Changes successfully saved!",
+                    "Save",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error while saving to database: " + ex.getMessage());
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error while saving!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }
-
     private void deleteSelectedHotel() {
         int selectedRow = table1.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a hotel first!", "No selection", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a hotel in the table first!",
+                    "No selection",
+                    JOptionPane.WARNING_MESSAGE
+            );
             return;
         }
 
-        int hotelId = Integer.parseInt(table1.getValueAt(selectedRow, 0).toString());
-
-        int choice = JOptionPane.showConfirmDialog(
+        String hotelId = table1.getValueAt(selectedRow, 0).toString();
+        Object[] options = {"Delete", "Stop"};
+        int choice = JOptionPane.showOptionDialog(
                 this,
-                "Delete this hotel and all related data?",
-                "Confirm Delete",
-                JOptionPane.YES_NO_OPTION
+                "Transactional data of this Hotel will also be deleted!",
+                "Are you sure?",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
         );
 
         if (choice == JOptionPane.YES_OPTION) {
-            // 1) Hotel aus DB holen
-            Hotel h = HotelDAO.getHotelById(hotelId);
-            if (h == null) {
-                JOptionPane.showMessageDialog(this, "Hotel not found in database (ID " + hotelId + ").");
-                return;
+            DefaultTableModel model = (DefaultTableModel) table1.getModel();
+            model.removeRow(selectedRow);
+
+            // ---------- NEU: Auch aus der Transactional Data (table6) löschen ----------
+            DefaultTableModel transactionalModel = (DefaultTableModel) table6.getModel();
+            // Achtung: von HINTEN nach VORNE durchgehen, sonst Fehler!
+            for (int row = transactionalModel.getRowCount() - 1; row >= 0; row--) {
+                Object idObj = transactionalModel.getValueAt(row, 0);
+                if (idObj != null && idObj.toString().equals(hotelId)) {
+                    transactionalModel.removeRow(row);
+                }
             }
+            // ---------------------------------------------------------------------------
 
-            // 2) Hotel löschen (dein DAO erwartet ein Hotel-Objekt)
-            HotelDAO.deleteHotel(h);
-
-            // 3) Zeile aus der Tabelle entfernen
-            ((DefaultTableModel) table1.getModel()).removeRow(selectedRow);
-
-            JOptionPane.showMessageDialog(this, "Hotel deleted from database.");
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Hotel with ID " + hotelId + " has been deleted.",
+                    "Deleted",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         }
     }
-    private void ladeTransaktionsDatenMitAttributen() {
-        // Daten holen
-        List<Occupancy> occsAll = OccupancyDAO.getAllOccupancies();
-
-        String selHotel = (String) comboBox18.getSelectedItem();
-        List<Occupancy> toDisplay;
-        if (selHotel != null && !selHotel.equals("---select---")) {
-            toDisplay = occsAll.stream()
-                    .filter(o -> o.getHotel() != null && selHotel.equals(o.getHotel().getName()))
-                    .collect(Collectors.toList());
-        } else {
-            toDisplay = occsAll;
-        }
-
-        // sortieren (Jahr, dann Monat)
-        toDisplay.sort(Comparator.comparingInt(Occupancy::getYear).thenComparingInt(Occupancy::getMonth));
-
-        // Tabelle füllen
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year", "Attribute"},
-                0
-        );
-
-        for (Occupancy o : toDisplay) {
-            model.addRow(new Object[]{
-                    o.getHotel() != null ? o.getHotel().getName() : "",
-                    o.getUsedRooms(),
-                    o.getUsedBeds(),
-                    getMonthName(o.getMonth()),
-                    o.getYear(),
-                    (o.getHotel() != null && o.getHotel().getAttribute() != null) ? o.getHotel().getAttribute() : ""
-            });
-
-        }
-
-        table3.setModel(model);
-    }
 
 
-
-
-    private void deleteSelectedTransactionalData() {
-        int selectedRow = table6.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a row in the transactional table first.");
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this, "Delete selected transactional data?", "Confirm", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            ((DefaultTableModel) table6.getModel()).removeRow(selectedRow);
-            JOptionPane.showMessageDialog(this, "Transactional data deleted.");
-        }
-    }
 
 
     // ===== Methoden für das Hotel-Summary-Panel =====
 
     private void ladeHotelsSummary() {
-        List<Hotel> hotels = HotelDAO.getAllHotels();
-
+        String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
 
         Map<String, List<Hotel>> kategorienMap = new HashMap<>();
         for (Hotel hotel : hotels) {
@@ -345,8 +351,8 @@ public class startseite extends JPanel {
     // ===== Methoden für das Transactional Data Panel =====
 
     private void initialisiereLeereTransaktionsTabelle() {
-        List<Hotel> hotels = HotelDAO.getAllHotels();
-
+        String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(filePath);
 
         DefaultTableModel model = new DefaultTableModel(new Object[]{
                 "ID", "Hotel Name", "Room Occupancy", "Bed Occupancy", "Month", "Year"
@@ -415,44 +421,116 @@ public class startseite extends JPanel {
     }
 
     private void saveTransactionalData() {
-        try {
-            for (Map<String, Object> occMap : occupancyDataList) {
-                int id        = (Integer) occMap.get("id");
-                int usedRooms = (Integer) occMap.get("roomOcc");
-                int usedBeds  = (Integer) occMap.get("bedOcc");
-                int year      = (Integer) occMap.get("year");
-                int month     = (Integer) occMap.get("month");
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        Map<Integer, Hotel> hotelMap = new HashMap<>();
+        for (Hotel h : hotels) {
+            hotelMap.put(h.getId(), h);
+        }
 
-                Hotel h = HotelDAO.getHotelById(id);
-                if (h == null) {
-                    throw new IllegalStateException("Hotel with ID " + id + " not found.");
-                }
+        File out = new File("src/main/java/org/example/data/txt/occupancies.txt");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(out, true))) {
+            for (Map<String,Object> occ : occupancyDataList) {
+                int id        = (Integer) occ.get("id");
+                int usedRooms = (Integer) occ.get("roomOcc");
+                int usedBeds  = (Integer) occ.get("bedOcc");
+                int year      = (Integer) occ.get("year");
+                int month     = (Integer) occ.get("month");
 
-                Occupancy occ = new Occupancy();
-                occ.setHotel(h);
-                occ.setUsedRooms(usedRooms);
-                occ.setUsedBeds(usedBeds);
-                occ.setYear(year);
-                occ.setMonth(month);
+                Hotel h = hotelMap.get(id);
+                int totalRooms = h.getNoRooms();
+                int totalBeds  = h.getNoBeds();
 
-                // In deiner Codebasis liegt der Save im HotelDAO:
-                HotelDAO.saveOccupancy(occ);
+                String line = String.format(
+                        "%d,%d,%d,%d,%d,%d,%d",
+                        id, totalRooms, usedRooms, totalBeds, usedBeds, year, month
+                );
+
+                bw.write(line);
+                bw.newLine();
             }
+            bw.flush();
 
-            JOptionPane.showMessageDialog(this, "Transactional data saved to database!", "Save", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Transactional data saved to file!",
+                    "Save",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
             occupancyDataList.clear();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error saving transactional data:\n" + ex.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE);
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error writing occupancies.txt:\n" + ex.getMessage(),
+                    "Save Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }
 
+    private void deleteSelectedTransactionalData() {
+        int selectedRow = table6.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a row to delete.");
+            return;
+        }
+        // Setze Room Occ, Bed Occ, Month, Year (Spalten 2–5) auf leer
+        for (int col = 2; col <= 5; col++) {
+            table6.setValueAt("", selectedRow, col);
+        }
+        // Optional: Wenn du eine occupancyDataList benutzt, dort ebenfalls den Eintrag löschen!
+        // occupancyDataList.removeIf(occ -> (int)occ.get("id") == Integer.parseInt(table6.getValueAt(selectedRow, 0).toString()));
+    }
+
+    // ===== Methoden für das Transactional Data List Panel =====
+
+    private void ladeTransaktionsDatenMitAttributen() {
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
+
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> occsAll = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
+
+        String selHotel = (String) comboBox18.getSelectedItem();
+        List<Occupancy> toDisplay;
+        if (selHotel != null && !selHotel.equals("---select---")) {
+            toDisplay = occsAll.stream()
+                    .filter(o -> o.getHotel().getName().equals(selHotel))
+                    .collect(Collectors.toList());
+        } else {
+            toDisplay = occsAll;
+        }
+
+        toDisplay.sort(
+                Comparator.comparingInt(Occupancy::getYear)
+                        .thenComparingInt(Occupancy::getMonth)
+        );
+
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{ "Hotel Name","Room Occupancy","Bed Occupancy","Month","Year","Attribute" },
+                0
+        );
+        for (Occupancy o : toDisplay) {
+            model.addRow(new Object[]{
+                    o.getHotel().getName(),
+                    o.getUsedRooms(),
+                    o.getUsedBeds(),
+                    getMonthName(o.getMonth()),
+                    o.getYear(),
+                    ""  // Platz für Attribute
+            });
+        }
+        table3.setModel(model);
+    }
 
     // ===== PANEL 5: =====
     private void ladeCombinedOverviewData() {
         // 1) Lese alle Transaktionen ein
-        List<Hotel> hotels = HotelDAO.getAllHotels();
-        List<Occupancy> allOcc = OccupancyDAO.getAllOccupancies();
-
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> allOcc = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
 
         // 2) Welches Hotel ist ausgewählt?
         String selHotel = (String) comboBox16.getSelectedItem();
@@ -480,8 +558,7 @@ public class startseite extends JPanel {
     //part 2:
     private void updateCombinedHotelDetails() {
         // 1) Lese alle Hotels
-        List<Hotel> hotels = HotelDAO.getAllHotels();
-
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile("src/main/java/org/example/data/txt/hotels.txt");
 
         String sel = (String) comboBox16.getSelectedItem();
         // 2) Wenn gar nichts oder Default ausgewählt, dann leere Kopfzeile
@@ -517,9 +594,10 @@ public class startseite extends JPanel {
 
     private void ladeCombinedOverview() {
         // 1) Dateien einlesen
-        List<Hotel> hotels = HotelDAO.getAllHotels();
-        List<Occupancy> occs = OccupancyDAO.getAllOccupancies();
-
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> occs = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
 
         // 2) Auswahl aus den Comboboxen holen
         String selHotel    = (String) comboBox16.getSelectedItem();
@@ -584,12 +662,28 @@ public class startseite extends JPanel {
         table2.setModel(model);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // ===== Hilfsmethoden =====
 
     private void ladeDropdownHotels() {
-        List<Hotel> hotels = HotelDAO.getAllHotels();
-        List<Occupancy> occsAll = OccupancyDAO.getAllOccupancies();
+        String hotelFile = "src/main/java/org/example/data/txt/hotels.txt";
+        String occFile   = "src/main/java/org/example/data/txt/occupancies.txt";
 
+        List<Hotel> hotels = HotelFileReader.readHotelsFromFile(hotelFile);
+        List<Occupancy> occsAll = OccupancyFileReader.readOccupanciesFromFile(occFile, hotels);
 
         Set<String> names = new TreeSet<>();
         for (Occupancy o : occsAll) {
@@ -621,13 +715,13 @@ public class startseite extends JPanel {
         JOptionPane.showMessageDialog(
                 this,
                 "Welcome to the Lower Austria Tourist Portal!\n\n" +
-                        "Here’s how to use this application:\n" +
-                        "1. In the Hotels tab, view and edit master data for all hotels.\n" +
-                        "2. In Hotels Summary, see aggregate statistics per hotel category.\n" +
-                        "3. In Occupancy, select a year, month, and category to view occupancy trends.\n" +
-                        "4. In Occupancy Summary, choose date ranges or hotel to see summarized occupancy data.\n\n" +
-                        "Use the +, save and logout buttons as needed. If you need further assistance,\n" +
-                        "please consult the user guide or contact support@example.com.",
+                        "Using the Tabs & Controls:\n" +
+                        "1. In the Hotel List tab, click + to add a hotel, select a row and use Edit or Delete, then click Save to commit changes.\n" +
+                        "2. In Hotel Summary, click Update to refresh aggregated statistics per hotel category.\n" +
+                        "3. In Transactional Data, choose a hotel, year, and month, enter room and bed occupancy, optionally use Add Attribute, then click Save to record.\n" +
+                        "4. In Transactional Data List, browse existing occupancy entries and use Save for edits or Delete to remove.\n" +
+                        "5. In Combined Overview, apply filters (hotel, year, month, category) to view consolidated occupancy data.\n\n" +
+                        "If you need further assistance, please consult the user guide or contact support@cloud4you.com.",
                 "Help",
                 JOptionPane.INFORMATION_MESSAGE
         );
@@ -642,22 +736,14 @@ public class startseite extends JPanel {
     }
 
     private void button6(ActionEvent e) {
-        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-
-        JTable hotelTable = this.table1;  // <-- richtiger GUI-Name hier einsetzen!
-
-        if (table1 == null) {
-            JOptionPane.showMessageDialog(this, "Hotel-Tabelle nicht gefunden.");
-            return;
-        }
-
-        org.example.view.mainWindow.AddMasterDataHandler.addHotel(parentFrame, hotelTable);
+        // TODO add your code here
     }
 
-
-
-
     private void AddButton(ActionEvent e) {
+        // TODO add your code here
+    }
+
+    private void delete(ActionEvent e) {
         // TODO add your code here
     }
 
@@ -665,20 +751,14 @@ public class startseite extends JPanel {
         // TODO add your code here
     }
 
-    private void delete(ActionEvent e) {
-        deleteSelectedHotel();
-    }
-
-
-
-// ===== JFormDesigner initComponents und Variablen-Deklaration =====
+    // ===== JFormDesigner initComponents und Variablen-Deklaration =====
     // ... hier bleibt alles wie vom JFormDesigner erzeugt!
 
 
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
+        // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
         this2 = new JPanel();
         tabbedPane1 = new JTabbedPane();
         panel1 = new JPanel();
@@ -1980,7 +2060,7 @@ public class startseite extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
+    // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
     private JPanel this2;
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
@@ -2052,7 +2132,7 @@ public class startseite extends JPanel {
     private class save extends AbstractAction {
         private save() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-            // Generated using JFormDesigner Educational license - Maria Malik (Sarah Malik)
+            // Generated using JFormDesigner Educational license - Amelie Pötscher (fhb232606)
             // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
         }
 
@@ -2078,10 +2158,8 @@ public class startseite extends JPanel {
                     hotelListe.add(hotel);
                 }
 
-                for (Hotel hotel : hotelListe) {
-                    HotelDAO.updateHotel(hotel);
-                }
-
+                String filePath = "src/main/java/org/example/data/txt/hotels.txt";
+                HotelFileWriter.writeHotelsToFile(hotelListe, filePath);
 
                 JOptionPane.showMessageDialog(
                         startseite.this,
