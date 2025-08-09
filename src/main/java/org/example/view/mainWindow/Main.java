@@ -1,6 +1,8 @@
 package org.example.view.mainWindow;
 
 import org.example.dao.HotelDAO;
+import org.example.data.txt.HotelFileReader;
+import org.example.data.txt.OccupancyFileReader;
 import org.example.entity.Hotel;
 import org.example.entity.Occupancy;
 
